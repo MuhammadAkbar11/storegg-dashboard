@@ -1,11 +1,9 @@
 import express from "express";
+import { getLogin } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  console.log("tess");
-  res.send("Auth here");
-});
+router.get("/", getLogin);
 
 const authRoutes = router;
 

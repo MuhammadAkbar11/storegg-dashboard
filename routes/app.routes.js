@@ -1,11 +1,9 @@
 import express from "express";
+import { getIndex } from "../controllers/app.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  console.log("tess");
-  res.send("Hayyy");
-});
+router.get("/", getIndex);
 
 const appRoutes = router;
 
