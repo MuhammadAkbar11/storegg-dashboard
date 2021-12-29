@@ -1,3 +1,5 @@
 export const getIndex = (req, res) => {
-  res.send("Hello wellcome to login system boilerplate");
+  res.render("index", {
+    title: "Login System",
+  });
 };
