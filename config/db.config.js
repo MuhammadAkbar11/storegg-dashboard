@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { consoleLogError } from "../utils/console.js";
+import consoleLog from "../utils/consoleLog.js";
 import { MONGO_URI } from "./env.config.js";
 
 const connectDB = async () => {
@@ -10,9 +10,9 @@ const connectDB = async () => {
       // useCreateIndex: true,
     });
 
-    console.log(`[MongoDB] Connected : ${conn.connection.host} \n`.cyan);
+    consoleLog.info(`[MongoDB] Connected : ${conn.connection.host} `);
   } catch (error) {
-    consoleLogError(`[MongoDB] Error : ${error.message} \n`.underline);
+    consoleLog.error(`[MongoDB] Error : ${error.message} `.underline);
     process.exit(1);
   }
 };
