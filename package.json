@@ -8,13 +8,16 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "nodemon app.js --dev"
+    "dev": "nodemon app.js --dev",
+    "seed:import": "node seeds/index.js --dev seed=import",
+    "seed:destroy": "node seeds/index.js --dev seed=destroy"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chalk": "^5.0.0",
     "colors": "^1.4.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.6.0",
