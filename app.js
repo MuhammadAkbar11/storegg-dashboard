@@ -3,7 +3,7 @@ import morgan from "morgan";
 import connectDB from "./config/db.config.js";
 import { dotenvConfig, MODE, PORT } from "./config/env.config.js";
 import routers from "./routes/index.routes.js";
-import { consoleLogInfo } from "./utils/console.js";
+import consoleLog from "./utils/consoleLog.js";
 
 dotenvConfig;
 
@@ -14,6 +14,10 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+// Body Parse
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 if (MODE == "development") {
   app.use(morgan("dev"));
 }
@@ -21,7 +25,7 @@ if (MODE == "development") {
 app.use(routers);
 
 app.listen(PORT, () => {
-  consoleLogInfo(
-    `\n[Server] Server running in ${MODE} mode on port ${PORT.underline}`.bold
+  consoleLog.success(
+    `[server] Server running in ${MODE} mode on port ${PORT.underline}`
   );
 });
