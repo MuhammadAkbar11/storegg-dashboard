@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import { MODE } from "../config/env.config.js";
 
-const orange = chalk.hex("#fd7e14");
 const success = chalk.green;
 const danger = chalk.hex("#DC3545");
 const warning = chalk.hex("#FFC107");
