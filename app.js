@@ -3,6 +3,9 @@ import morgan from "morgan";
 import connectDB from "./config/db.config.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
+import passport from "passport";
+import methodOverride from "method-override";
+import connectFlash from "connect-flash";
 import * as envConfigs from "./config/env.config.js";
 import {
   isOperationalError,
@@ -12,12 +15,13 @@ import {
 } from "./middleware/errorHandler.js";
 import routers from "./routes/index.routes.js";
 import consoleLog from "./utils/consoleLog.js";
-import methodOverride from "method-override";
-import connectFlash from "connect-flash";
+
 import { STATIC_FOLDER } from "./utils/constants.js";
+import passportConfig from "./config/passport.config.js";
 
 envConfigs.dotenvConfig;
 
+passportConfig();
 connectDB();
 
 const app = express();
@@ -61,6 +65,20 @@ app.use(
 if (envConfigs.MODE == "development") {
   app.use(morgan("dev"));
 }
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session({}));
+
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.userAuth = req.user;
+  } else {
+    res.locals.userAuth = null;
+  }
+
+  next();
+});
 
 app.use(express.static(STATIC_FOLDER));
 
