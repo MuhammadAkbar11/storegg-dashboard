@@ -14,6 +14,7 @@ import routers from "./routes/index.routes.js";
 import consoleLog from "./utils/consoleLog.js";
 import methodOverride from "method-override";
 import connectFlash from "connect-flash";
+import { STATIC_FOLDER } from "./utils/constants.js";
 
 envConfigs.dotenvConfig;
 
@@ -27,6 +28,10 @@ const store = MongoStore.create({
 
 app.set("view engine", "ejs");
 app.set("views", "views");
+
+// Body Parse
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Method override
 app.use(
@@ -43,10 +48,6 @@ app.use(
 // Flash
 app.use(connectFlash());
 
-// Body Parse
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
 // Session
 app.use(
   session({
@@ -60,6 +61,8 @@ app.use(
 if (envConfigs.MODE == "development") {
   app.use(morgan("dev"));
 }
+
+app.use(express.static(STATIC_FOLDER));
 
 app.use(routers);
 

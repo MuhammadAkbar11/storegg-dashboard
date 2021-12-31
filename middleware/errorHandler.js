@@ -1,6 +1,7 @@
 import { MODE } from "../config/env.config.js";
 import BaseError from "../helpers/apiError.helper.js";
 import consoleLog from "../utils/consoleLog.js";
+import httpStatusCodes from "../utils/httpStatusCode.js";
 
 function logError(err) {
   consoleLog.error(`
@@ -18,7 +19,7 @@ function returnError(err, req, res, next) {
   const type = err.responseType;
   if (type == "json") {
     return res
-      .status(err.statusCode || 500)
+      .status(err.statusCode || httpStatusCodes.INTERNAL_SERVER)
       .json({ ...err, stack: MODE == "development" ? err.stack : null });
   } else if (type == "page") {
     return res.render(err.errorView, {
@@ -27,7 +28,7 @@ function returnError(err, req, res, next) {
     });
   } else {
     res
-      .status(err.statusCode || 500)
+      .status(err.statusCode || httpStatusCodes.INTERNAL_SERVER)
       .json({ ...err, stack: MODE == "development" ? err.stack : null });
   }
 }
