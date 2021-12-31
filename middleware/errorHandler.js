@@ -1,5 +1,5 @@
 import { MODE } from "../config/env.config.js";
-import BaseError from "../utils/BaseError.js";
+import BaseError from "../helpers/apiError.helper.js";
 import consoleLog from "../utils/consoleLog.js";
 
 function logError(err) {
