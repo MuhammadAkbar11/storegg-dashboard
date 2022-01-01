@@ -3,7 +3,6 @@ import UserModel from "../models/User.model.js";
 import localStrategy from "./strategies/local.strategy.js";
 
 export default function () {
-  console.log("tesss");
   passport.use(localStrategy);
 
   passport.serializeUser((user, done) => {

@@ -1,8 +1,10 @@
 import {
   getLocalAuthCallback,
   getLogin,
+  getSignUp,
   postLogin,
   postLogout,
+  postSignUp,
 } from "../controllers/auth.controller.js";
 import { userValidate } from "../helpers/validation.helper.js";
 import { ensureGuest } from "../middleware/auth.js";
@@ -15,6 +17,16 @@ function AuthRoutes(app) {
     .post(
       userValidate("login"),
       postLogin,
+      passportAuthLogin,
+      getLocalAuthCallback
+    );
+
+  app
+    .route("/auth/signup")
+    .get(ensureGuest, getSignUp)
+    .post(
+      userValidate("signup"),
+      postSignUp,
       passportAuthLogin,
       getLocalAuthCallback
     );
