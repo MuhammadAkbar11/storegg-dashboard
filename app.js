@@ -18,6 +18,7 @@ import consoleLog from "./utils/consoleLog.js";
 
 import { STATIC_FOLDER } from "./utils/constants.js";
 import passportConfig from "./config/passport.config.js";
+import MainRoutes from "./routes/index.routes.js";
 
 envConfigs.dotenvConfig;
 
@@ -82,7 +83,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(STATIC_FOLDER));
 
-app.use(routers);
+MainRoutes(app);
 
 app.use(logErrorMiddleware);
 app.use(returnError);

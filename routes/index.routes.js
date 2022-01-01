@@ -1,12 +1,13 @@
-import express from "express";
-import appRoutes from "./app.routes.js";
-import authRoutes from "./auth.routes.js";
+import { getDashboard, getIndex } from "../controllers/app.controller.js";
+import { ensureAuth } from "../middleware/auth.js";
+import AuthRoutes from "./auth.routes.js";
 
-const router = express.Router();
+function MainRoutes(app) {
+  app.get("/", getIndex);
+  app.get("/dashboard", ensureAuth, getDashboard);
 
-router.use("/", appRoutes);
-router.use("/auth", authRoutes);
+  // auth Routes
+  AuthRoutes(app);
+}
 
-const routers = router;
-
-export default routers;
+export default MainRoutes;
