@@ -1,0 +1,9 @@
+<%- include('layouts/head.ejs') %>
+
+<h1>Welcome <%= userAuth.name %> </h1>
+
+<form action="/auth/logout" method="post">
+  <button type="submit">Logout</button>
+</form>
+
+<%- include('layouts/end.ejs') %>
