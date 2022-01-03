@@ -16,19 +16,29 @@ function logErrorMiddleware(err, req, res, next) {
 }
 
 function returnError(err, req, res, next) {
+  const message = err.message;
+  const status = err.statusCode || httpStatusCodes.INTERNAL_SERVER;
   const type = err.responseType;
+  const stack = MODE == "development" ? err.stack : null;
+  console.log(err);
   if (type == "json") {
-    return res
-      .status(err.statusCode || httpStatusCodes.INTERNAL_SERVER)
-      .json({ ...err, stack: MODE == "development" ? err.stack : null });
+    return res.status(status).json({ ...err, stack });
   } else if (type == "page") {
-    return res.render(err.errorView, {
-      title: err.message,
-      errors: { ...err },
+    const view = err?.errorView || "errors/500";
+    const errData = {
+      message: err.message,
+      ...err,
+    };
+    const renderData = err?.renderData || null;
+
+    return res.status(status).render(view, {
+      errors: errData,
+      ...renderData,
+      stack,
     });
   } else {
     res
-      .status(err.statusCode || httpStatusCodes.INTERNAL_SERVER)
+      .status(status)
       .json({ ...err, stack: MODE == "development" ? err.stack : null });
   }
 }

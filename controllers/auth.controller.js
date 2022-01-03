@@ -1,5 +1,8 @@
 import UserModel from "../models/User.model.js";
-import BaseError from "../helpers/baseError.helper.js";
+import BaseError, {
+  TransfromError,
+  ValidationError,
+} from "../helpers/baseError.helper.js";
 import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 
@@ -13,14 +16,8 @@ export const getLogin = async (req, res, next) => {
       values: null,
     });
   } catch (error) {
-    const message = error?.message || error.message;
-    const baseError = new BaseError(
-      error.name,
-      error.statusCode,
-      message,
-      true,
-      { errorView: "errors/500" }
-    );
+    const baseError = new TransfromError(error);
+
     next(baseError);
   }
 };
@@ -31,64 +28,47 @@ export const postLogin = async (req, res, next) => {
     const validate = validationResult(req);
 
     if (!validate.isEmpty()) {
-      const baseError = new BaseError(
-        "Validation",
-        httpStatusCodes.BAD_REQUEST,
-        "Bad Validation",
-        false
-      );
-      baseError.validation(validate.array());
-
-      return res.status(400).render("auth/login", {
+      const errValidate = new ValidationError(validate.array(), "auth/login", {
         title: "Login",
-        errors: baseError,
         values: req.body,
       });
+
+      throw errValidate;
     }
 
     const user = await UserModel.findOne({ email: email });
 
     if (!user) {
-      const baseError = new BaseError(
+      throw new BaseError(
         "BadRequest",
         httpStatusCodes.BAD_REQUEST,
         "User not found",
-        true
+        true,
+        {
+          errorView: "auth/login",
+          renderData: { title: "Login", values: req.body },
+        }
       );
-
-      return res.status(400).render("auth/login", {
-        title: "Login",
-        errors: baseError,
-        values: req.body,
-      });
     }
 
     const passwordMatch = await user.matchPassword(password);
 
     if (!passwordMatch) {
-      const baseError = new BaseError(
+      throw new BaseError(
         "BadRequest",
         httpStatusCodes.BAD_REQUEST,
         "Wrong password",
-        true
+        true,
+        {
+          errorView: "auth/login",
+          renderData: { title: "Login", values: req.body },
+        }
       );
-
-      return res.status(400).render("auth/login", {
-        title: "Login",
-        errors: baseError,
-        values: req.body,
-      });
     }
 
     next();
   } catch (error) {
-    const baseError = new BaseError(
-      error.name,
-      error.statusCode,
-      error.message || error.message,
-      true,
-      { errorView: "errors/500" }
-    );
+    const baseError = new TransfromError(error);
     next(baseError);
   }
 };
@@ -103,14 +83,7 @@ export const getSignUp = async (req, res, next) => {
       values: null,
     });
   } catch (error) {
-    const message = error?.message || error.message;
-    const baseError = new BaseError(
-      error.name,
-      error.statusCode,
-      message,
-      true,
-      { errorView: "errors/500" }
-    );
+    const baseError = new TransfromError(error);
     next(baseError);
   }
 };
@@ -121,17 +94,8 @@ export const postSignUp = async (req, res, next) => {
     const validate = validationResult(req);
 
     if (!validate.isEmpty()) {
-      const baseError = new BaseError(
-        "Validation",
-        httpStatusCodes.BAD_REQUEST,
-        "Bad Validation",
-        false
-      );
-      baseError.validation(validate.array());
-
-      return res.status(400).render("auth/signup", {
+      throw new ValidationError(validate.array(), "auth/signup", {
         title: "Sign Up",
-        errors: baseError,
         values: req.body,
       });
     }
@@ -152,23 +116,23 @@ export const postSignUp = async (req, res, next) => {
         true
       );
 
-      return res.status(400).render("auth/signup", {
-        title: "Sign Up",
-        errors: baseError,
-        values: req.body,
-      });
+      throw new BaseError(
+        "BadRequest",
+        httpStatusCodes.BAD_REQUEST,
+        "User already exist",
+        true,
+        {
+          errorView: "auth/signup",
+          renderData: { title: "Sign Up", values: req.body },
+        }
+      );
     }
+
     await UserModel.create(newUser);
 
     next();
   } catch (error) {
-    const baseError = new BaseError(
-      error.name,
-      error.statusCode,
-      error.message || error.message,
-      true,
-      { errorView: "errors/500" }
-    );
+    const baseError = new TransfromError(error);
     next(baseError);
   }
 };
