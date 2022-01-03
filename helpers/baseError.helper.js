@@ -1,18 +1,12 @@
 class BaseError extends Error {
-  constructor(
-    name,
-    statusCode,
-    description,
-    isOperational = true,
-    errors = {}
-  ) {
-    super(description);
+  constructor(name, statusCode, message, isOperational = true, errors = {}) {
+    super(message);
 
     Object.setPrototypeOf(this, new.target.prototype);
 
     this.name = name;
     this.statusCode = statusCode;
-    this.description = description;
+    this.message = message;
     this.isOperational = isOperational;
     this.stack;
     this.responseType = "page";
@@ -36,7 +30,6 @@ class BaseError extends Error {
     }
 
     for (var key in errorObj) newArrError.push(errorObj[key]);
-    console.log(errorObj, "class");
     this.validation = errorObj;
   }
 }
