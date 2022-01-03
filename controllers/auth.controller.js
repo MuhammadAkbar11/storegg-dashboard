@@ -13,7 +13,7 @@ export const getLogin = async (req, res, next) => {
       values: null,
     });
   } catch (error) {
-    const message = error?.message || error.description;
+    const message = error?.message || error.message;
     const baseError = new BaseError(
       error.name,
       error.statusCode,
@@ -85,7 +85,7 @@ export const postLogin = async (req, res, next) => {
     const baseError = new BaseError(
       error.name,
       error.statusCode,
-      error.message || error.description,
+      error.message || error.message,
       true,
       { errorView: "errors/500" }
     );
@@ -103,7 +103,7 @@ export const getSignUp = async (req, res, next) => {
       values: null,
     });
   } catch (error) {
-    const message = error?.message || error.description;
+    const message = error?.message || error.message;
     const baseError = new BaseError(
       error.name,
       error.statusCode,
@@ -165,7 +165,7 @@ export const postSignUp = async (req, res, next) => {
     const baseError = new BaseError(
       error.name,
       error.statusCode,
-      error.message || error.description,
+      error.message || error.message,
       true,
       { errorView: "errors/500" }
     );

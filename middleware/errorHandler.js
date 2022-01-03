@@ -5,7 +5,7 @@ import httpStatusCodes from "../utils/httpStatusCode.js";
 
 function logError(err) {
   consoleLog.error(`
-[error] : ${err.name} : ${err.description}
+[error] : ${err.name} : ${err.message}
           ${err.statusCode} ${err.stack}
 `);
 }
@@ -23,8 +23,8 @@ function returnError(err, req, res, next) {
       .json({ ...err, stack: MODE == "development" ? err.stack : null });
   } else if (type == "page") {
     return res.render(err.errorView, {
-      title: err.description,
-      ...err,
+      title: err.message,
+      errors: { ...err },
     });
   } else {
     res

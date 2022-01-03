@@ -4,7 +4,7 @@
   <h1>Login Page</h1>
   <% if(errors && errors?.name !== "Validation") {  %>
   <div style="margin-top: 1rem; margin-bottom: 1rem;">
-    <%= errors.description %>
+    <%= errors?.message %>
   </div>
   <% } %>
   <form action="/auth" method="post">

@@ -5,11 +5,11 @@ class ApiError extends BaseError {
   constructor(
     name,
     statusCode = httpStatusCodes.NOT_FOUND,
-    description = "Not found.",
+    message = "Not found.",
     isOperational = true,
     errors = {}
   ) {
-    super(name, statusCode, description, isOperational, errors);
+    super(name, statusCode, message, isOperational, errors);
     this.responseType = "json";
   }
 }
