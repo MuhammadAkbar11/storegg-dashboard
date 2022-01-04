@@ -1,4 +1,5 @@
 import {
+  getGoogleAuthCallback,
   getLocalAuthCallback,
   getLogin,
   getSignUp,
@@ -8,7 +9,11 @@ import {
 } from "../controllers/auth.controller.js";
 import { userValidate } from "../helpers/validation.helper.js";
 import { ensureGuest } from "../middleware/auth.js";
-import { passportAuthLogin } from "../middleware/passportAuth.js";
+import {
+  passportAuthGoogleLogin,
+  passportAuthGoogleLoginCallback,
+  passportAuthLogin,
+} from "../middleware/passportAuth.js";
 
 function AuthRoutes(app) {
   app
@@ -30,6 +35,13 @@ function AuthRoutes(app) {
       passportAuthLogin,
       getLocalAuthCallback
     );
+
+  app.get("/auth/google", passportAuthGoogleLogin);
+  app.get(
+    "/auth/google/callback",
+    passportAuthGoogleLoginCallback,
+    getGoogleAuthCallback
+  );
 
   app.post("/auth/logout", postLogout);
 }

@@ -48,7 +48,7 @@ export class ValidationError extends BaseError {
   #transform(errorValidation) {
     let errorObj = {};
     const newArrError = [...errorValidation];
-    for (var i = 0, len = newArrError.length; i < len; i++) {
+    for (let i = 0, len = newArrError.length; i < len; i++) {
       const messageArr = errorValidation
         .filter(item => item.param == newArrError[i]["param"])
         .map(el => el.msg);
@@ -58,7 +58,7 @@ export class ValidationError extends BaseError {
       };
     }
 
-    for (var key in errorObj) newArrError.push(errorObj[key]);
+    for (let key in errorObj) newArrError.push(errorObj[key]);
 
     return errorObj;
   }

@@ -20,13 +20,13 @@ function returnError(err, req, res, next) {
   const status = err.statusCode || httpStatusCodes.INTERNAL_SERVER;
   const type = err.responseType;
   const stack = MODE == "development" ? err.stack : null;
-  console.log(err);
+
   if (type == "json") {
     return res.status(status).json({ ...err, stack });
   } else if (type == "page") {
     const view = err?.errorView || "errors/500";
     const errData = {
-      message: err.message,
+      message: message,
       ...err,
     };
     const renderData = err?.renderData || null;

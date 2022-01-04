@@ -137,11 +137,6 @@ export const postSignUp = async (req, res, next) => {
   }
 };
 
-export const postLogout = (req, res) => {
-  req.logout();
-  res.redirect("/");
-};
-
 export const getLocalAuthCallback = (req, res) => {
   try {
     res.redirect("/dashboard");
@@ -152,4 +147,21 @@ export const getLocalAuthCallback = (req, res) => {
     });
     res.redirect("/auth");
   }
+};
+
+export const getGoogleAuthCallback = (req, res) => {
+  try {
+    res.redirect("/dashboard/");
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "danger",
+      message: "Opps, Login failed please try again",
+    });
+    res.redirect("/auth");
+  }
+};
+
+export const postLogout = (req, res) => {
+  req.logout();
+  res.redirect("/");
 };
