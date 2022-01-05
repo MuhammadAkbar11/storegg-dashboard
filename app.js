@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import connectDB from "./config/db.config.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -37,6 +38,9 @@ app.set("views", "views");
 // Body Parse
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Cors
+app.use(cors());
 
 // Method override
 app.use(

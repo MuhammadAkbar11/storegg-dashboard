@@ -1,15 +1,10 @@
 import path from "path";
 import fs from "fs";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import colors from "colors";
 import connectDB from "../config/db.config.js";
 import { dotenvConfig } from "../config/env.config.js";
-import { consoleLogError } from "../utils/consoleLog.js";
+import consoleLog from "../utils/consoleLog.js";
 import UserModel from "../models/User.model.js";
 import bcryptjs from "bcryptjs";
-
-const __dirname = path.resolve();
 
 dotenvConfig;
 
@@ -27,11 +22,10 @@ async function importData() {
 
     await UserModel.insertMany(users);
 
-    console.log("Imported".green);
+    consoleLog.info("Imported");
     process.exit();
   } catch (error) {
-    console.log(`\n${error}`.bgRed.grey);
-    consoleLogError("Import data is failed!");
+    consoleLog.error("Import data is failed!");
     process.exit();
   }
 }
@@ -39,11 +33,10 @@ async function importData() {
 async function destroyData() {
   try {
     await UserModel.deleteMany();
-    console.log("Destroyed".red);
+    consoleLog.error("Destroyed");
     process.exit();
   } catch (error) {
-    console.log(`\n${error}`.bgRed.grey);
-    consoleLogError("Import data is failed!");
+    consoleLog.error("Import data is failed!");
     process.exit();
   }
 }
