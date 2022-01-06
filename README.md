@@ -1,4 +1,4 @@
-# Nodejs Authentication Boilerplate Support OAuth
+# Nodejs Authentication Boilerplate Support Google OAuth
 
 ## Requirments
 
