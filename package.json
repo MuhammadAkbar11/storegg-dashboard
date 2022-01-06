@@ -1,18 +1,20 @@
 {
-  "name": "nodejs-login-system-boilerplate",
+  "name": "nodejs-auth-boilerplate",
   "version": "1.0.0",
-  "description": "Nodejs login system boilerplate",
+  "description": "Nodejs authetication boilerplate support google oauth",
   "main": "app.js",
   "repository": "https://github.com/MuhammadAkbar11/node-login-system-boilerplate.git",
   "author": "MuhammadAkbar11",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "nodemon app.js --dev",
-    "seed:import": "node seeds/index.js --dev seed=import",
-    "seed:destroy": "node seeds/index.js --dev seed=destroy"
+    "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "start": "cross-env NODE_ENV=production nodemon app.js",
+    "seed:import": "node seeds/index.js seed=import",
+    "seed:destroy": "node seeds/index.js seed=destroy"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.15"
   },
   "dependencies": {

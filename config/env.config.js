@@ -3,16 +3,19 @@ import path from "path";
 
 const __dirname = path.resolve();
 
+export const MODE = process.env.NODE_ENV;
+
 const DEV_ENV = path.resolve(__dirname, ".env.dev");
 const PRODUCTION_ENV = path.resolve(__dirname, ".env");
-const DEV_MODE = process.argv.find(arg => arg.includes("--dev"));
+
+const DEV_MODE = "development";
 
 export const dotenvConfig = dotenv.config({
-  path: DEV_MODE ? DEV_ENV : PRODUCTION_ENV,
+  path: MODE === DEV_MODE ? DEV_ENV : PRODUCTION_ENV,
 });
 
 export const PORT = process.env.PORT;
-export const MODE = process.env.NODE_ENV;
+
 export const MONGO_URI = process.env.MONGO_URI;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MAIL_USER = process.env.MAIL_USERNAME;
