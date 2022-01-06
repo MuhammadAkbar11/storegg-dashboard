@@ -1,25 +1,25 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import connectDB from "./config/db.config.js";
+import connectDB from "./src/config/db.config.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import passport from "passport";
 import methodOverride from "method-override";
 import connectFlash from "connect-flash";
-import * as envConfigs from "./config/env.config.js";
+import * as envConfigs from "./src/config/env.config.js";
 import {
   isOperationalError,
   logError,
   logErrorMiddleware,
   returnError,
-} from "./middleware/errorHandler.js";
-import routers from "./routes/index.routes.js";
-import consoleLog from "./utils/consoleLog.js";
+} from "./src/middleware/errorHandler.js";
 
-import { STATIC_FOLDER } from "./utils/constants.js";
-import passportConfig from "./config/passport.config.js";
-import MainRoutes from "./routes/index.routes.js";
+import consoleLog from "./src/utils/consoleLog.js";
+
+import { STATIC_FOLDER } from "./src/utils/constants.js";
+import passportConfig from "./src/config/passport.config.js";
+import MainRoutes from "./src/routes/index.routes.js";
 
 envConfigs.dotenvConfig;
 
@@ -28,12 +28,13 @@ connectDB();
 
 const app = express();
 // Store Session
+
 const store = MongoStore.create({
   mongoUrl: envConfigs.MONGO_URI,
 });
 
 app.set("view engine", "ejs");
-app.set("views", "views");
+app.set("views", "src/views");
 
 // Body Parse
 app.use(express.urlencoded({ extended: false }));
