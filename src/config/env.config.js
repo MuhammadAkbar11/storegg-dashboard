@@ -14,7 +14,7 @@ export const dotenvConfig = dotenv.config({
   path: MODE == DEV_MODE ? DEV_ENV : PRODUCTION_ENV,
 });
 
-export const PORT = process.env.PORT;
+export const PORT = process.env.PORT | 3000;
 
 export const MONGO_URI = process.env.MONGO_URI;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
