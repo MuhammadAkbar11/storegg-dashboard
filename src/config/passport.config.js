@@ -1,6 +1,6 @@
 import passport from "passport";
 import BaseError from "../helpers/baseError.helper.js";
-import UserModel from "../models/User.model.js";
+import { findUserById } from "../modules/user/user.repository.js";
 import GoogleStrategy from "./strategies/google.strategy.js";
 import LocalStrategy from "./strategies/local.strategy.js";
 
@@ -14,7 +14,7 @@ export default function () {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await UserModel.findById(id);
+      const user = await findUserById(id);
       done(null, user);
     } catch (err) {
       const error = new BaseError(

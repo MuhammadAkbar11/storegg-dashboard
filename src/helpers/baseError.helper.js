@@ -6,7 +6,7 @@ class BaseError extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
 
     this.name = name || "BASE_ERROR";
-    this.statusCode = statusCode || 500;
+    this.statusCode = statusCode || httpStatusCodes.INTERNAL_SERVER;
     this.message = message || "Something went wrong";
     this.isOperational = isOperational || true;
     this.errors = errors;

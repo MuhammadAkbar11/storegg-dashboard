@@ -1,6 +1,6 @@
 import { Strategy } from "passport-local";
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
-import UserModel from "../../models/User.model.js";
+import { findOneUser } from "../../modules/user/user.repository.js";
 
 const LocalStrategy = new Strategy(
   {
@@ -9,7 +9,7 @@ const LocalStrategy = new Strategy(
   },
   async function (email, password, done) {
     try {
-      const user = await UserModel.findOne({ email: email });
+      const user = await findOneUser({ email: email });
       if (user) {
         return done(null, user);
       }

@@ -1,6 +1,6 @@
 import { Strategy } from "passport-google-oauth20";
 import { TransfromError } from "../../helpers/baseError.helper.js";
-import UserModel from "../../models/User.model.js";
+import { findOneUser } from "../../modules/user/user.repository.js";
 import { OAUTH_CLIENTID, OAUTH_CLIENT_SECRET } from "../env.config.js";
 
 const GoogleStrategy = new Strategy(
@@ -19,7 +19,7 @@ const GoogleStrategy = new Strategy(
     };
 
     try {
-      const user = await UserModel.findOne({ email: profile.emails[0].value });
+      const user = await findOneUser({ email: profile.emails[0].value });
 
       if (user) {
         if (user.googleId) {

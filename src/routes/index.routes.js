@@ -1,16 +1,15 @@
-import { getIndex } from "../controllers/app.controller.js";
 import { ensureAuth } from "../middleware/auth.js";
-import APIsRoutes from "./api/apis.routes.js";
-import AuthRoutes from "./auth.routes.js";
+import UserRoutes from "../modules/user/user.routes.js";
 
 function MainRoutes(app) {
-  app.get("/", ensureAuth, getIndex);
+  app.get("/", ensureAuth, (req, res) => {
+    res.render("index", {
+      title: "Welcome",
+      path: "/",
+    });
+  });
 
-  // auth Routes
-  AuthRoutes(app);
-
-  // Api main routes
-  APIsRoutes(app);
+  UserRoutes(app);
 }
 
 export default MainRoutes;
