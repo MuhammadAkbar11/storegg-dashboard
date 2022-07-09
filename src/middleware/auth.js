@@ -8,7 +8,7 @@ function ensureAuth(req, res, next) {
 
 function ensureGuest(req, res, next) {
   if (req.isAuthenticated()) {
-    res.redirect("/dashboard");
+    res.redirect("/");
   } else {
     next();
   }

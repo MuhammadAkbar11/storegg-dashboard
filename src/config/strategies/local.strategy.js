@@ -13,12 +13,12 @@ const LocalStrategy = new Strategy(
       if (user) {
         return done(null, user);
       }
-      throw new BaseError("Authentication", "Failed to Login", 400, true, {
+      throw new BaseError("AUTHENTICATION", "Failed to Login", 400, true, {
         errorView: "auth/login",
       });
     } catch (err) {
       const error = new BaseError(
-        "Authentication",
+        "AUTHENTICATION",
         err?.message || "Failed to Login",
         err?.status || 400,
         true,

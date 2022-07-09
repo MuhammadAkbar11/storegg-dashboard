@@ -5,7 +5,7 @@ class BaseError extends Error {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
 
-    this.name = name || "BaseError";
+    this.name = name || "BASE_ERROR";
     this.statusCode = statusCode || 500;
     this.message = message || "Something went wrong";
     this.isOperational = isOperational || true;
@@ -24,7 +24,6 @@ export class TransfromError extends BaseError {
       err?.errors
     );
 
-    this.responseType = err?.responseType || "page";
     Object.keys(this.errors).map(x => {
       this[x] = this.errors[x];
     });
@@ -38,9 +37,15 @@ export class TransfromError extends BaseError {
 
 export class ValidationError extends BaseError {
   constructor(err, view, renderOpts) {
-    super("Validation", httpStatusCodes.BAD_REQUEST, "Bad Validation", true, {
-      errorView: view,
-    });
+    super(
+      "BAD_VALIDATION",
+      httpStatusCodes.BAD_REQUEST,
+      "Bad Validation",
+      true,
+      {
+        errorView: view,
+      }
+    );
     this.validation = this.#transform(err);
     this.renderData = { ...renderOpts };
   }

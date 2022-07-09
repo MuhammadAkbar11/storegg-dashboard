@@ -8,7 +8,6 @@ import {
   OAUTH_REFRESH_TOKEN,
 } from "./env.config.js";
 import BaseError from "../helpers/baseError.helper.js";
-import ApiError from "../helpers/apiError.helper.js";
 
 const OAuth2 = googleApis.google.auth.OAuth2;
 
@@ -28,7 +27,7 @@ const createTransporter = async () => {
       return oauth2Client.getAccessToken((err, token) => {
         if (err) {
           const errors = new BaseError(
-            "Error OAuth2",
+            "OAUTH2_ERROR",
             err.response.status,
             err.response.data?.error_description ||
               "Failed to create access token :(",

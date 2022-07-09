@@ -7,7 +7,7 @@ const sendEmail = async emailOptions => {
     await emailTransporter.sendMail(emailOptions);
   } catch (err) {
     const errors = new BaseError(
-      "Error OAuth2",
+      "MAILER_ERROR",
       err.statusCode,
       err.message,
       true

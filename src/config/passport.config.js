@@ -18,7 +18,7 @@ export default function () {
       done(null, user);
     } catch (err) {
       const error = new BaseError(
-        "Authentication",
+        "AUTHENTICATION",
         err?.message || "Failed to Login",
         err?.status || 400,
         true,

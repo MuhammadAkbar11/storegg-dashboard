@@ -40,7 +40,7 @@ export const postLogin = async (req, res, next) => {
 
     if (!user) {
       throw new BaseError(
-        "BadRequest",
+        "BAD_REQUEST",
         httpStatusCodes.BAD_REQUEST,
         "User not found",
         true,
@@ -55,7 +55,7 @@ export const postLogin = async (req, res, next) => {
 
     if (!passwordMatch) {
       throw new BaseError(
-        "BadRequest",
+        "BAD_REQUEST",
         httpStatusCodes.BAD_REQUEST,
         "Wrong password",
         true,
@@ -109,15 +109,8 @@ export const postSignUp = async (req, res, next) => {
     const user = await UserModel.findOne({ email: email });
 
     if (user) {
-      const baseError = new BaseError(
-        "BadRequest",
-        httpStatusCodes.BAD_REQUEST,
-        "User already exist",
-        true
-      );
-
       throw new BaseError(
-        "BadRequest",
+        "BAD_REQUEST",
         httpStatusCodes.BAD_REQUEST,
         "User already exist",
         true,

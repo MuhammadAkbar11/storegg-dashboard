@@ -1,11 +1,10 @@
-import { getDashboard, getIndex } from "../controllers/app.controller.js";
+import { getIndex } from "../controllers/app.controller.js";
 import { ensureAuth } from "../middleware/auth.js";
 import APIsRoutes from "./api/apis.routes.js";
 import AuthRoutes from "./auth.routes.js";
 
 function MainRoutes(app) {
-  app.get("/", getIndex);
-  app.get("/dashboard", ensureAuth, getDashboard);
+  app.get("/", ensureAuth, getIndex);
 
   // auth Routes
   AuthRoutes(app);
