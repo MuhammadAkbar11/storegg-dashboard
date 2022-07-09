@@ -1,11 +1,25 @@
-<%- include('../layouts/head.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Error</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title  %> </title>
+</head>
 
-<div>
-  <%= JSON.stringify(errors) %>
-</div>
+<body>
+  <h1>Error</h1>
 
-<a href="/auth/">Login Page</a>
+  <div>
+    <%= JSON.stringify(errors) %>
 
-<%- include('../layouts/end.ejs') %>
+
+    <br>
+    <%= stack %>
+  </div>
+
+  <a href="/auth/">Login Page</a>
+</body>
+
+</html>
