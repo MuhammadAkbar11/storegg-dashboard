@@ -12,6 +12,7 @@ import {
   isOperationalError,
   logError,
   logErrorMiddleware,
+  return404,
   returnError,
 } from "./src/middleware/errorHandler.js";
 
@@ -20,6 +21,7 @@ import consoleLog from "./src/utils/consoleLog.js";
 import { STATIC_FOLDER } from "./src/utils/constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
+import { responseType } from "./src/middleware/responseType.js";
 
 envConfigs.dotenvConfig;
 
@@ -87,10 +89,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(STATIC_FOLDER));
+app.use(responseType);
 
 MainRoutes(app);
 
 app.use(logErrorMiddleware);
+app.use(return404);
 app.use(returnError);
 
 app.listen(envConfigs.PORT, () => {
