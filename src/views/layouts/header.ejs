@@ -12,8 +12,7 @@
       </ul>
     </div>
     <ul class="nav navbar-nav align-items-center ms-auto">
-      <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
-            data-feather="moon"></i></a></li>
+
       <li class="nav-item dropdown dropdown-notification me-25"><a class="nav-link" href="#"
           data-bs-toggle="dropdown"><i class="ficon" data-feather="bell"></i><span
             class="badge rounded-pill bg-danger badge-up">5</span></a>
@@ -119,11 +118,18 @@
           <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="me-50"
               data-feather="settings"></i> Settings</a><a class="dropdown-item" href="#"><i class="me-50"
               data-feather="credit-card"></i> Pricing</a><a class="dropdown-item" href="#"><i class="me-50"
-              data-feather="help-circle"></i> FAQ</a><a class="dropdown-item" href="#"><i class="me-50"
-              data-feather="power"></i> Logout</a>
+              data-feather="help-circle"></i> FAQ</a>
+          <a class="dropdown-item" id="logout-action" href="#"><i class="me-50" data-feather="power"></i>
+            Logout
+          </a>
         </div>
       </li>
     </ul>
   </div>
 </nav>
+
+<form action="/auth/logout" method="post" id="form-logout" class="d-none">
+  <input type="hidden" name="_method" value="POST">
+  <button id="logout-submit" type="submit" class=" d-none">Submit</button>
+</form>
 <!-- END: Header-->
