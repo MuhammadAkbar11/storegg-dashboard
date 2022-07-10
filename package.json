@@ -10,10 +10,12 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
     "start": "cross-env NODE_ENV=production nodemon app.js",
-    "seed:import": "node seeds/index.js seed=import",
-    "seed:destroy": "node seeds/index.js seed=destroy"
+    "seed:import": "node ./src/database/seeds/index.js seed=import",
+    "seed:destroy": "node ./src/database/seeds/index.js seed=destroy",
+    "modules" : "node ./src/generator/index.js"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.15"
   },

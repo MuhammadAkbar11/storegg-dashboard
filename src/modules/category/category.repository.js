@@ -4,7 +4,6 @@ import CategoryModel from "./category.model.js";
 export const findAllCategories = async () => {
   try {
     const data = await CategoryModel.find({});
-
     return data;
   } catch (error) {
     console.error("[EXCEPTION] findOneUser", error);

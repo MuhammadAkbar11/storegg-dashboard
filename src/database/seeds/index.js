@@ -1,30 +1,21 @@
 import path from "path";
-import fs from "fs";
-import connectDB from "../config/db.config.js";
-import { dotenvConfig } from "../config/env.config.js";
-import consoleLog from "../utils/consoleLog.js";
-import UserModel from "../models/User.model.js";
-import bcryptjs from "bcryptjs";
+import { dotenvConfig } from "../../config/env.config";
+import connectDB from "../../config/db.config";
+import { seedDestroyUsers, seedImportUsers } from "./user.seed";
+import consoleLog from "../../utils/consoleLog";
 
 dotenvConfig;
 
-connectDB();
+connectDB;
 
 async function importData() {
   try {
-    const usersJson = await fs.readFileSync(path.resolve("data/users.json"));
-    const users = JSON.parse(usersJson).map(user => {
-      return {
-        ...user,
-        password: bcryptjs.hashSync(user.password, 12),
-      };
-    });
-
-    await UserModel.insertMany(users);
+    await seedImportUsers();
 
     consoleLog.info("Imported");
     process.exit();
   } catch (error) {
+    console.log(error);
     consoleLog.error("Import data is failed!");
     process.exit();
   }
@@ -32,7 +23,7 @@ async function importData() {
 
 async function destroyData() {
   try {
-    await UserModel.deleteMany();
+    await seedDestroyUsers();
     consoleLog.error("Destroyed");
     process.exit();
   } catch (error) {
