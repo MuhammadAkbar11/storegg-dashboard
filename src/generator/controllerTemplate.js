@@ -7,12 +7,19 @@ import {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
+import {
+  create${capName},
+  delete${capName}ById,
+  findAll${capName},
+  find${capName}ById,
+  update${capName},
+} from "./${name}.repository.js";
 
 export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    res.render("${name}/view_${name}", {
+    res.render("${name}/v_${name}", {
       title: "${name}",
       path: "/${name}",
       flashdata: flashdata,
@@ -28,6 +35,15 @@ export const index = async (req, res, next) => {
 
 
 export const post${capName} = async (req, res, next) => {
+
+  if (!validate.isEmpty()) {
+    const errValidate = new ValidationError(validate.array(), "", {
+      values: req.body,
+    });
+    // response here
+    return;
+  }
+
   try {
     // code here
   } catch (error) {
@@ -38,6 +54,15 @@ export const post${capName} = async (req, res, next) => {
 
 
 export const put${capName} = async (req, res, next) => {
+
+  if (!validate.isEmpty()) {
+    const errValidate = new ValidationError(validate.array(), "", {
+      values: req.body,
+    });
+    // response here
+    return;
+  }
+
   try {
     // code here
   } catch (error) {
