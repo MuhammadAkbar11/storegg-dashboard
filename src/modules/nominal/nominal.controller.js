@@ -5,6 +5,7 @@ import {
 } from "../../helpers/baseError.helper.js";
 import {
   createNominal,
+  deleteNominalById,
   findAllNominal,
   findNominalById,
   updateNominal,
@@ -139,10 +140,37 @@ export const putNominal = async (req, res, next) => {
 };
 
 export const deleteNominal = async (req, res, next) => {
+  const id = req.params.id;
+  const redirect = req.query.redirect || "/nominal";
   try {
-    // code here
+    const nominal = await findNominalById(req.params.id);
+
+    if (!nominal) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal menghapus Nominal, karena Nominal dengan ID <strong>${id}</strong> tidak di temukan`,
+      });
+      res.redirect(`${redirect}`);
+      return;
+    }
+
+    const message = `Anda telah menghapus Nominal <strong class=" text-warning" >${nominal.coinNominal} ${nominal.coinName}</strong> `;
+
+    await deleteNominalById(id);
+
+    req.flash("flashdata", {
+      type: "warning",
+      title: "Terhapus!",
+      message: message,
+    });
+    res.redirect("/nominal");
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal menghapus Nominal",
+    });
+    res.redirect(`${redirect}?action_error=true`);
   }
 };
