@@ -21,21 +21,28 @@
     </ul>
   </div>
   <div class="shadow-bottom"></div>
-  <div class="main-menu-content mt-2">
+  <div class="main-menu-content pb-2">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       <li class="nav-item <%= path == "/" ? "active" : ""%>  ">
-        <a class="d-flex align-items-center" href="index.html">
+        <a class="d-flex align-items-center" href="/">
           <i data-feather="home"></i><span class="menu-title text-truncate">Dashboard
           </span>
         </a>
       </li>
+
+      <li class=" navigation-header"><span>Profile</span><i data-feather="more-horizontal"></i>
+      </li>
+      <li class="nav-item"><a class="d-flex align-items-center" href="/profile">
+          <i data-feather="user"></i><span class="menu-title text-truncate">Profile</span></a>
+      </li>
       <li class="nav-item"><a class="d-flex align-items-center" href="/chat">
           <i data-feather="message-square"></i><span class="menu-title text-truncate">Chat</span></a>
       </li>
+      <li class=" navigation-header"><span>Master</span><i data-feather="more-horizontal"></i>
+      </li>
       <li class=" nav-item">
         <a class="d-flex align-items-center" href="#"><i data-feather="users"></i>
-          <span class="menu-title text-truncate">Users</span><span
-            class="badge badge-light-danger rounded-pill ms-auto me-1">2</span></a>
+          <span class="menu-title text-truncate">Users</span></a>
         <ul class="menu-content">
           <li>
             <a class="d-flex align-items-center" href="/users">
@@ -48,20 +55,61 @@
           <li><a class="d-flex align-items-center" href="/players"><i data-feather="circle"></i><span
                 class="menu-item text-truncate">Players</span></a>
           </li>
-
         </ul>
+      </li>
+      <li class="nav-item <%= path == "/category" ? "active" : ""%>">
+        <a class="d-flex align-items-center " href="/category">
+          <i data-feather="monitor"> </i>
+          <span class="menu-title text-truncate">Categories</span>
+        </a>
       </li>
       <li class="nav-item">
         <a class="d-flex align-items-center" href="/chat">
-          <i data-feather="crosshair"> </i>
+          <i data-feather="dribbble"> </i>
           <span class="menu-title text-truncate">Games</span>
         </a>
+      </li>
+      <li class="nav-item <%= path == "/vouchers" ? "active" : ""%>">
+        <a class="d-flex align-items-center " href="/vouchers">
+          <i data-feather='grid'></i>
+          <span class="menu-title text-truncate">Vouchers</span>
+        </a>
+      </li>
+
+      <li class=" navigation-header"><span>Payment</span><i data-feather="more-horizontal"></i>
+      </li>
+      <li class="nav-item">
+        <a class="d-flex align-items-center" href="/bank">
+          <i data-feather='credit-card'></i>
+          <span class="menu-title text-truncate">Bank</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="d-flex align-items-center" href="/payment">
+          <i data-feather='dollar-sign'></i>
+          <span class="menu-title text-truncate">Payment Method</span>
+        </a>
+      </li>
+      <li class=" navigation-header"><span>Transaction</span><i data-feather="more-horizontal"></i>
       </li>
       <li class="nav-item">
         <a class="d-flex align-items-center" href="/chat">
           <i data-feather="file-text"> </i>
           <span class="menu-title text-truncate">Transactions</span>
         </a>
+      </li>
+      <li class=" navigation-header"><span>Management</span><i data-feather="more-horizontal"></i>
+      </li>
+      <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="shield"></i><span
+            class="menu-title text-truncate">Roles &amp; Permission</span></a>
+        <ul class="menu-content">
+          <li><a class="d-flex align-items-center" href="app-access-roles.html"><i data-feather="circle"></i><span
+                class="menu-item text-truncate">Roles</span></a>
+          </li>
+          <li><a class="d-flex align-items-center" href="app-access-permission.html"><i data-feather="circle"></i><span
+                class="menu-item text-truncate">Permission</span></a>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
