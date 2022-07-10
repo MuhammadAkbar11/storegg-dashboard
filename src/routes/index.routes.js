@@ -1,4 +1,5 @@
 import { ensureAuth } from "../middleware/auth.js";
+import CategoryRoutes from "../modules/category/category.routes.js";
 import UserRoutes from "../modules/user/user.routes.js";
 
 function MainRoutes(app) {
@@ -10,6 +11,8 @@ function MainRoutes(app) {
   });
 
   UserRoutes(app);
+
+  CategoryRoutes(app);
 }
 
 export default MainRoutes;

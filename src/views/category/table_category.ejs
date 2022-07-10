@@ -1,0 +1,53 @@
+<section>
+  <div class="row">
+
+    <div class="col-12 col-md-12 col-lg-10">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Data Kategori</h6>
+
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createCanvasEnd"
+            aria-controls="createCanvasEnd">
+            <i data-feather="plus" data-bs-toggle='modal' data-bs-target='#modals-createCategory'></i> Tambah Kategori
+          </button>
+        </div>
+        <div class="card-body">
+          <table id="category-datatable" class="datatables-basic table table-responsive-sm">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let no = 1 %>
+              <% categories && categories.forEach(cat => { %>
+              <tr>
+                <td><%= no++  %></td>
+                <td><%= cat.name  %></td>
+                <td><%= cat.description  %></td>
+                <td data-order="false">
+
+                  <form action="/category/<%= cat._id %>" method="post">
+                    <a href="/category-edit/<%= cat._id %>"
+                      class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                      <i data-feather="edit"></i>
+                    </a>
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
+                      <i data-feather="trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <%  }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
