@@ -1,4 +1,3 @@
-
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import NominalModel from "./nominal.model.js";
 
@@ -32,9 +31,14 @@ export const createNominal = async data => {
   }
 };
 
-export const updateNominal = async (id, data) => {
+export const updateNominal = async (id, { coinName, coinNominal, price }) => {
   try {
     const result = await NominalModel.findById(id);
+
+    result.coinName = coinName;
+    result.coinNominal = coinNominal;
+    result.price = price;
+
     return await result.save();
   } catch (error) {
     console.error("[EXCEPTION] updateNominal", error);
@@ -51,4 +55,3 @@ export const deleteNominalById = async id => {
     throw new TransfromError(error);
   }
 };
-

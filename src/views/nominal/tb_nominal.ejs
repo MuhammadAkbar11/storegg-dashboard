@@ -6,7 +6,7 @@
         <div class="card-header">
           <h6 class="mb-0">Data Nominal</h6>
 
-          <a href="/create-nominal" class="btn btn-primary">
+          <a href="/nominal-create" class="btn btn-primary">
             <i data-feather="plus"></i> Buat Nomimal
           </a>
         </div>
@@ -15,8 +15,8 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Nama Koin</th>
                 <th>Nominal</th>
+                <th>Nama Koin</th>
                 <th>Harga</th>
                 <th></th>
               </tr>
@@ -24,11 +24,16 @@
             <tbody>
               <% let no = 1 %>
               <% nominals && nominals.forEach(nm => { %>
+
+              <% const price = nm.price.toLocaleString("id", {
+                style: "currency",
+                currency: "IDR",
+              }); %>
               <tr>
                 <td><%= no++  %></td>
-                <td><%= nm.coinName  %></td>
                 <td><%= nm.coinNominal  %></td>
-                <td><%= nm.price  %></td>
+                <td><%= nm.coinName  %></td>
+                <td><%= price  %></td>
                 <td data-order="false">
                   <form action="/nominal/<%= nm._id %>" method="post">
                     <a href="/nominal-edit/<%= nm._id %>"

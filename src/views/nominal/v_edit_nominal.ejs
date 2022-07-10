@@ -1,0 +1,112 @@
+<%- include('../layouts/head.ejs') %>
+
+<%- include("../layouts/header.ejs") %>
+<%- include("../layouts/sidebar.ejs") %>
+
+<%- include("../includes/toast.ejs") %>
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= title %></h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/nominal">Nomial</a>
+                </li>
+                <li class="breadcrumb-item active"><%= title %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <% if(!nominal) { %>
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            <div class="alert-body">
+              <strong>Info:</strong> Nominal dengan ID "<%= params %>" tidak ditemukan
+              ! <a class="text-info text-decoration-underline fw-light " href="/nominal">Kembali ke Halaman
+                Nominal</a>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <%
+        let coinNameValue = nominal.coinName
+        let coinNominalValue = nominal.coinNominal
+        let priceValue = nominal.price
+
+        if(errors && errors?.renderData?.values) {
+          coinNameValues = errors?.renderData?.values?.coinName
+          coinNominalValue = errors?.renderData?.values?.coinNominal
+          priceValue = errors?.renderData?.values?.price
+        }
+
+        %>
+        <% if(nominal) { %>
+        <div class="col-12 col-md-8 col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <form class="form form-vertical" action="/nominal/<%= nominal._id %>" method="post">
+                <input type="hidden" value="PUT" name="_method">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="mb-1">
+                      <label class="form-label" for="coinName">Nama Koin</label>
+                      <input type="text" id="coinName" class="form-control" name="coinName" placeholder="Name Koin"
+                        value="<%= coinNameValue %>" />
+                      <% if(errors && errors?.validation?.coinName) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.coinName?.message[0] %></small>
+                      <% } %>
+                    </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="coinNominal">Nominal</label>
+                      <input type="number" id="coinNominal" class="form-control" name="coinNominal"
+                        placeholder="Nominal" value="<%= coinNominalValue %>" />
+                      <% if(errors && errors?.validation?.coinNominal) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.coinNominal?.message[0] %></small>
+                      <% } %>
+                    </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="price">Harga</label>
+                      <input type="number" id="price" class="form-control" name="price" placeholder="Harga"
+                        value="<%= priceValue %>" />
+                      <% if(errors && errors?.validation?.price) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.price?.message[0] %></small>
+                      <% } %>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary me-1">Simpan </button>
+                    <a href="/nominal" class=" btn btn-outline-secondary">Batal</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+<%- include('../layouts/footer.ejs') %>
+
+<%- include('../layouts/end.ejs') %>
