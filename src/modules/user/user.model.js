@@ -14,6 +14,9 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
     },
+    role: {
+      type: String,
+    },
     googleId: {
       type: String,
     },
