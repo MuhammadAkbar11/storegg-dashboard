@@ -13,15 +13,18 @@ logoutActions.forEach(el => {
 
 const ToastsTemplate = [...document.querySelectorAll("#toast-template")];
 if (ToastsTemplate.length !== 0) {
-  ToastsTemplate.map(toast => {
+  ToastsTemplate.map((toast, idx) => {
     const type = toast.dataset.type;
     const message = toast.dataset.message;
     const title = toast.dataset.title;
-    toastr[type](message, title, {
-      closeButton: true,
-      timeOut: 8000,
-      progressBar: true,
-      tapToDismiss: false,
-    });
+    setTimeout(() => {
+      toastr[type](message, title, {
+        timeOut: 9000,
+        closeButton: true,
+        timeOut: 0,
+        extendedTimeOut: 0,
+        tapToDismiss: false,
+      });
+    }, idx * 1000);
   });
 }
