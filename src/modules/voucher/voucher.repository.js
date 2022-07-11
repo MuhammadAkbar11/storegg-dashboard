@@ -1,10 +1,12 @@
-
 import { TransfromError } from "../../helpers/baseError.helper.js";
+import { ROOT_FOLDER } from "../../utils/constants.js";
 import VoucherModel from "./voucher.model.js";
 
 export const findAllVoucher = async () => {
   try {
-    const result = await VoucherModel.find({});
+    const result = await VoucherModel.find({})
+      .populate("category")
+      .populate("nominals");
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllVoucher", error);
@@ -42,6 +44,8 @@ export const updateVoucher = async (id, data) => {
   }
 };
 
+export const uploadVoucherThumbnail = async () => {};
+
 export const deleteVoucherById = async id => {
   try {
     const result = await VoucherModel.deleteOne({ _id: id });
@@ -51,4 +55,3 @@ export const deleteVoucherById = async id => {
     throw new TransfromError(error);
   }
 };
-
