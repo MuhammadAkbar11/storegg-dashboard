@@ -1,12 +1,22 @@
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import NominalModel from "./nominal.model.js";
 
-export const findAllNominal = async () => {
+export const findAllNominal = async (filter = {}, sort = {}) => {
   try {
-    const result = await NominalModel.find({});
+    const result = await NominalModel.find({ ...filter }, null, { ...sort });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllNominal", error);
+    throw new TransfromError(error);
+  }
+};
+
+export const findOneNominal = async filter => {
+  try {
+    const result = await NominalModel.findById({ ...filter });
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] findOneNominal", error);
     throw new TransfromError(error);
   }
 };
