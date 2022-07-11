@@ -2,6 +2,7 @@ import { ensureAuth } from "../middleware/auth.js";
 import CategoryRoutes from "../modules/category/category.routes.js";
 import NominalRoutes from "../modules/nominal/nominal.routes.js";
 import UserRoutes from "../modules/user/user.routes.js";
+import VoucherRoutes from "../modules/voucher/voucher.routes.js";
 
 function MainRoutes(app) {
   app.get("/", ensureAuth, (req, res) => {
@@ -12,10 +13,9 @@ function MainRoutes(app) {
   });
 
   UserRoutes(app);
-
   CategoryRoutes(app);
-
   NominalRoutes(app);
+  VoucherRoutes(app);
 }
 
 export default MainRoutes;
