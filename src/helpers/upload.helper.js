@@ -1,7 +1,7 @@
 import path from "path";
 import multer from "multer";
 import dayjs from "dayjs";
-import BaseError from "./baseError.helper";
+import BaseError from "./baseError.helper.js";
 
 class Upload {
   constructor({
@@ -26,10 +26,13 @@ class Upload {
           filename = file.fieldname;
         }
 
+        const resultFileName = filename
+          .replace(/[^A-Za-z0-9]/g, "")
+          .replace(/\s+/g, "")
+          .trim();
         const filenameToArr = file.originalname.split(" ").join("").split(".");
-        const fileName = req.body.title.split(" ").join("-");
         const ext = filenameToArr[filenameToArr.length - 1];
-        cb(null, `${fileName}_${dayjs().valueOf()}.${ext}`);
+        cb(null, `${resultFileName}_${dayjs().valueOf()}.${ext}`);
       },
     });
   }
