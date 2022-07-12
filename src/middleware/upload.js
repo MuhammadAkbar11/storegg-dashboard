@@ -1,10 +1,11 @@
 import multer from "multer";
+import { UPLOAD_PATH } from "../config/env.config.js";
 
 import Upload from "../helpers/upload.helper.js";
 
 const uploadSingle = new Upload({
   fieldName: "image",
-  folderName: "public/uploads/voucher/",
+  folderName: UPLOAD_PATH + "/vouchers",
 }).single();
 
 export const uploadSingleImage = (req, res, next) => {

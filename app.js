@@ -18,7 +18,7 @@ import {
 
 import consoleLog from "./src/utils/consoleLog.js";
 
-import { STATIC_FOLDER } from "./src/utils/constants.js";
+import { DEV_STATIC_FOLDER, STATIC_FOLDER } from "./src/utils/constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";
@@ -89,6 +89,10 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(STATIC_FOLDER));
+if (envConfigs.MODE == "development") {
+  app.use(express.static(DEV_STATIC_FOLDER));
+}
+
 app.use(responseType);
 
 MainRoutes(app);

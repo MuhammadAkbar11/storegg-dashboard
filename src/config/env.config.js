@@ -25,3 +25,5 @@ export const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
 export const OAUTH_REFRESH_TOKEN = process.env.OAUTH_REFRESH_TOKEN;
 export const OAUTH_PLAYGROUND = process.env.OAUTH_PLAYGROUND;
 export const EMAIL = process.env.EMAIL;
+export const UPLOAD_PATH =
+  MODE == DEV_MODE ? process.env.UPLOAD_PATH : "public/uploads";

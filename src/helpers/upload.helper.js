@@ -2,11 +2,12 @@ import path from "path";
 import multer from "multer";
 import dayjs from "dayjs";
 import BaseError from "./baseError.helper.js";
+import { UPLOAD_PATH } from "../config/env.config.js";
 
 class Upload {
   constructor({
     fieldName = "image",
-    folderName = "public/uploads/",
+    folderName = UPLOAD_PATH,
     fileTypes = /jpg|jpeg|png/,
   }) {
     this.fieldName = fieldName;

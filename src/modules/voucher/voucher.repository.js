@@ -3,6 +3,8 @@ import { deleteFile } from "../../utils/index.js";
 import sharp from "sharp";
 import VoucherModel from "./voucher.model.js";
 import path from "path";
+import { MODE, UPLOAD_PATH } from "../../config/env.config.js";
+import { DEV_STATIC_FOLDER, STATIC_FOLDER } from "../../utils/constants.js";
 
 export const findAllVoucher = async () => {
   try {
@@ -43,17 +45,25 @@ export const updateVoucher = async (id, data) => {
     const oldThumbnail = result.thumbnail;
     const fileImgData = data.fileimg.data;
     if (fileImgData) {
-      if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
-        deleteFile("public" + oldThumbnail);
-      }
-
       const resultImg = "GG_" + fileImgData.filename;
       await sharp(fileImgData.path)
         .resize(281, 381)
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileImgData.destination, resultImg));
       deleteFile(fileImgData.path);
-      result.thumbnail = `/uploads/voucher/${resultImg}`;
+      result.thumbnail = `/uploads/vouchers/${resultImg}`;
+
+      if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
+        const oldThumbnailPath =
+          MODE == "development" ? ".dev/public" : "public";
+        console.log(
+          "/uploads/Default-Thumbnail.png" != oldThumbnail,
+
+          oldThumbnailPath,
+          oldThumbnail
+        );
+        deleteFile(oldThumbnailPath + oldThumbnail);
+      }
     }
 
     result.name = data.name;
