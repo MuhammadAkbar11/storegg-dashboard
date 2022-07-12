@@ -7,12 +7,15 @@ import {
   deleteVoucher,
   viewPutVoucher,
   updateVoucherStatus,
+  viewListVoucherNominals,
 } from "./voucher.controller.js";
 
 import voucherValidation from "./voucher.validator.js";
 
 function VoucherRoutes(app) {
   app.route("/voucher/status/:id").put(ensureAuth, updateVoucherStatus);
+
+  app.route("/voucher-info/:id").get(ensureAuth, viewListVoucherNominals);
   app
     .route("/voucher-edit/:id")
     .get(ensureAuth, viewPutVoucher)

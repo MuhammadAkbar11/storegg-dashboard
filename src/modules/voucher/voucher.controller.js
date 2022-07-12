@@ -11,6 +11,7 @@ import {
   deleteVoucherById,
   findAllVoucher,
   findVoucherById,
+  findVoucherNominals,
   updateVoucher,
   updateVoucherStatusById,
 } from "./voucher.repository.js";
@@ -20,6 +21,7 @@ export const index = async (req, res, next) => {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
     const vouchers = await findAllVoucher();
+
     res.render("voucher/v_voucher", {
       title: "Voucher",
       path: "/voucher",
@@ -75,6 +77,27 @@ export const viewPutVoucher = async (req, res, next) => {
       nominals: transformNominal,
       categories: categories,
       params: req.params.id,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const viewListVoucherNominals = async (req, res, next) => {
+  const ID = req.params.id;
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+
+    const voucher = await findVoucherNominals(ID);
+
+    res.render("voucher/v_info_voucher", {
+      title: "Detail Voucher",
+      path: "/voucher",
+      flashdata: flashdata,
+      errors: errors,
+      voucher: voucher,
     });
   } catch (error) {
     const baseError = new TransfromError(error);

@@ -3,8 +3,7 @@ import { deleteFile } from "../../utils/index.js";
 import sharp from "sharp";
 import VoucherModel from "./voucher.model.js";
 import path from "path";
-import { MODE, UPLOAD_PATH } from "../../config/env.config.js";
-import { DEV_STATIC_FOLDER, STATIC_FOLDER } from "../../utils/constants.js";
+import { MODE } from "../../config/env.config.js";
 
 export const findAllVoucher = async () => {
   try {
@@ -21,6 +20,18 @@ export const findAllVoucher = async () => {
 export const findVoucherById = async id => {
   try {
     const result = await VoucherModel.findById(id);
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] findOneVoucher", error);
+    throw new TransfromError(error);
+  }
+};
+
+export const findVoucherNominals = async id => {
+  try {
+    const result = await VoucherModel.findById(id)
+      .populate("category")
+      .populate("nominals");
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOneVoucher", error);

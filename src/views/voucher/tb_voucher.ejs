@@ -14,14 +14,14 @@
 
         </div>
         <div class="card-body">
-          <table id="voucher-datatable" class="datatables-basic table table-responsive-sm">
+          <table id="voucher-datatable" class="datatables-basic table table-responsive">
             <thead>
               <tr>
                 <th>No</th>
-                <th>Gambar</th>
                 <th>Game</th>
-                <th>Nama Koin</th>
+                <th class=" text-nowrap ">Nama Koin</th>
                 <th>Kategori</th>
+                <th class=" text-nowrap ">Total Voucher</th>
                 <th>Status</th>
                 <th></th>
               </tr>
@@ -31,11 +31,18 @@
               <% vouchers && vouchers.forEach(vcr => { %>
 
               <tr>
-                <td><%= no++  %></td>
-                <td> <img height="80" src="<%= vcr.thumbnail  %>" alt=""> </td>
-                <td><%= vcr.name  %></td>
+                <td style="width: 30px;"><%= no++  %></td>
+                <td style="width: 180px;">
+                  <div class="d-flex gap-1">
+                    <img height="80" src="<%= vcr.thumbnail  %>" alt="">
+                    <%= vcr.name  %>
+                  </div>
+                </td>
                 <td><%= vcr.gameCoinName  %></td>
                 <td><%= vcr.category.name  %></td>
+                <td><a href="/voucher-info/<%= vcr._id %>" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Klik untuk detail"><span class=" badge badge-light-primary "><%= vcr.nominals.length %>
+                      Items</span></a> </td>
                 <td><% if(vcr.status == "Y")  { %>
 
                   <span class="badge badge-light-success text-uppercase ">Aktif</span>
