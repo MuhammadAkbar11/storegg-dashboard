@@ -78,8 +78,6 @@ export const updateVoucher = async (id, data) => {
   }
 };
 
-export const uploadVoucherThumbnail = async () => {};
-
 export const deleteVoucherById = async id => {
   try {
     const result = await VoucherModel.deleteOne({ _id: id });

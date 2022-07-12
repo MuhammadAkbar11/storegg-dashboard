@@ -149,10 +149,37 @@ export const putVoucher = async (req, res, next) => {
 };
 
 export const deleteVoucher = async (req, res, next) => {
+  const ID = req.params.id;
   try {
-    // code here
+    const voucher = await findVoucherById(ID);
+
+    if (!voucher) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal menghapus Voucher, karena Nominal dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      res.redirect(`/voucher`);
+      return;
+    }
+
+    const message = `Anda telah menghapus Voucher <strong class=" text-warning" >${voucher.name}</strong> `;
+
+    await deleteVoucherById(ID);
+
+    req.flash("flashdata", {
+      type: "warning",
+      title: "Terhapus!",
+      message: message,
+    });
+    res.redirect("/voucher");
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: "Gagal menghapus voucher",
+    });
+    res.redirect(`/voucher?action_error=true`);
   }
 };

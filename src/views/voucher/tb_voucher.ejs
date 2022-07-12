@@ -37,6 +37,7 @@
                 <td><%= vcr.gameCoinName  %></td>
                 <td><%= vcr.category.name  %></td>
                 <td><% if(vcr.status == "Y")  { %>
+
                   <span class="badge badge-light-success text-uppercase ">Aktif</span>
                   <% } else { %>
                   <span class="badge badge-light-danger text-uppercase ">Nonaktif</span>
@@ -44,16 +45,37 @@
                   <% } %>
                 </td>
                 <td data-order="false">
-                  <form action="/voucher/<%= vcr._id %>" method="post">
-                    <a href="/voucher-edit/<%= vcr._id %>"
-                      class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
-                      <i data-feather="edit"></i>
-                    </a>
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
-                      <i data-feather="trash"></i>
-                    </button>
-                  </form>
+                  <div class="d-flex">
+                    <form action="/voucher/status/<%= vcr._id %>?_method=PUT" method="POST"
+                      style="display: inline-block;">
+
+                      <% if(vcr.status === 'Y') { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Nonaktifkan">
+                        <i data-feather='check-circle'></i>
+                      </button>
+                      <% } else { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Aktifkan">
+                        <i data-feather='check-circle'></i>
+                      </button>
+                      <% } %>
+
+                    </form>
+                    <div>
+                      <a href="/voucher-edit/<%= vcr._id %>"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                        <i data-feather="edit"></i>
+                      </a>
+                    </div>
+                    <form action="/voucher/<%= vcr._id %>" method="post">
+
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
+                        <i data-feather="trash"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               <%  }); %>
