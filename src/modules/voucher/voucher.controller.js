@@ -12,6 +12,7 @@ import {
   findAllVoucher,
   findVoucherById,
   updateVoucher,
+  updateVoucherStatusById,
 } from "./voucher.repository.js";
 
 export const index = async (req, res, next) => {
@@ -179,6 +180,44 @@ export const deleteVoucher = async (req, res, next) => {
       type: "error",
       title: "Oppps!",
       message: "Gagal menghapus voucher",
+    });
+    res.redirect(`/voucher?action_error=true`);
+  }
+};
+
+export const updateVoucherStatus = async (req, res, next) => {
+  const ID = req.params.id;
+  const status = req.body === "Y" ? "Menonaktifkan" : "Mengaktifkan";
+
+  try {
+    const voucher = await findVoucherById(ID);
+
+    if (!voucher) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal ${status} Voucher, karena Voucher dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      res.redirect(`/voucher`);
+      return;
+    }
+
+    const message = `Berhasil ${status} Voucher <strong class="text-success" >${voucher.name}</strong> `;
+
+    await updateVoucherStatusById(ID);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: message,
+    });
+    res.redirect("/voucher");
+  } catch (error) {
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: `Gagal ${status} Voucher `,
     });
     res.redirect(`/voucher?action_error=true`);
   }

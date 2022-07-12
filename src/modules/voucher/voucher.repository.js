@@ -78,6 +78,22 @@ export const updateVoucher = async (id, data) => {
   }
 };
 
+export const updateVoucherStatusById = async id => {
+  try {
+    let voucher = await VoucherModel.findOne({ _id: id });
+    let status = voucher.status === "Y" ? "N" : "Y";
+    voucher = await VoucherModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      { status }
+    );
+  } catch (error) {
+    console.error("[EXCEPTION] updateVoucherStatusById", error);
+    throw new TransfromError(error);
+  }
+};
+
 export const deleteVoucherById = async id => {
   try {
     const result = await VoucherModel.deleteOne({ _id: id });

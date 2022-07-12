@@ -6,11 +6,13 @@ import {
   putVoucher,
   deleteVoucher,
   viewPutVoucher,
+  updateVoucherStatus,
 } from "./voucher.controller.js";
 
 import voucherValidation from "./voucher.validator.js";
 
 function VoucherRoutes(app) {
+  app.route("/voucher/status/:id").put(ensureAuth, updateVoucherStatus);
   app
     .route("/voucher-edit/:id")
     .get(ensureAuth, viewPutVoucher)

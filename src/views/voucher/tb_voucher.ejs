@@ -46,9 +46,9 @@
                 </td>
                 <td data-order="false">
                   <div class="d-flex">
-                    <form action="/voucher/status/<%= vcr._id %>?_method=PUT" method="POST"
-                      style="display: inline-block;">
-
+                    <form action="/voucher/status/<%= vcr._id %>" method="POST" style="display: inline-block;">
+                      <input type="hidden" name="status" value="<%= vcr.status  %>">
+                      <input type="hidden" name="_method" value="PUT">
                       <% if(vcr.status === 'Y') { %>
                       <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Nonaktifkan">
