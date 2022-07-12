@@ -128,17 +128,23 @@ export const putVoucher = async (req, res, next) => {
   //   // response here
   //   return;
   // }
-
+  const fileimg = req.fileimg;
   try {
-    console.log(req.body);
+    await updateVoucher(req.params.id, { ...req.body, fileimg: fileimg });
+
     req.flash("flashdata", {
       type: "success",
-      title: "Berhasil!",
-      message: "Berhasil membuat voucher. ",
+      title: "Diubah!",
+      message: "Berhasil mengubah voucher",
     });
+    res.redirect(`/voucher`);
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps",
+      message: "Gagal mengubah voucher",
+    });
+    res.redirect(`/voucher?action_error=true`);
   }
 };
 

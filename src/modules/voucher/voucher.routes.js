@@ -1,4 +1,5 @@
 import { ensureAuth } from "../../middleware/auth.js";
+import { uploadSingleImage } from "../../middleware/upload.js";
 import {
   index,
   postVoucher,
@@ -11,16 +12,18 @@ import voucherValidation from "./voucher.validator.js";
 
 function VoucherRoutes(app) {
   app
-    .route("/voucher")
-    .get(ensureAuth, index)
-    .post(ensureAuth, voucherValidation, postVoucher);
-
-  app.route("/voucher-edit/:id").get(ensureAuth, viewPutVoucher);
+    .route("/voucher-edit/:id")
+    .get(ensureAuth, viewPutVoucher)
+    .post(ensureAuth, uploadSingleImage, putVoucher);
 
   app
     .route("/voucher/:id")
-    .put(ensureAuth, putVoucher)
+
     .delete(ensureAuth, deleteVoucher);
+  app
+    .route("/voucher")
+    .get(ensureAuth, index)
+    .post(ensureAuth, voucherValidation, postVoucher);
 }
 
 export default VoucherRoutes;
