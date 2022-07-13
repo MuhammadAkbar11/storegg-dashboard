@@ -92,7 +92,7 @@ export const postNominal = async (req, res, next) => {
     req.flash("flashdata", {
       type: "success",
       title: "Berhasil!",
-      message: "Berhasil menambahkan category",
+      message: "Berhasil membuat nominal baru!",
     });
     res.redirect(`/nominal`);
   } catch (error) {
