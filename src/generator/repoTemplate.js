@@ -27,6 +27,7 @@ export const find${capName}ById = async id => {
 
 export const create${capName} = async data => {
   try {
+
     const result = await ${capName}Model.create({ ...data });
     return result;
   } catch (error) {
@@ -37,8 +38,8 @@ export const create${capName} = async data => {
 
 export const update${capName} = async (id, data) => {
   try {
-    const result = await ${capName}Model.findById(id);
-    return await result.save();
+    const result = await BankModel.findByIdAndUpdate(id, data);
+    return result
   } catch (error) {
     console.error("[EXCEPTION] update${capName}", error);
     throw new TransfromError(error);
