@@ -42,7 +42,7 @@
                 <td><%= vcr.category.name  %></td>
                 <td><a href="/voucher-info/<%= vcr._id %>" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Klik untuk detail"><span class=" badge badge-light-primary "><%= vcr.nominals.length %>
-                      Items</span></a> </td>
+                      Item</span></a> </td>
                 <td><% if(vcr.status == "Y")  { %>
 
                   <span class="badge badge-light-success text-uppercase ">Aktif</span>
@@ -58,13 +58,13 @@
                       <input type="hidden" name="_method" value="PUT">
                       <% if(vcr.status === 'Y') { %>
                       <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Nonaktifkan">
-                        <i data-feather='check-circle'></i>
+                        data-bs-placement="top" title="Nonaktifkan Voucher">
+                        <i data-feather='minus-square'></i>
                       </button>
                       <% } else { %>
                       <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Aktifkan">
-                        <i data-feather='check-circle'></i>
+                        data-bs-placement="top" title="Aktifkan Voucher">
+                        <i data-feather='check-square'></i>
                       </button>
                       <% } %>
 
