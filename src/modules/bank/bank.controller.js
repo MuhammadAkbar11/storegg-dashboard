@@ -1,27 +1,23 @@
-function controllerTemplate(name) {
-  const capName = `${name.charAt(0).toUpperCase() + name.slice(1)}`;
-
-  return `
 import { validationResult } from "express-validator";
 import {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
 import {
-  create${capName},
-  delete${capName}ById,
-  findAll${capName},
-  find${capName}ById,
-  update${capName},
-} from "./${name}.repository.js";
+  createBank,
+  deleteBankById,
+  findAllBank,
+  findBankById,
+  updateBank,
+} from "./bank.repository.js";
 
 export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    res.render("${name}/v_${name}", {
-      title: "${name}",
-      path: "/${name}",
+    res.render("bank/v_bank", {
+      title: "bank",
+      path: "/bank",
       flashdata: flashdata,
       errors: errors,
       isEdit: false,
@@ -33,10 +29,38 @@ export const index = async (req, res, next) => {
   }
 };
 
-
-export const post${capName} = async (req, res, next) => {
-
+export const postBank = async (req, res, next) => {
+  const { name, bankName, noRekening } = req.body;
   const validate = validationResult(req);
+  if (!validate.isEmpty()) {
+    const errValidate = new ValidationError(validate.array(), "", {
+      values: req.body,
+    });
+    // response here
+    req.flash("errors", errValidate);
+    res.redirect(`${redirect}?validation_error=true`);
+    return;
+  }
+
+  try {
+    await createBank({
+      name,
+      bankName,
+      noRekening,
+    });
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: "Berhasil menambahkan bank",
+    });
+  } catch (error) {
+    const trError = new TransfromError(error);
+    next(trError);
+  }
+};
+
+export const putBank = async (req, res, next) => {
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
       values: req.body,
@@ -53,18 +77,7 @@ export const post${capName} = async (req, res, next) => {
   }
 };
 
-
-export const put${capName} = async (req, res, next) => {
-
-  const validate = validationResult(req);
-  if (!validate.isEmpty()) {
-    const errValidate = new ValidationError(validate.array(), "", {
-      values: req.body,
-    });
-    // response here
-    return;
-  }
-
+export const deleteBank = async (req, res, next) => {
   try {
     // code here
   } catch (error) {
@@ -72,17 +85,3 @@ export const put${capName} = async (req, res, next) => {
     next(trError);
   }
 };
-
-
-export const delete${capName} = async (req, res, next) => {
-  try {
-    // code here
-  } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
-  }
-};
-  `;
-}
-
-export default controllerTemplate;
