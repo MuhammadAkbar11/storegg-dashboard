@@ -1,8 +1,9 @@
-export default function repositoryTempalate(name) {
-  const capName = `${name.charAt(0).toUpperCase() + name.slice(1)}`;
+import { moduleNameToCap } from "../utils.js";
 
-  return `
-import { TransfromError } from "../../helpers/baseError.helper.js";
+export default function _repositoryFileTempalate(name) {
+  const capName = moduleNameToCap(name);
+
+  return `import { TransfromError } from "../../helpers/baseError.helper.js";
 import ${capName}Model from "./${name}.model.js";
 
 export const findAll${capName} = async () => {

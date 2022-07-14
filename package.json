@@ -12,11 +12,13 @@
     "start": "cross-env NODE_ENV=production nodemon app.js",
     "seed:import": "node ./src/database/seeds/index.js seed=import",
     "seed:destroy": "node ./src/database/seeds/index.js seed=destroy",
-    "modules": "node ./src/generator/index.js"
+    "modules": "node ./src/generator/index.js",
+    "module": "node ./core/generateModule.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
     "cross-env": "^7.0.3",
+    "inquirer": "^9.0.1",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
