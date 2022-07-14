@@ -1,4 +1,3 @@
-
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import BankModel from "./bank.model.js";
 
@@ -24,7 +23,7 @@ export const findBankById = async id => {
 
 export const createBank = async data => {
   try {
-    const result = await BankModel.findByIdAndUpdate(id, data);
+    const result = await BankModel.create(data);
     return result;
   } catch (error) {
     console.error("[EXCEPTION] createBank", error);
@@ -51,4 +50,3 @@ export const deleteBankById = async id => {
     throw new TransfromError(error);
   }
 };
-
