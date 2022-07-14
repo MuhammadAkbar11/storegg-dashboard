@@ -33,7 +33,7 @@ export const createBank = async data => {
 
 export const updateBank = async (id, data) => {
   try {
-    const result = await BankModel.findById(id);
+    const result = await BankModel.findByIdAndUpdate(id, { ...data });
     return await result.save();
   } catch (error) {
     console.error("[EXCEPTION] updateBank", error);

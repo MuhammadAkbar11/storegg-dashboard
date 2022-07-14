@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import {
+import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
@@ -87,6 +87,9 @@ export const postBank = async (req, res, next) => {
 };
 
 export const putBank = async (req, res, next) => {
+  const ID = req.params.id;
+  const { name, bankName, noRekening } = req.body;
+
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
@@ -94,23 +97,68 @@ export const putBank = async (req, res, next) => {
     });
     // response here
     req.flash("errors", errValidate);
-    res.redirect(`${redirect}?validation_error=true`);
+    res.redirect(`/bank?validation_error=true`);
     return;
   }
 
   try {
+    const bank = await findBankById(ID);
+
+    if (!bank) {
+      throw new BaseError("NOT_FOUND", 404, "Bank tidak ditemukan", true);
+    }
     // code here
+
+    await updateBank(ID, { name, bankName, noRekening });
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: "Berhasil mengubah bank ",
+    });
+    res.redirect(`/bank?action_error=true`);
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps",
+      message: "Gagal mengubah Bank",
+    });
+    res.redirect(`/bank?action_error=true`);
   }
 };
 
 export const deleteBank = async (req, res, next) => {
+  const ID = req.params.id;
   try {
-    // code here
+    const bank = await findBankById(ID);
+
+    if (!bank) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal menghapus Bank, karena Bank dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      res.redirect(`/bank`);
+      return;
+    }
+
+    const message = `Anda telah menghapus bank`;
+
+    await deleteBankById(ID);
+
+    req.flash("flashdata", {
+      type: "warning",
+      title: "Terhapus!",
+      message: message,
+    });
+    res.redirect("/bank");
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal menghapus Bank",
+    });
+    res.redirect(`/bank?action_error=true`);
   }
 };
