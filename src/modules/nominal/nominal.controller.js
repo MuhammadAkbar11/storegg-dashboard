@@ -134,8 +134,12 @@ export const putNominal = async (req, res, next) => {
     });
     res.redirect(`/nominal`);
   } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: "Gagal mengubah Nominal",
+    });
+    res.redirect(`/nominal`);
   }
 };
 
