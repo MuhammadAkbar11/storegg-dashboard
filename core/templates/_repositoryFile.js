@@ -39,7 +39,7 @@ export const create${capName} = async data => {
 
 export const update${capName} = async (id, data) => {
   try {
-    const result = await BankModel.findByIdAndUpdate(id, data);
+    const result = await ${capName}Model.findByIdAndUpdate(id, data);
     return result
   } catch (error) {
     console.error("[EXCEPTION] update${capName}", error);
