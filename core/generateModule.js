@@ -58,21 +58,27 @@ async function generateModules() {
       questions
     );
 
-    consoleLog.info(`[core] creating ${moduleName} module...`);
+    consoleLog.info(`> creating ${moduleName} module...`);
 
     const seedTextToArr = seedData.split(",");
 
     const moduleFolder = path.resolve(`src/modules/${moduleName}`);
+    const copyPath = moduleFolder;
+    const srcPathIdx = copyPath.split("/").findIndex(p => p == "src");
+    const modulePathInfo = copyPath.split("/").splice(srcPathIdx).join("/");
 
-    console.info(`[core] checking folder...`);
+    consoleLog.info(`> checking folder...`);
     if (fs.existsSync(moduleFolder)) {
-      consoleLog.log(`modules/${moduleName} already exist`);
+      consoleLog.error(
+        `[!] failed create module folder, because ${modulePathInfo} already exist`
+      );
       process.exit();
     }
-
-    consoleLog.info(`[core] creating ${moduleName}/ folder...`);
+    consoleLog.info(`> ${modulePathInfo}/ folder not found!`);
+    consoleLog.info(`> creating ${modulePathInfo}/ folder...`);
     fs.mkdirSync(moduleFolder);
-    consoleLog.info(`[core] success create ${moduleName} folder`);
+    consoleLog.success(`> create ${modulePathInfo}/ folder`);
+
     const ctrlFileName = `${moduleName}.controller.js`;
     const modelFileName = `${moduleName}.model.js`;
     const repoFileName = `${moduleName}.repository.js`;
@@ -80,7 +86,10 @@ async function generateModules() {
     const routesFileName = `${moduleName}.routes.js`;
 
     const modelTemplate = _modelFileTemplate(moduleName, tbName, seedTextToArr);
-    const controllerTemplate = _controllerFileTemplate(moduleName, isApi);
+    const controllerTemplate = _controllerFileTemplate(
+      moduleName,
+      seedTextToArr
+    );
     const repoTemplate = _repositoryFileTempalate(moduleName);
     const routesTemplate = _routesFileTemplate(moduleName);
     const validationTemplate = _validationFileTemplate(
@@ -97,14 +106,15 @@ async function generateModules() {
       validationTemplate
     );
 
-    consoleLog.success(`[core] success created ${ctrlFileName} file`);
-    consoleLog.success(`[core] success created ${modelFileName} file`);
-    consoleLog.success(`[core] success created ${repoFileName} file`);
-    consoleLog.success(`[core] success created ${routesFileName} file`);
-    consoleLog.success(`[core] success created ${validationFileName} file`);
-    consoleLog.success("[core] Success created module");
+    consoleLog.success(`> create ${modulePathInfo}/${ctrlFileName} file`);
+    consoleLog.success(`> create ${modulePathInfo}/${modelFileName} file`);
+    consoleLog.success(`> create ${modulePathInfo}/${repoFileName} file`);
+    consoleLog.success(`> create ${modulePathInfo}/${routesFileName} file`);
+    consoleLog.success(`> create ${modulePathInfo}/${validationFileName} file`);
+    consoleLog.success("> success created module");
   } catch (error) {
-    consoleLog.error("[core] Failed generate module");
+    console.log(error);
+    consoleLog.error("[!] failed create module");
     consoleLog.error(`[EXCEPTION] ${error}`);
   }
 }

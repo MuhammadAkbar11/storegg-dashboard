@@ -1,10 +1,23 @@
 import { moduleNameToCap } from "../utils.js";
 
-export default function _controllerFileTemplate(name) {
+export default function _controllerFileTemplate(name, seeds) {
   const capitalName = moduleNameToCap(name);
 
+  const reqBodyDescructure = seeds.join(", ");
+  const updatedData = seeds
+    .map(sd => {
+      return `${sd}: ${sd},`;
+    })
+    .join("\n");
+
+  const newData = seeds
+    .map(sd => {
+      return `${sd}: "${moduleNameToCap(sd)} Data",`;
+    })
+    .join("\n");
+
   return `import { validationResult } from "express-validator";
-import {
+import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
@@ -22,7 +35,7 @@ export const index = async (req, res, next) => {
     const errors = req.flash("errors")[0];
     const ${name} = await findAll${capitalName}()
     res.render("${name}/v_${name}", {
-      title: "${name}",
+      title: "${capitalName}",
       path: "/${name}",
       flashdata: flashdata,
       ${name}: ${name},
@@ -38,39 +51,67 @@ export const index = async (req, res, next) => {
 
 export const post${capitalName} = async (req, res, next) => {
 
-  const {} = req.body
-
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
       values: req.body,
     });
-    // response here
+    // Response Validation Error Here
     return;
   }
 
   try {
-    // code here
+
+    const new${capitalName}Data = {
+      ${newData}
+    }
+
+    await create${capitalName}(new${capitalName}Data)
+
+    // Response Success
   } catch (error) {
+    console.log("[controller] post${capitalName} ")
     const trError = new TransfromError(error);
     next(trError);
+    // Redirect Error
+    // req.flash("flashdata", {
+    //   type: "error",
+    //   title: "Oppps",
+    //   message: "Gagal membuat ${capitalName}",
+    // });
+    // res.redirect("/${name}?action_error=true");
   }
 };
 
 
 export const put${capitalName} = async (req, res, next) => {
+  const ID = req.params.id;
+  const { ${reqBodyDescructure} } = req.body
 
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
       values: req.body,
     });
-    // response here
+    // response error validation
     return;
   }
 
   try {
-    // code here
+
+    const ${name} = await find${capitalName}ById(ID);
+
+    if (!${name}) {
+      throw new BaseError("NOT_FOUND", 404, "${name} tidak ditemukan", true);
+    }
+
+    const updated${capitalName}Data = {
+      ${updatedData}
+    }
+
+    await update${capitalName}(ID, updated${capitalName}Data);
+
+    // Response Success
   } catch (error) {
     const trError = new TransfromError(error);
     next(trError);
@@ -92,9 +133,10 @@ export const delete${capitalName} = async (req, res, next) => {
 
     await delete${capitalName}ById(ID);
 
-    // code here
+    // Response Success
   } catch (error) {
-    // response error
+    const trError = new TransfromError(error);
+    next(trError);
   }
 };
   `;

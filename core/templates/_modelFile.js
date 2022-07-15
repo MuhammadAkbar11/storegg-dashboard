@@ -1,7 +1,7 @@
 import { moduleNameToCap } from "../utils.js";
 
 export default function _modelFileTemplate(name, dbName, seeds) {
-  const modelName = moduleNameToCap(name);
+  const capitalName = moduleNameToCap(name);
   const schemaName = `${name}Schema`;
 
   return `import mongoose from "mongoose";
@@ -13,15 +13,15 @@ const ${schemaName} = mongoose.Schema(
       type: String
     },`;
     })
-    .join("")}
+    .join("\n")}
   },
   {
     timestamps: true,
   }
 );
 
-const ${modelName} = mongoose.model("${modelName}", ${schemaName}, "${dbName}");
+const ${capitalName}Model = mongoose.model("${capitalName}Model", ${schemaName}, "${dbName}");
 
-export default ${modelName};
+export default ${capitalName}Model;
 `;
 }
