@@ -18,7 +18,7 @@ export const index = async (req, res, next) => {
     const errors = req.flash("errors")[0];
     const banks = await findAllBank();
     res.render("bank/v_bank", {
-      title: "bank",
+      title: "Bank",
       path: "/bank",
       flashdata: flashdata,
       errors: errors,
