@@ -60,7 +60,7 @@
       <li class="nav-item <%= path == "/category" ? "active" : ""%>">
         <a class="d-flex align-items-center " href="/category">
           <i data-feather="monitor"> </i>
-          <span class="menu-title text-truncate">Categories</span>
+          <span class="menu-title text-truncate">Kategori</span>
         </a>
       </li>
       <li class="nav-item <%= path == "/nominal" ? "active" : ""%>">
@@ -72,7 +72,7 @@
       <li class="nav-item <%= path == "/voucher" ? "active" : ""%>">
         <a class="d-flex align-items-center " href="/voucher">
           <i data-feather='grid'></i>
-          <span class="menu-title text-truncate">Vouchers</span>
+          <span class="menu-title text-truncate">Voucher</span>
         </a>
       </li>
 
@@ -84,10 +84,10 @@
           <span class="menu-title text-truncate">Bank</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item  <%= path == "/payment" ? "active" : ""%>">
         <a class="d-flex align-items-center" href="/payment">
           <i data-feather='dollar-sign'></i>
-          <span class="menu-title text-truncate">Payment Method</span>
+          <span class="menu-title text-truncate">Metode Pembayaran</span>
         </a>
       </li>
       <li class=" navigation-header"><span>Transaction</span><i data-feather="more-horizontal"></i>
