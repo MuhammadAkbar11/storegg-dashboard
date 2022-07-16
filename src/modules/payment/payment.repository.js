@@ -50,3 +50,14 @@ export const deletePaymentById = async id => {
     throw new TransfromError(error);
   }
 };
+
+export const updatePaymentStatusById = async id => {
+  try {
+    let payment = await PaymentModel.findOne({ _id: id });
+    payment.status = payment.status === "Y" ? "N" : "Y";
+    return await payment.save();
+  } catch (error) {
+    console.error("[EXCEPTION] updateVoucherStatusById", error);
+    throw new TransfromError(error);
+  }
+};

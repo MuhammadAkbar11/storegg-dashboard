@@ -11,6 +11,7 @@ import {
   findAllPayment,
   findPaymentById,
   updatePayment,
+  updatePaymentStatusById,
 } from "./payment.repository.js";
 
 export const index = async (req, res, next) => {
@@ -181,5 +182,43 @@ export const deletePayment = async (req, res, next) => {
       message: "Gagal menghapus metode pembayaran",
     });
     res.redirect("/payment?action_error=true");
+  }
+};
+
+export const updatePaymentStatus = async (req, res, next) => {
+  const ID = req.params.id;
+  const status = req.body === "Y" ? "Menonaktifkan" : "Mengaktifkan";
+
+  try {
+    const payment = await findPaymentById(ID);
+
+    if (!payment) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal ${status} Metode Pembayaran, karena Metode Pembayaran dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      res.redirect(`/payment`);
+      return;
+    }
+
+    const message = `Berhasil ${status} Metode Pembayaran <strong class="text-success" >${payment.type}</strong> `;
+
+    await updatePaymentStatusById(ID);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: message,
+    });
+    res.redirect("/payment");
+  } catch (error) {
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: `Gagal ${status} Metode Pembayaran `,
+    });
+    res.redirect(`/payment?action_error=true`);
   }
 };

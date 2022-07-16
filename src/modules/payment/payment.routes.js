@@ -5,11 +5,12 @@ import {
   putPayment,
   deletePayment,
   viewPutPayment,
+  updatePaymentStatus,
 } from "./payment.controller.js";
-
 import paymentValidation from "./payment.validator.js";
 
 function PaymentRoutes(app) {
+  app.route("/payment/status/:id").put(ensureAuth, updatePaymentStatus);
   app.get("/payment-edit/:id", ensureAuth, viewPutPayment);
   app
     .route("/payment/:id")
