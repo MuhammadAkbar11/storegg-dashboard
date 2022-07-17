@@ -9,6 +9,7 @@ import {
   findAllTransaction,
   findTransactionById,
   updateTransaction,
+  updateTransactionStatusById,
 } from "./transaction.repository.js";
 
 export const index = async (req, res, next) => {
@@ -117,6 +118,48 @@ export const putTransaction = async (req, res, next) => {
   } catch (error) {
     const trError = new TransfromError(error);
     next(trError);
+  }
+};
+
+export const updateTransactionStatus = async (req, res, next) => {
+  const ID = req.params.id;
+  const { status } = req.body;
+  const statusTypes = {
+    failed: "Membatalkan",
+    success: "Menerima",
+  };
+
+  try {
+    const transaction = await findTransactionById(ID);
+
+    if (!transaction) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal ${statusTypes[status]} Transaksi, karena Transaksi dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      res.redirect(`/transaction?action_error=true`);
+      return;
+    }
+
+    const message = `Berhasil ${statusTypes[status]} Transaksi`;
+
+    await updateTransactionStatusById(ID, status);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: message,
+    });
+    res.redirect("/transaction");
+  } catch (error) {
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: `Gagal ${statusTypes[status]} Transaksi `,
+    });
+    res.redirect(`/transaction?action_error=true`);
   }
 };
 

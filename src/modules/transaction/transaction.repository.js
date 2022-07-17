@@ -23,7 +23,6 @@ export const findTransactionById = async id => {
 
 export const createTransaction = async data => {
   try {
-
     const result = await TransactionModel.create({ ...data });
     return result;
   } catch (error) {
@@ -35,7 +34,7 @@ export const createTransaction = async data => {
 export const updateTransaction = async (id, data) => {
   try {
     const result = await TransactionModel.findByIdAndUpdate(id, data);
-    return result
+    return result;
   } catch (error) {
     console.error("[EXCEPTION] updateTransaction", error);
     throw new TransfromError(error);
@@ -52,3 +51,13 @@ export const deleteTransactionById = async id => {
   }
 };
 
+export const updateTransactionStatusById = async (id, statusData) => {
+  try {
+    let payment = await TransactionModel.findOne({ _id: id });
+    payment.status = statusData;
+    return await payment.save();
+  } catch (error) {
+    console.error("[EXCEPTION] updateTransactionStatusById", error);
+    throw new TransfromError(error);
+  }
+};
