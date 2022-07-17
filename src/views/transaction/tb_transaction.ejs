@@ -1,0 +1,110 @@
+<section>
+  <div class="row">
+
+    <div class="col-12 col-md-12 ">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Data Transaksi</h6>
+
+          <!-- <form action="/transaction" method="post">
+            <button type="submit" class="btn btn-primary">
+              <i data-feather="plus"></i> Buat Transaksi
+            </button>
+          </form> -->
+
+        </div>
+        <div class="card-body">
+          <table id="transaction-datatable" class="datatables-basic table table-responsive">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama player</th>
+                <th>Nama game</th>
+                <th>Item</th>
+                <th>Total harga</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let no = 1 %>
+              <% transactions && transactions.forEach(ts => { %>
+
+              <tr>
+                <td style="width: 30px;"><%= no++  %></td>
+                <td>
+                  <%= ts?.player?.name ?? '-' %>
+                </td>
+                <td style="width: 180px;">
+                  <ul class="list-inline">
+                    <li class="list-inline-item">
+                      <img height="80" src="<%= ts.historyVoucherTopup.thumbnail %>"
+                        alt="Thumbnail <%= ts?.historyVoucherTopup?.gameName %>">
+                    </li>
+                  </ul>
+                  <%= ts?.historyVoucherTopup?.gameName %>
+                  <br>
+                  <%= ts?.historyVoucherTopup?.category %>
+                  <div class="d-flex gap-1">
+                    <img height="80" src="<%= ts.thumbnail  %>" alt="">
+                    <%= ts.name  %>
+                  </div>
+                </td>
+                <td>
+                  <%= ts?.historyVoucherTopup?.coinQuantity %>
+                  <%= ts?.historyVoucherTopup?.coinName %></td>
+                <td> <%= ts.value %></td>
+
+
+                <td>
+                  <% if(ts.status === 'pending' ) { %>
+                  <span class="badge badge-light-warning">
+                    <%= ts.status %>
+                  </span>
+                  <% } else if(ts.status === 'success' ) { %>
+                  <span class="badge badge-light-success">
+                    <%= ts.status %>
+                  </span>
+                  <% } else { %>
+                  <span class="badge badge-light-danger">
+                    <%= ts.status %>
+                  </span>
+                  <% } %>
+                </td>
+                <td data-order="false">
+                  <div class="d-flex">
+                    <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
+                      <input type="hidden" name="status" value="failed">
+                      <input type="hidden" name="_method" value="PUT">
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Tolak Transaksi">
+                        <i data-feather='x-circle'></i> Terima
+                      </button>
+                    </form>
+                    <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
+                      <input type="hidden" name="status" value="success">
+                      <input type="hidden" name="_method" value="PUT">
+                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Terima Transaksi">
+                        <i data-feather='x-circle'></i> Terima
+                      </button>
+                    </form>
+                    <div>
+                      <a href="/transaction-edit/<%= ts._id %>"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                        <i data-feather="edit"></i>
+                      </a>
+                    </div>
+
+                  </div>
+                </td>
+              </tr>
+              <%  }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
