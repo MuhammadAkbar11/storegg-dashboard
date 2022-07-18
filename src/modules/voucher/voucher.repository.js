@@ -27,6 +27,19 @@ export const findVoucherById = async id => {
   }
 };
 
+export const findOneVoucher = async filter => {
+  try {
+    const result = await VoucherModel.findOne({ ...filter })
+      .select("name category _id thumbnail user")
+      .populate("category")
+      .populate("user");
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] findOneVoucher", error);
+    throw new TransfromError(error);
+  }
+};
+
 export const findVoucherNominals = async id => {
   try {
     const result = await VoucherModel.findById(id)
