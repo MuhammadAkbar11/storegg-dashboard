@@ -10,7 +10,35 @@ export const apiGetVouchers = async (req, res, next) => {
       .populate("category")
       .limit(limit);
 
-    res.status(200).json({ data: voucher });
+    res
+      .status(200)
+      .json({ message: "Berhasil mengambil data voucher", data: voucher });
+  } catch (err) {
+    next(new TransfromError(err));
+  }
+};
+
+export const apiGetDetailVoucher = async (req, res, next) => {
+  try {
+    const { ID } = req.params;
+    const voucher = await VoucherModel.findOne({ _id: ID })
+      .populate("category")
+      .populate("nominals")
+      .populate("user", "_id name phoneNumber");
+
+    if (!voucher) {
+      throw new BaseError(
+        "NOT_FOUND",
+        404,
+        "Voucher game tidak ditemukan.!",
+        true
+      );
+    }
+
+    res.status(200).json({
+      message: "Berhasil mengambil detail data voucher",
+      data: voucher,
+    });
   } catch (err) {
     next(new TransfromError(err));
   }

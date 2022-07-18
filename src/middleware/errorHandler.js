@@ -39,6 +39,7 @@ function returnError(err, req, res, next) {
     return res.status(status).json({
       name: err.name,
       message: err.message,
+      statusCode: status,
       data: {
         validation: err.validation,
         ...err.data,
