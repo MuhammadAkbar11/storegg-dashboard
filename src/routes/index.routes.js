@@ -1,4 +1,5 @@
 import { ensureAuth } from "../middleware/auth.js";
+import APIsRoutes from "../modules/api/api.routes.js";
 import BankRoutes from "../modules/bank/bank.routes.js";
 import CategoryRoutes from "../modules/category/category.routes.js";
 import NominalRoutes from "../modules/nominal/nominal.routes.js";
@@ -22,6 +23,9 @@ function MainRoutes(app) {
   BankRoutes(app);
   PaymentRoutes(app);
   TransactionRoutes(app);
+
+  // APIs
+  APIsRoutes(app);
 }
 
 export default MainRoutes;
