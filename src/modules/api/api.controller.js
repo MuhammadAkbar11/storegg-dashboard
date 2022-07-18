@@ -1,4 +1,5 @@
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
+import { findAllCategories } from "../category/category.repository.js";
 import VoucherModel from "../voucher/voucher.model.js";
 
 export const apiGetVouchers = async (req, res, next) => {
@@ -39,6 +40,15 @@ export const apiGetDetailVoucher = async (req, res, next) => {
       message: "Berhasil mengambil detail data voucher",
       data: voucher,
     });
+  } catch (err) {
+    next(new TransfromError(err));
+  }
+};
+
+export const apiGetCategories = async (req, res, next) => {
+  try {
+    const category = await findAllCategories({});
+    res.status(200).json({ data: category });
   } catch (err) {
     next(new TransfromError(err));
   }
