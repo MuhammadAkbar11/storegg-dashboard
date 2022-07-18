@@ -19,7 +19,7 @@ function VoucherRoutes(app) {
   app
     .route("/voucher-edit/:id")
     .get(ensureAuth, viewPutVoucher)
-    .post(ensureAuth, uploadSingleImage, putVoucher);
+    .post(ensureAuth, uploadSingleImage("/vouchers"), putVoucher);
 
   app.route("/voucher/:id").delete(ensureAuth, deleteVoucher);
   app
