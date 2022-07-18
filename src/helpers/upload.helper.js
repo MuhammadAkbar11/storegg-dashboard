@@ -9,10 +9,12 @@ class Upload {
     fieldName = "image",
     folderName = UPLOAD_PATH,
     fileTypes = /jpg|jpeg|png/,
+    filename = "image",
   }) {
     this.fieldName = fieldName;
     this.folderName = folderName;
     this.fileTypes = fileTypes;
+    this.filename = filename;
   }
 
   diskStorage() {
@@ -21,7 +23,7 @@ class Upload {
         cb(null, this.folderName);
       },
       filename: (req, file, cb) => {
-        let filename = req.body.filename;
+        let filename = req.body.filename ?? this.filename;
 
         if (!filename) {
           filename = file.fieldname;
