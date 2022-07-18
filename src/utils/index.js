@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import BaseError from "../helpers/baseError.helper.js";
+import { PREFIX_VERSION } from "../helpers/version.helper.js";
 import { ROOT_FOLDER } from "./constants.js";
 
 export function getRandom(arr) {
@@ -18,4 +19,8 @@ export function deleteFile(filePath) {
       }
     });
   }
+}
+
+export function joinAPIsURL(path = "/") {
+  return `${PREFIX_VERSION}${path}`;
 }
