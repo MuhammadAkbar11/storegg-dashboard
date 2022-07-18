@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import path from "path";
 import sharp from "sharp";
+import { SESSION_SECRET } from "../../config/env.config.js";
 import BaseError, {
   TransfromError,
   ValidationError,
@@ -8,6 +9,7 @@ import BaseError, {
 import { DEFAULT_USER_PP } from "../../utils/constants.js";
 import httpStatusCodes from "../../utils/httpStatusCode.js";
 import { deleteFile, transformFilename } from "../../utils/index.js";
+import { signJWT } from "../../utils/jwt.js";
 import { createPlayer, findOnePlayer } from "../player/player.repository.js";
 
 export const apiPlayerSignup = async (req, res, next) => {
@@ -70,6 +72,57 @@ export const apiPlayerSignup = async (req, res, next) => {
     if (fileimgData) {
       deleteFile(fileimgData.path);
     }
+    next(new TransfromError(error));
+  }
+};
+
+export const apiPlayerSignin = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const validate = validationResult(req);
+
+    if (!validate.isEmpty()) {
+      const errValidate = new ValidationError(validate.array());
+      throw errValidate;
+    }
+
+    const player = await findOnePlayer({ email: email });
+
+    if (!player) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Email yang anda masukan belum terdaftar.`,
+        true
+      );
+    }
+
+    const matchPassword = await player.matchPassword(password);
+    if (matchPassword) {
+      const payloadJWT = {
+        id: player._id,
+        username: player.username,
+        name: player.name,
+        email: player.email,
+        phoneNumber: player.phoneNumber,
+        avatar: player.avatar,
+      };
+      const token = signJWT(payloadJWT, SESSION_SECRET, "7d");
+
+      res.status(200).json({
+        message: "Signin berhasil!",
+        data: { token },
+      });
+      return;
+    } else {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Password yang anda masukan salah.`,
+        true
+      );
+    }
+  } catch (error) {
     next(new TransfromError(error));
   }
 };
