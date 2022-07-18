@@ -36,7 +36,15 @@ function returnError(err, req, res, next) {
   const stack = MODE == "development" ? err.stack : null;
 
   if (type == "json") {
-    return res.status(status).json({ ...err, stack });
+    return res.status(status).json({
+      name: err.name,
+      message: err.message,
+      data: {
+        validation: err.validation,
+        ...err.data,
+      },
+      stack,
+    });
   }
 
   const view = err?.errorView || "errors/500";
