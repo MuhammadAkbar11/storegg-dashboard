@@ -1,3 +1,4 @@
+import { ensurePlayerAuth } from "../../middleware/auth.js";
 import { uploadSingleImage } from "../../middleware/upload.js";
 import { joinAPIsURL } from "../../utils/index.js";
 import userValidation from "../user/user.validator.js";
@@ -5,10 +6,12 @@ import {
   apiGetCategories,
   apiGetDetailVoucher,
   apiGetVouchers,
+  apiPostCheckout,
 } from "./api.controller.js";
 import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
 
 function APIsRoutes(app) {
+  app.route(joinAPIsURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
   app.route(joinAPIsURL("/categories")).get(apiGetCategories);
   app.route(joinAPIsURL("/vouchers")).get(apiGetVouchers);
   app.route(joinAPIsURL("/vouchers/:ID")).get(apiGetDetailVoucher);

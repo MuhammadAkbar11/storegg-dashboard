@@ -15,7 +15,7 @@ export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    const player = await findAllPlayer()
+    const player = await findAllPlayer();
     res.render("player/v_player", {
       title: "player",
       path: "/player",
@@ -30,9 +30,7 @@ export const index = async (req, res, next) => {
   }
 };
 
-
 export const postPlayer = async (req, res, next) => {
-
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
@@ -43,22 +41,21 @@ export const postPlayer = async (req, res, next) => {
   }
 
   try {
-
     const newPlayerData = {
       name: "Name Data",
-username: "Username Data",
-email: "Email Data",
-password: "Password Data",
-avatar: "Avatar Data",
-phoneNumber: "PhoneNumber Data",
-status: "Status Data",
-    }
+      username: "Username Data",
+      email: "Email Data",
+      password: "Password Data",
+      avatar: "Avatar Data",
+      phoneNumber: "PhoneNumber Data",
+      status: "Status Data",
+    };
 
-    await createPlayer(newPlayerData)
+    await createPlayer(newPlayerData);
 
     // Response Success
   } catch (error) {
-    console.log("[controller] postPlayer ")
+    console.log("[controller] postPlayer ");
     const trError = new TransfromError(error);
     next(trError);
     // Redirect Error
@@ -71,10 +68,10 @@ status: "Status Data",
   }
 };
 
-
 export const putPlayer = async (req, res, next) => {
   const ID = req.params.id;
-  const { name, username, email, password, avatar, phoneNumber, status } = req.body
+  const { name, username, email, password, avatar, phoneNumber, status } =
+    req.body;
 
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
@@ -86,7 +83,6 @@ export const putPlayer = async (req, res, next) => {
   }
 
   try {
-
     const player = await findPlayerById(ID);
 
     if (!player) {
@@ -95,13 +91,13 @@ export const putPlayer = async (req, res, next) => {
 
     const updatedPlayerData = {
       name: name,
-username: username,
-email: email,
-password: password,
-avatar: avatar,
-phoneNumber: phoneNumber,
-status: status,
-    }
+      username: username,
+      email: email,
+      password: password,
+      avatar: avatar,
+      phoneNumber: phoneNumber,
+      status: status,
+    };
 
     await updatePlayer(ID, updatedPlayerData);
 
@@ -112,17 +108,15 @@ status: status,
   }
 };
 
-
 export const deletePlayer = async (req, res, next) => {
   const ID = req.params.id;
 
   try {
-
     const player = await findPlayerById(ID);
 
-    if(!player) {
+    if (!player) {
       // response here
-      return
+      return;
     }
 
     await deletePlayerById(ID);
@@ -133,4 +127,3 @@ export const deletePlayer = async (req, res, next) => {
     next(trError);
   }
 };
-  

@@ -13,7 +13,7 @@ import { signJWT } from "../../utils/jwt.js";
 import { createPlayer, findOnePlayer } from "../player/player.repository.js";
 
 export const apiPlayerSignup = async (req, res, next) => {
-  const { email, name, password } = req.body;
+  const { email, name, password, category } = req.body;
 
   const { data: fileimgData } = req.fileimg;
   try {
@@ -57,6 +57,7 @@ export const apiPlayerSignup = async (req, res, next) => {
       email: email,
       password: password,
       avatar: avatar,
+      favorite: category,
     };
 
     const player = await createPlayer(newPlayer);
@@ -107,11 +108,12 @@ export const apiPlayerSignin = async (req, res, next) => {
         phoneNumber: player.phoneNumber,
         avatar: player.avatar,
       };
+
       const token = signJWT(payloadJWT, SESSION_SECRET, "7d");
 
       res.status(200).json({
         message: "Signin berhasil!",
-        data: { token },
+        data: { ...payloadJWT, token },
       });
       return;
     } else {

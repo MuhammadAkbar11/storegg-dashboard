@@ -56,16 +56,15 @@ const transactionSchema = mongoose.Schema(
 
     player: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Player",
+      ref: "PlayerModel",
     },
 
-    historyUser: {
-      name: { type: String, require: [true, "nama player harus diisi."] },
+    historyPlayer: {
+      name: { type: String },
+      email: { type: String },
       phoneNumber: {
         type: Number,
-        require: [true, "nama akun harus diisi"],
-        maxlength: [13, "panjang nama harus antara 9 - 13 karakter"],
-        minlength: [9, "panjang nama harus antara 9 - 13 karakter"],
+        default: 0,
       },
     },
 

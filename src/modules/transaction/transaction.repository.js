@@ -3,7 +3,7 @@ import TransactionModel from "./transaction.model.js";
 
 export const findAllTransaction = async () => {
   try {
-    const result = await TransactionModel.find({});
+    const result = await TransactionModel.find({}).populate("player");
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllTransaction", error);

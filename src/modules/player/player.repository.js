@@ -13,7 +13,7 @@ export const findAllPlayer = async () => {
 
 export const findOnePlayer = async filter => {
   try {
-    const result = await PlayerModel.findOne({ ...filter });
+    const result = await PlayerModel.findOne({ ...filter }).select("-password");
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOnePlayer", error);

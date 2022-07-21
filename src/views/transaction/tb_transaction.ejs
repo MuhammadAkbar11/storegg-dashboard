@@ -18,8 +18,9 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Nama player</th>
-                <th>Nama game</th>
+                <th class=" text-nowrap ">Nama player</th>
+                <th>Game</th>
+                <th class=" text-nowrap ">ID Game</th>
                 <th>Item</th>
                 <th>Total harga</th>
                 <th>Status</th>
@@ -29,33 +30,41 @@
             <tbody>
               <% let no = 1 %>
               <% transactions && transactions.forEach(ts => { %>
-
+              <% const totalPrice = ts.value.toLocaleString("id", {
+                  style: "currency",
+                  currency: "IDR",
+                }); %>
               <tr>
                 <td style="width: 30px;"><%= no++  %></td>
                 <td>
-                  <%= ts?.player?.name ?? '-' %>
-                </td>
-                <td style="width: 180px;">
-                  <ul class="list-inline">
-                    <li class="list-inline-item">
-                      <img height="80" src="<%= ts.historyVoucherTopup.thumbnail %>"
-                        alt="Thumbnail <%= ts?.historyVoucherTopup?.gameName %>">
-                    </li>
-                  </ul>
-                  <%= ts?.historyVoucherTopup?.gameName %>
-                  <br>
-                  <%= ts?.historyVoucherTopup?.category %>
-                  <div class="d-flex gap-1">
-                    <img height="80" src="<%= ts.thumbnail  %>" alt="">
+                  <div class=" h-100 text-capitalize ">
                     <%= ts.name  %>
                   </div>
                 </td>
                 <td>
+                  <div class="d-flex ">
+                    <img height="80" src="<%= ts.historyVoucherTopup.thumbnail %>"
+                      alt="Thumbnail <%= ts?.historyVoucherTopup?.gameName %>">
+                    <div class="px-1">
+                      <span class="text-primary text-nowrap ">
+                        <%= ts?.historyVoucherTopup?.gameName %>
+                      </span>
+                      <br>
+                      <span class="badge badge-light-secondary " style="margin-top: 7px;">
+                        <%= ts?.historyVoucherTopup?.category %>
+                      </span>
+                    </div>
+                  </div>
+
+                </td>
+                <td>
+                  <%= ts.accountUser  %>
+
+                </td>
+                <td class=" text-nowrap ">
                   <%= ts?.historyVoucherTopup?.coinQuantity %>
                   <%= ts?.historyVoucherTopup?.coinName %></td>
-                <td> <%= ts.value %></td>
-
-
+                <td> <%= totalPrice %></td>
                 <td>
                   <% if(ts.status === 'pending' ) { %>
                   <span class="badge badge-light-warning">
@@ -72,13 +81,13 @@
                   <% } %>
                 </td>
                 <td data-order="false">
-                  <div class="d-flex">
+                  <div class="d-flex gap-1 align-items-center ">
                     <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
                       <input type="hidden" name="status" value="failed">
                       <input type="hidden" name="_method" value="PUT">
-                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Tolak Transaksi">
-                        <i data-feather='x-circle'></i> Terima
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Tolak Transaksi">
+                        <i data-feather='x-circle'></i>
                       </button>
                     </form>
                     <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
@@ -86,16 +95,40 @@
                       <input type="hidden" name="_method" value="PUT">
                       <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Terima Transaksi">
-                        <i data-feather='x-circle'></i> Terima
+                        <i data-feather='check-circle'></i>
                       </button>
                     </form>
-                    <div>
-                      <a href="/transaction-edit/<%= ts._id %>"
-                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
-                        <i data-feather="edit"></i>
+                    <!-- <div>
+                      <a href="" class="btn btn-icon rounded-circle btn-flat-info waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Detail Transaksi">
+                        <i data-feather="info"></i>
                       </a>
                     </div>
+                    <div>
+                      <a href="" class="btn btn-icon rounded-circle btn-flat-primary waves-effect"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Transaksi">
+                        <i data-feather="edit"></i>
+                      </a>
+                    </div> -->
+                    <div class="dropdown">
+                      <button type="button"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect dropdown-toggle hide-arrow "
+                        data-bs-toggle="dropdown">
 
+                        <i data-feather='grid'></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="/transaction-info/<%= ts._id %>">
+                          <i data-feather="info" class="me-50"></i>
+                          <span>Invoice</span>
+                        </a>
+                        <a class="dropdown-item" href="/transaction-edit/<%= ts._id %>">
+                          <i data-feather="edit-2" class="me-50"></i>
+                          <span>Edit</span>
+                        </a>
+
+                      </div>
+                    </div>
                   </div>
                 </td>
               </tr>
