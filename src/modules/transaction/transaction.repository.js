@@ -61,3 +61,40 @@ export const updateTransactionStatusById = async (id, statusData) => {
     throw new TransfromError(error);
   }
 };
+
+export const findTransactionHistory = async data => {
+  try {
+    const { status, player } = data;
+    let query = {};
+
+    if (status.length) {
+      query = {
+        ...query,
+        status: { $regex: `${status}`, $options: "i" },
+      };
+    }
+
+    if (player._id) {
+      query = {
+        ...query,
+        player: player._id,
+      };
+    }
+
+    const history = await TransactionModel.find(query);
+    const total = await TransactionModel.aggregate([
+      { $match: query },
+      {
+        $group: {
+          _id: null,
+          value: { $sum: "$value" },
+        },
+      },
+    ]);
+
+    return { history, total };
+  } catch (error) {
+    console.error("[EXCEPTION] findTransactionHistory", error);
+    throw new TransfromError(error);
+  }
+};

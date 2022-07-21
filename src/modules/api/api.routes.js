@@ -5,6 +5,7 @@ import userValidation from "../user/user.validator.js";
 import {
   apiGetCategories,
   apiGetDetailVoucher,
+  apiGetListHistory,
   apiGetVouchers,
   apiPostCheckout,
 } from "./api.controller.js";
@@ -12,6 +13,7 @@ import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
 
 function APIsRoutes(app) {
   app.route(joinAPIsURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
+  app.route(joinAPIsURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
   app.route(joinAPIsURL("/categories")).get(apiGetCategories);
   app.route(joinAPIsURL("/vouchers")).get(apiGetVouchers);
   app.route(joinAPIsURL("/vouchers/:ID")).get(apiGetDetailVoucher);

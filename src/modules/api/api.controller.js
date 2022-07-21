@@ -5,7 +5,10 @@ import { findAllCategories } from "../category/category.repository.js";
 import { findNominalById } from "../nominal/nominal.repository.js";
 import { findPaymentById } from "../payment/payment.repository.js";
 import { findPlayerById } from "../player/player.repository.js";
-import { createTransaction } from "../transaction/transaction.repository.js";
+import {
+  createTransaction,
+  findTransactionHistory,
+} from "../transaction/transaction.repository.js";
 import VoucherModel from "../voucher/voucher.model.js";
 import { findOneVoucher } from "../voucher/voucher.repository.js";
 
@@ -149,6 +152,24 @@ export const apiPostCheckout = async (req, res, next) => {
     res.status(200).json({
       message: "Checkout Berhasil",
       data: result,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
+
+export const apiGetListHistory = async (req, res, next) => {
+  try {
+    const { status = "" } = req.query;
+
+    const { history, total } = await findTransactionHistory({
+      status,
+      player: req.player,
+    });
+
+    res.status(200).json({
+      data: history,
+      total: total.length ? total[0].value : 0,
     });
   } catch (error) {
     next(new TransfromError(error));
