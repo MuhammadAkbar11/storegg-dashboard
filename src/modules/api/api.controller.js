@@ -239,3 +239,14 @@ export const apiGetDashboard = async (req, res, next) => {
     next(new TransfromError(error));
   }
 };
+
+export const apiGetProfile = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      message: "Berhasil mendapat profile",
+      data: req.player,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
