@@ -24,9 +24,7 @@ async function ensurePlayerAuth(req, res, next) {
     const token = req.headers.authorization
       ? req.headers.authorization.replace("Bearer ", "")
       : null;
-    console.log("[TOKEN]", token);
-    // const data = jwt.verify(token, config.jwtKey);
-    console.log(req.headers.authorization);
+
     if (!token) {
       throw new BaseError("NOT_AUTH", 401, "Token not found", true);
     }
@@ -57,7 +55,6 @@ async function ensurePlayerAuth(req, res, next) {
     req.player = player;
 
     req.token = token;
-    console.log(player);
     next();
   } catch (err) {
     const errors = new TransfromError(err);
