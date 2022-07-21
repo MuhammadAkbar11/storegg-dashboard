@@ -1,10 +1,12 @@
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
 import httpStatusCodes from "../../utils/httpStatusCode.js";
 import { findBankById } from "../bank/bank.repository.js";
+import CategoryModel from "../category/category.model.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findNominalById } from "../nominal/nominal.repository.js";
 import { findPaymentById } from "../payment/payment.repository.js";
 import { findPlayerById } from "../player/player.repository.js";
+import TransactionModel from "../transaction/transaction.model.js";
 import {
   createTransaction,
   findTransactionById,
@@ -198,6 +200,42 @@ export const apiGetDetailHistory = async (req, res, next) => {
       error.message = "History Tidak ditemukan";
     }
 
+    next(new TransfromError(error));
+  }
+};
+
+export const apiGetDashboard = async (req, res, next) => {
+  try {
+    const count = await TransactionModel.aggregate([
+      { $match: { player: req.player._id } },
+      {
+        $group: {
+          _id: "$category",
+          value: { $sum: "$value" },
+        },
+      },
+    ]);
+
+    const category = await CategoryModel.find({});
+
+    category.forEach(element => {
+      count.forEach(data => {
+        if (data._id.toString() === element._id.toString()) {
+          data.name = element.name;
+        }
+      });
+    });
+
+    const history = await TransactionModel.find({ player: req.player._id })
+      .populate("category")
+      .sort({ updatedAt: -1 });
+
+    res.status(200).json({
+      message: "Berhasil mendapat data Dashboard",
+      data: history,
+      count: count,
+    });
+  } catch (error) {
     next(new TransfromError(error));
   }
 };
