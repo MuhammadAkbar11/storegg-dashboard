@@ -1,8 +1,7 @@
-import { SESSION_SECRET } from "../config/env.config";
-import BaseError, { TransfromError } from "../helpers/baseError.helper";
-import PlayerModel from "../modules/player/player.model";
-import { findOnePlayer } from "../modules/player/player.repository";
-import { verifyJWT } from "../utils/jwt";
+import { SESSION_SECRET } from "../config/env.config.js";
+import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
+import { findOnePlayer } from "../modules/player/player.repository.js";
+import { verifyJWT } from "../utils/jwt.js";
 
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) {
@@ -25,14 +24,29 @@ async function ensurePlayerAuth(req, res, next) {
     const token = req.headers.authorization
       ? req.headers.authorization.replace("Bearer ", "")
       : null;
-
+    console.log("[TOKEN]", token);
     // const data = jwt.verify(token, config.jwtKey);
-    const data = verifyJWT(token, SESSION_SECRET);
+    console.log(req.headers.authorization);
+    if (!token) {
+      throw new BaseError("NOT_AUTH", 401, "Token not found", true);
+    }
 
-    const player = await findOnePlayer({ _id: data.id });
+    const { payload } = verifyJWT(token, SESSION_SECRET);
 
+    if (!payload) {
+      throw new BaseError(
+        "NOT_AUTH",
+        401,
+        "Not authorized to acces this resource",
+        true
+      );
+    }
+
+    const player = await findOnePlayer({ _id: payload.id });
+
+    delete player.password;
     if (!player) {
-      new BaseError(
+      throw new BaseError(
         "NOT_AUTH",
         401,
         "Not authorized to acces this resource",
@@ -41,7 +55,9 @@ async function ensurePlayerAuth(req, res, next) {
     }
 
     req.player = player;
+
     req.token = token;
+    console.log(player);
     next();
   } catch (err) {
     const errors = new TransfromError(err);
