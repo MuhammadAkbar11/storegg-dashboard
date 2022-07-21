@@ -70,11 +70,11 @@ const transactionSchema = mongoose.Schema(
 
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "CategoryModel",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "UserModel",
     },
   },
   {
