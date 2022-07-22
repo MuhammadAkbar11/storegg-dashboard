@@ -282,7 +282,7 @@ export const apiPutProfile = async (req, res, next) => {
       );
     }
 
-    player = await updatePlayer(ID, {
+    await updatePlayer(ID, {
       username: username,
       phoneNumber: phoneNumber,
       name: name,
@@ -290,10 +290,12 @@ export const apiPutProfile = async (req, res, next) => {
       oldAvatar: player.avatar,
     });
 
-    delete player._doc.password;
+    const updatedPlayer = await findPlayerById(ID);
+
+    delete updatedPlayer._doc.password;
     res.status(201).json({
       message: "Berhasil mengubah profile",
-      data: player,
+      data: updatedPlayer,
     });
     return;
   } catch (error) {

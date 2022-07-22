@@ -10,10 +10,20 @@ const playerValidation = {
       },
     },
     username: {
-      escape: true,
       trim: true,
       notEmpty: {
         errorMessage: "username tidak boleh kosong",
+      },
+      custom: {
+        options: value => {
+          const ex = value.replace(/\s/, "");
+          if (/\s/.test(value)) {
+            throw new Error(
+              `username tidak mendukung karakter spasi, username yang dianjurkan seperti: ${ex}`
+            );
+          }
+          return true;
+        },
       },
     },
     phoneNumber: {
