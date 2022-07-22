@@ -18,8 +18,11 @@ export function deleteFile(filePath) {
         console.log(err);
         throw new BaseError(err);
       }
+      return file;
     });
   }
+
+  return false;
 }
 
 export function joinAPIsURL(path = "/") {

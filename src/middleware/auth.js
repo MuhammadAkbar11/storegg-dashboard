@@ -42,7 +42,7 @@ async function ensurePlayerAuth(req, res, next) {
 
     const player = await findOnePlayer({ _id: payload.id });
 
-    delete player.password;
+    delete player._doc.password;
     if (!player) {
       throw new BaseError(
         "NOT_AUTH",
