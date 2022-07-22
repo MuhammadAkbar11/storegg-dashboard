@@ -1,11 +1,16 @@
-import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
+import { validationResult } from "express-validator";
+import BaseError, {
+  TransfromError,
+  ValidationError,
+} from "../../helpers/baseError.helper.js";
 import httpStatusCodes from "../../utils/httpStatusCode.js";
+import { deleteFile } from "../../utils/index.js";
 import { findBankById } from "../bank/bank.repository.js";
 import CategoryModel from "../category/category.model.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findNominalById } from "../nominal/nominal.repository.js";
 import { findPaymentById } from "../payment/payment.repository.js";
-import { findPlayerById } from "../player/player.repository.js";
+import { findPlayerById, updatePlayer } from "../player/player.repository.js";
 import TransactionModel from "../transaction/transaction.model.js";
 import {
   createTransaction,
@@ -247,6 +252,54 @@ export const apiGetProfile = async (req, res, next) => {
       data: req.player,
     });
   } catch (error) {
+    next(new TransfromError(error));
+  }
+};
+
+export const apiPutProfile = async (req, res, next) => {
+  const ID = req.player._id;
+
+  const { username, name, phoneNumber } = req.body;
+
+  const fileimg = req.fileimg;
+
+  try {
+    const validate = validationResult(req);
+
+    if (!validate.isEmpty()) {
+      const errValidate = new ValidationError(validate.array());
+      throw errValidate;
+    }
+
+    let player = await findPlayerById(ID);
+
+    if (!player) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Player tidak ditemukan`,
+        true
+      );
+    }
+
+    player = await updatePlayer(ID, {
+      username: username,
+      phoneNumber: phoneNumber,
+      name: name,
+      fileimg: fileimg,
+      oldAvatar: player.avatar,
+    });
+
+    delete player._doc.password;
+    res.status(201).json({
+      message: "Berhasil mengubah profile",
+      data: player,
+    });
+    return;
+  } catch (error) {
+    if (fileimg.data) {
+      deleteFile(fileimg.data.path);
+    }
     next(new TransfromError(error));
   }
 };

@@ -97,7 +97,6 @@ export const apiPlayerSignin = async (req, res, next) => {
         true
       );
     }
-
     const matchPassword = await player.matchPassword(password);
     if (matchPassword) {
       const payloadJWT = {
