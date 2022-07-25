@@ -1,63 +1,44 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import { DataTypes, Model } from "sequelize";
+import ConnectSequelize from "../../helpers/connect.helper.js";
 
-const playerSchema = mongoose.Schema(
+class Player extends Model {
+  static associate(models) {
+    Player.belongsTo(models.Users, {
+      foreignKey: "user_id",
+      as: "users",
+    });
+  }
+}
+
+Player.init(
   {
-    email: {
-      type: String,
-      require: [true, "email harus diisi"],
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.BIGINT(20),
     },
-    name: {
-      type: String,
-      require: [true, "nama harus diisi"],
+    player_id: {
+      unique: true,
+      allowNull: false,
+      type: DataTypes.STRING(20),
     },
-    username: {
-      type: String,
+    user_id: {
+      unique: true,
+      allowNull: false,
+      type: DataTypes.STRING(20),
+      field: "user_id",
     },
-    password: {
-      type: String,
-      require: [true, "kata sandi harus diisi"],
-      maxlength: [225, "panjang password maksimal 225 karakter"],
-    },
-    status: {
-      type: String,
-      enum: ["Y", "N"],
-      default: "Y",
-    },
-    role: {
-      type: String,
-      enum: ["ADMIN", "PLAYER"],
-      default: "PLAYER",
-    },
-    avatar: { type: String },
-    fileName: { type: String },
-    phoneNumber: {
-      type: String,
-    },
-    favorite: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "CategoryModel",
+    phone_number: {
+      type: DataTypes.STRING,
     },
   },
   {
-    timestamps: true,
+    sequelize: ConnectSequelize,
+    modelName: "Players",
+    tableName: "gg_players",
+    deletedAt: false,
   }
 );
 
-playerSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-playerSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  if (this.password !== "") {
-    this.password = await bcrypt.hash(this.password, 12);
-  }
-});
-
-const PlayerModel = mongoose.model("PlayerModel", playerSchema, "players");
-
-export default PlayerModel;
+export default Player;
