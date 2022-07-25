@@ -1,0 +1,96 @@
+<section>
+  <div class="row">
+
+    <div class="col-12 col-md-12 ">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Data Voucher</h6>
+
+          <form action="/voucher" method="post">
+            <button type="submit" class="btn btn-primary">
+              <i data-feather="plus"></i> Buat Voucher
+            </button>
+          </form>
+
+        </div>
+        <div class="card-body">
+          <table id="voucher-datatable" class="datatables-basic table table-responsive">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Game</th>
+                <th class=" text-nowrap ">Nama Koin</th>
+                <th>Kategori</th>
+                <th class=" text-nowrap ">Total Voucher</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let no = 1 %>
+              <% vouchers && vouchers.forEach(vcr => { %>
+
+              <tr>
+                <td style="width: 30px;"><%= no++  %></td>
+                <td style="width: 180px;">
+                  <div class="d-flex gap-1">
+                    <img height="80" src="<%= vcr.thumbnail  %>" alt="">
+                    <%= vcr.name  %>
+                  </div>
+                </td>
+                <td><%= vcr.gameCoinName  %></td>
+                <td><%= vcr.category.name  %></td>
+                <td><a href="/voucher-info/<%= vcr._id %>" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Klik untuk detail"><span class=" badge badge-light-primary "><%= vcr.nominals.length %>
+                      Item</span></a> </td>
+                <td><% if(vcr.status == "Y")  { %>
+
+                  <span class="badge badge-light-success text-uppercase ">Aktif</span>
+                  <% } else { %>
+                  <span class="badge badge-light-danger text-uppercase ">Nonaktif</span>
+
+                  <% } %>
+                </td>
+                <td data-order="false">
+                  <div class="d-flex">
+                    <form action="/voucher/status/<%= vcr._id %>" method="POST" style="display: inline-block;">
+                      <input type="hidden" name="status" value="<%= vcr.status  %>">
+                      <input type="hidden" name="_method" value="PUT">
+                      <% if(vcr.status === 'Y') { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Nonaktifkan Voucher">
+                        <i data-feather='minus-square'></i>
+                      </button>
+                      <% } else { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Aktifkan Voucher">
+                        <i data-feather='check-square'></i>
+                      </button>
+                      <% } %>
+
+                    </form>
+                    <div>
+                      <a href="/voucher-edit/<%= vcr._id %>"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                        <i data-feather="edit"></i>
+                      </a>
+                    </div>
+                    <form action="/voucher/<%= vcr._id %>" method="post">
+
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
+                        <i data-feather="trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <%  }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

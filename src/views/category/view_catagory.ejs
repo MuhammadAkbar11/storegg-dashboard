@@ -1,0 +1,118 @@
+<%- include('../layouts/head.ejs') %>
+
+<%- include("../layouts/header.ejs") %>
+<%- include("../layouts/sidebar.ejs") %>
+
+<%- include("../includes/toast.ejs") %>
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= title %></h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active"><%= title %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
+        <div class="mb-1 breadcrumb-right">
+          <div class="dropdown">
+            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="grid"></i></button>
+            <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#"><i class="me-1"
+                  data-feather="check-square"></i><span class="align-middle">Todo</span></a><a class="dropdown-item"
+                href="#"><i class="me-1" data-feather="message-square"></i><span class="align-middle">Chat</span></a><a
+                class="dropdown-item" href="#"><i class="me-1" data-feather="mail"></i><span
+                  class="align-middle">Email</span></a><a class="dropdown-item" href="#"><i class="me-1"
+                  data-feather="calendar"></i><span class="align-middle">Calendar</span></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-body">
+      <%- include("./table_category.ejs") %>
+
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+<% if(errors && errors?.name === "BAD_VALIDATION") {  %>
+<template id="validation-template">
+  <p><%= errors?.name %> </p>
+</template>
+<% } %>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="createCanvasEnd" aria-labelledby="createCanvasEndLabel">
+  <div class="offcanvas-header">
+    <h5 id="createCanvasEndLabel" class="offcanvas-title">Tambah Kategori</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body ">
+    <form class="form form-vertical" action="/category" method="post">
+      <div class="row">
+        <div class="col-12">
+          <div class="mb-1">
+            <input type="hidden" name="_method" value="POST">
+            <label class="form-label" for="name">Nama Kategori</label>
+            <input type="text" id="name" class="form-control" name="name" placeholder="Name Kategori"
+              value="<%= errors && errors?.renderData?.values?.name || "" %>" />
+            <% if(errors && errors?.validation?.name) {  %>
+            <small class=" text-danger "> <%= errors?.validation?.name?.message[0] %></small>
+            <% } %>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="mb-1">
+            <label class="form-label" for="description">Deskripsi</label>
+            <textarea class="form-control" id="description" name="description" rows="3"
+              placeholder="Textarea"><%= errors && errors?.renderData?.values?.description || "" %></textarea>
+            <% if(errors && errors?.validation?.description) {  %>
+            <small class=" text-danger "> <%= errors?.validation?.description?.message[0] %></small>
+            <% } %>
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary me-1">Submit</button>
+          <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../layouts/footer.ejs') %>
+
+<script>
+  var dt_basic_table = $('#category-datatable')
+
+  if (dt_basic_table.length) {
+    dt_basic_table.DataTable({});
+  }
+
+  const createCanvasEnd = document.getElementById('createCanvasEnd')
+  const bsOffcanvas = new bootstrap.Offcanvas(createCanvasEnd)
+
+  const validationTemplate = document.getElementById("validation-template")
+  if (validationTemplate) {
+
+    console.log('show')
+    bsOffcanvas.show()
+  }
+</script>
+
+
+
+<%- include('../layouts/end.ejs') %>

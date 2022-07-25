@@ -1,0 +1,188 @@
+<%- include('../layouts/head.ejs') %>
+
+<%- include("../layouts/header.ejs") %>
+<%- include("../layouts/sidebar.ejs") %>
+
+<%- include("../includes/toast.ejs") %>
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= title %></h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/voucher">Voucher</a>
+                </li>
+                <li class="breadcrumb-item active"><%= title %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <% if(!voucher) { %>
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            <div class="alert-body">
+              <strong>Info:</strong> Voucher dengan ID "<%= params %>" tidak ditemukan
+              ! <a class="text-info text-decoration-underline fw-light " href="/voucher">Kembali ke Halaman
+                Voucher</a>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+
+        <% if(voucher) { %>
+        <div class="col-12 col-md-12 col-lg-10">
+          <div class="card">
+            <div class="card-body">
+              <form class="form form-vertical" action="/voucher-edit/<%= voucher._id %>?_method=PUT" method="post"
+                enctype="multipart/form-data">
+                <!-- <input type="hidden" value="PUT" name="_method"> -->
+                <input type="hidden" value="<%= voucher.name %>" name="filename" id="filename">
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-6">
+                    <div class="mb-1">
+                      <label class="form-label" for="name">Game</label>
+                      <input type="text" id="name" class="form-control" name="name" placeholder="Nama Game"
+                        value="<%= voucher.name %>" />
+                      <% if(errors && errors?.validation?.name) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.name?.message[0] %></small>
+                      <% } %>
+                    </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="gameCoinName">Nama Koin</label>
+                      <input type="text" id="gameCoinName" class="form-control" name="gameCoinName"
+                        placeholder="Nama Koin" value="<%= voucher.gameCoinName %>" />
+                      <% if(errors && errors?.validation?.gameCoinName) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.gameCoinName?.message[0] %></small>
+                      <% } %>
+                    </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="category">Kategori</label>
+                      <select class="form-select" id="category" name="category">
+                        <option>-- Pilih Kategori</option>
+                        <% for (let category of categories) { %>
+                        <% if (category._id.toString()===voucher?.category?._id.toString()) { %>
+                        <option value="<%= category._id %>" selected><%= category.name %></option>
+                        <% } else {  %>
+                        <option value="<%= category._id %>"><%= category.name %></option>
+                        <% } %>
+
+                        <%  } %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-6">
+
+                    <div class="mb-1  ">
+                      <div class="mb-1 d-flex gap-3" id="preview-thumb">
+                        <div class="d-flex flex-column  ">
+                          <small class="mb-1">Thumbnail</small>
+                          <img class="object-fit-cover" src="<%= voucher.thumbnail %>" height="200" alt="" width="150">
+                        </div>
+                      </div>
+                      <input type="file" name="image" class="d-none" id="upload-thumbnail" data-parent="preview-thumb"
+                        data-image-height="200" data-image-width="150">
+                      <button id="btn-upload-thumbnail" type="button" class=" btn btn-primary  ">
+                        <i data-feather="upload"></i> Upload
+                        Image
+                      </button>
+                    </div>
+
+                  </div>
+                  <div class="col-12 my-2 ">
+                    <p>Nominal </p>
+                    <div class="row custom-options-checkable g-1">
+                      <% for (let nm of nominals) { %>
+                      <% if(nm.checked) { %>
+                      <div class="col-md-3">
+                        <input class="custom-option-item-check" type="checkbox" name="nominals"
+                          id="nominal_<%= nm._id %>" value="<%= nm._id %>" <%= nm.checked %> />
+                        <label class="custom-option-item p-1" for="nominal_<%= nm._id %>">
+                          <span class="d-flex mb-50">
+                            <span class="fw-bolder "><%= nm.coinNominal %></span>
+                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coinName %> </span>
+                          </span>
+                          <small class="d-block"><%= nm.price.toLocaleString("id", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                  });  %>
+                          </small>
+                        </label>
+                      </div>
+
+                      <% } %>
+                      <% } %>
+                      <% for (let nm of nominals) { %>
+                      <% if(!nm.checked) { %>
+                      <div class="col-md-3">
+                        <input class="custom-option-item-check" type="checkbox" name="nominals"
+                          id="nominal_<%= nm._id %>" value="<%= nm._id %>" />
+                        <label class="custom-option-item p-1" for="nominal_<%= nm._id %>">
+                          <span class="d-flex mb-50">
+                            <span class="fw-bolder "><%= nm.coinNominal %></span>
+                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coinName %>
+                            </span>
+
+                          </span>
+                          <small class="d-block"><%= nm.price.toLocaleString("id", {
+                                      style: "currency",
+                                      currency: "IDR",
+                                    });  %>
+                          </small>
+                        </label>
+                      </div>
+
+                      <% } %>
+                      <% } %>
+
+
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary me-1">Simpan </button>
+                    <a href="/voucher" class=" btn btn-outline-secondary">Batal</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+<%- include('../layouts/footer.ejs') %>
+
+<script>
+  const NameInput = document.getElementById("name");
+  const FilenameInput = document.getElementById("filename")
+
+  if (NameInput) {
+    NameInput.addEventListener("change", (e) => {
+      FilenameInput.setAttribute("value", e.target.value.trim())
+    })
+  }
+</script>
+
+<script src="/js/components/upload-thumbnail.js"></script>
+<%- include('../layouts/end.ejs') %>

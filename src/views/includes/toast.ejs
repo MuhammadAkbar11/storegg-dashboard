@@ -1,0 +1,8 @@
+<% if(flashdata) { %>
+
+<% flashdata.forEach(flash => { %>
+<template id="toast-template" data-type="<%= flash?.type || "success" %>" data-message="<%= flash.message %>"
+  data-title="<%= flash?.title  %>">
+</template>
+<% }) %>
+<% } %>

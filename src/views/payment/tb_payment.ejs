@@ -1,0 +1,137 @@
+<section>
+  <div class="row">
+
+    <div class="col-12 col-md-12 col-lg-11">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Data Metode Pembayaran</h6>
+
+          <form action="/payment" method="post">
+            <button type="submit" class="btn btn-primary">
+              <i data-feather="plus"></i> Buat Metode baru
+            </button>
+          </form>
+        </div>
+        <div class="card-body">
+          <table id="payment-datatable" class="datatables-basic table table-responsive py-3">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th class=" text-nowrap ">Type pembayaran</th>
+                <th>Data Bank</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let no = 1 %>
+              <% payments && payments.forEach(py => { %>
+              <tr>
+                <td><%= no++  %></td>
+                <td><%= py.type  %></td>
+                <td>
+                  <div class="d-flex flex-wrap  ">
+                    <% py.banks.forEach(bnk => { %>
+                    <div class=" btn-group dropend " style=" margin: 5px;">
+                      <a role="button" class="badge badge-light-primary" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <%= bnk.bankName %> <i data-feather='chevron-right'></i>
+                      </a>
+                      <ul class="dropdown-menu" style="min-width: 350px;">
+                        <ul class="list-group list-group-flush " id="content">
+                          <li class="list-group-item py-0  ">
+                            <p class=" text-muted  mb-0">Detail Bank</p>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between py-0  ">
+                            <span class=" text-primary ">Nama Pemilik </span><span><%= bnk.name %>
+                            </span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between py-0  ">
+                            <span class=" text-primary ">Bank </span><span><%= bnk.bankName %>
+                            </span>
+
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between py-0 ">
+                            <span class=" text-primary ">No Rekening </span><span><%= bnk.noRekening %>
+                            </span>
+                          </li>
+                        </ul>
+                      </ul>
+                    </div>
+                    <% }) %>
+                  </div>
+                </td>
+                <td>
+                  <% if(py.status == "Y")  { %>
+                  <span class="badge badge-light-success text-uppercase ">Aktif</span>
+                  <% } else { %>
+                  <span class="badge badge-light-danger text-uppercase ">Nonaktif</span>
+                  <% } %>
+                </td>
+                <td data-order="false" class=" text-nowrap ">
+                  <form action="/payment/status/<%= py._id %>" method="POST" style="display: inline-block;">
+                    <input type="hidden" name="status" value="<%= py.status  %>">
+                    <input type="hidden" name="_method" value="PUT">
+                    <% if(py.status === 'Y') { %>
+                    <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Nonaktifkan Metode Pembayaran">
+                      <i data-feather='minus-square'></i>
+                    </button>
+                    <% } else { %>
+                    <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Aktifkan Metode Pembayaran">
+                      <i data-feather='check-square'></i>
+                    </button>
+                    <% } %>
+
+                  </form>
+                  <!-- <form action="/payment/<%= py._id %>" method="post"> -->
+                  <a href="/payment-edit/<%= py._id %>"
+                    class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                    <i data-feather="edit"></i>
+                  </a>
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
+                    data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-payment="<%= JSON.stringify(py)  %>">
+                    <i data-feather="trash"></i>
+                  </button>
+                  <!-- </form> -->
+                </td>
+              </tr>
+              <%  }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="deleteModal" tabindex="-1"
+  aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class="  mb-1">Anda yakin?</h3>
+          <p class=" mb-2">Apakah anda ingin menghapusnya?</p>
+          <form action="/payment" id="formDeletePayment">
+
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-danger">Ya, hapus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

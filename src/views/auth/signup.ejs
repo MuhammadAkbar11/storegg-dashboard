@@ -1,0 +1,49 @@
+<%- include('../layouts/auth/head.ejs') %>
+
+<main class="wrapper auth-wrapper">
+  <h1>Sign up Page</h1>
+  <% if(errors && errors?.name !== "Validation") {  %>
+  <div style="margin-top: 1rem; margin-bottom: 1rem;">
+    <%= errors?.message %>
+  </div>
+  <% } %>
+  <form action="/auth/signup" method="post">
+
+    <div>
+      <label for="">Username</label>
+      <input type="text" name="name" placeholder="Username" value="<%= values && values?.name || "" %>">
+      <% if(errors && errors?.validation?.name) {  %>
+      <small> <%= errors && errors?.validation?.name?.message?.[0] %></small>
+      <% } %>
+    </div>
+
+    <div>
+      <label for="">Email</label>
+      <input type="text" name="email" placeholder="email" value="<%= values && values?.email || ""%>">
+      <% if(errors && errors?.validation?.email) {  %>
+      <small> <%= errors && errors?.validation?.email?.message[0] %></small>
+      <% } %>
+    </div>
+
+    <div>
+      <label for="">Password</label>
+      <input type="password" name="password" placeholder="Password" value="<%= values && values?.password || "" %>">
+      <% if(errors && errors?.validation?.password) {  %>
+      <small> <%= errors && errors?.validation?.password?.message[0] %></small>
+      <% } %>
+    </div>
+    <div>
+      <label for="">Password Confirm</label>
+      <input type="password" name="password2" placeholder="Password Confirm"
+        value="<%= values && values?.password2 || "" %>">
+      <% if(errors && errors?.validation?.password2) {  %>
+      <small> <%= errors && errors?.validation?.password2?.message[0] %></small>
+      <% } %>
+    </div>
+    <button type="submit">Signup</button>
+  </form>
+</main>
+
+
+
+<%- include('../layouts/auth/footer.ejs') %>
