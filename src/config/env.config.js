@@ -17,6 +17,11 @@ export const dotenvConfig = dotenv.config({
 export const PORT = process.env.PORT | 3000;
 
 export const MONGO_URI = process.env.MONGO_URI;
+export const DB_NAME = process.env.DB_DATABASE;
+export const DB_USERNAME = process.env.DB_USERNAME;
+export const DB_PASSWORD = process.env.DB_PASSWORD;
+export const DB_HOST = process.env.DB_HOST;
+export const DB_DRIVER = process.env.DB_DRIVER;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MAIL_USER = process.env.MAIL_USERNAME;
 export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
