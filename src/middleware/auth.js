@@ -1,7 +1,7 @@
 import { SESSION_SECRET } from "../config/env.config.js";
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
-import { findOnePlayer } from "../modules/player/player.repository.js";
-import { verifyJWT } from "../utils/jwt.js";
+import { VerifyJWT } from "../helpers/jwt.helper.js";
+// import { findOnePlayer } from "../modules/player/player.repository.js";
 
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) {
@@ -29,7 +29,7 @@ async function ensurePlayerAuth(req, res, next) {
       throw new BaseError("NOT_AUTH", 401, "Token not found", true);
     }
 
-    const { payload } = verifyJWT(token, SESSION_SECRET);
+    const { payload } = VerifyJWT(token, SESSION_SECRET);
 
     if (!payload) {
       throw new BaseError(
@@ -40,7 +40,7 @@ async function ensurePlayerAuth(req, res, next) {
       );
     }
 
-    const player = await findOnePlayer({ _id: payload.id });
+    // const player = await findOnePlayer({ _id: payload.id });
 
     delete player._doc.password;
     if (!player) {

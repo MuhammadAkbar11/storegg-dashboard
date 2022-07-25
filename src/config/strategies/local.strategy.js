@@ -9,7 +9,8 @@ const LocalStrategy = new Strategy(
   },
   async function (email, password, done) {
     try {
-      const user = await findOneUser({ email: email });
+      // const user = await findOneUser({ email: email });
+      let user = null;
       if (user) {
         return done(null, user);
       }
