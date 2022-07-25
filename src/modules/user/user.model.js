@@ -1,48 +1,46 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import { DataTypes, Model } from "sequelize";
+import ConnectSequelize from "../../helpers/connect.helper.js";
 
-const userSchema = mongoose.Schema(
+class User extends Model {}
+
+User.init(
   {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.BIGINT(20),
+    },
+    user_id: {
+      unique: true,
+      allowNull: false,
+      type: DataTypes.STRING(20),
+    },
     name: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING(20),
+      allowNull: false,
     },
     email: {
-      type: String,
-      unique: true,
+      type: DataTypes.STRING(128),
+      allowNull: false,
     },
     password: {
-      type: String,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     role: {
-      type: String,
-    },
-    googleId: {
-      type: String,
+      type: DataTypes.ENUM("SUPER_ADMIN", "ADMIN", "PLAYER"),
     },
     image: {
-      type: String,
+      type: DataTypes.STRING,
     },
   },
   {
-    timestamps: true,
+    sequelize: ConnectSequelize,
+    modelName: "User",
+    tableName: "gg_users",
+    deletedAt: false,
   }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  if (this.password !== "") {
-    this.password = await bcrypt.hash(this.password, 12);
-  }
-});
-
-const UserModel = mongoose.model("UserModel", userSchema, "users");
-
-export default UserModel;
+export default User;
