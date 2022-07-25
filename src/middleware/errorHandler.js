@@ -1,14 +1,12 @@
 import { MODE } from "../config/env.config.js";
 import BaseError from "../helpers/apiError.helper.js";
 import { TransfromError } from "../helpers/baseError.helper.js";
-import consoleLog from "../utils/consoleLog.js";
-import httpStatusCodes from "../utils/httpStatusCode.js";
+import Logger from "../helpers/logger.helper.js";
+import { httpStatusCodes } from "../constants/index.constants.js";
 
 function logError(err) {
-  consoleLog.error(`
-[error] : ${err.name} : ${err.message}
-          ${err.statusCode} ${err.stack}
-`);
+  Logger.error(`${err.name} : ${err.message}`);
+  Logger.error(`${err.statusCode} ${err.stack}`);
 }
 
 function logErrorMiddleware(err, req, res, next) {

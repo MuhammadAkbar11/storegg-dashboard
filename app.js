@@ -15,9 +15,10 @@ import {
   returnError,
 } from "./src/middleware/errorHandler.js";
 
-import consoleLog from "./src/utils/consoleLog.js";
-
-import { DEV_STATIC_FOLDER, STATIC_FOLDER } from "./src/utils/constants.js";
+import {
+  DEV_STATIC_FOLDER,
+  STATIC_FOLDER,
+} from "./src/constants/index.constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";

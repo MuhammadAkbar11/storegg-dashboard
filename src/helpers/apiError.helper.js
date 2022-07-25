@@ -1,5 +1,5 @@
 import BaseError from "./baseError.helper.js";
-import httpStatusCodes from "../utils/httpStatusCode.js";
+import { httpStatusCodes } from "../constants/index.constants.js";
 
 class ApiError extends BaseError {
   constructor(
