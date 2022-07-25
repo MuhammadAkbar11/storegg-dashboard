@@ -1,7 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import ConnectSequelize from "../../helpers/connect.helper.js";
 
-class User extends Model {}
+class User extends Model {
+  static associate(models) {
+    User.hasOne(models.Players, {
+      foreignKey: "user_id",
+      as: "players",
+    });
+  }
+}
 
 User.init(
   {
@@ -37,7 +44,7 @@ User.init(
   },
   {
     sequelize: ConnectSequelize,
-    modelName: "User",
+    modelName: "Users",
     tableName: "gg_users",
     deletedAt: false,
   }
