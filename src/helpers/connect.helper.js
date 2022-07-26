@@ -11,7 +11,7 @@ import Logger from "./logger.helper.js";
 
 const define = {
   timestamps: true,
-  freezeTableName: true,
+  // freezeTableName: true,
   underscored: true,
   paranoid: true,
   createdAt: "created_at",
