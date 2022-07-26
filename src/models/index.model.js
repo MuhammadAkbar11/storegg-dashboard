@@ -13,6 +13,7 @@ import PaymentMethod from "./paymentMethod.model.js";
 import Bank from "./bank.model.js";
 import PaymentBank from "./paymentBank.model.js";
 import Transaction from "./transaction.model.js";
+import History from "./history.model.js";
 
 export default function BootstrapModels() {
   User.hasOne(Player, {
@@ -23,7 +24,6 @@ export default function BootstrapModels() {
     foreignKey: "user_id",
     as: "users",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   User.hasOne(Administrator, {
@@ -34,7 +34,6 @@ export default function BootstrapModels() {
     foreignKey: "user_id",
     as: "users",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Category.hasOne(Player, {
@@ -45,7 +44,6 @@ export default function BootstrapModels() {
     foreignKey: "favorite",
     as: "categories",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Category.hasOne(Voucher, {
@@ -56,7 +54,6 @@ export default function BootstrapModels() {
     foreignKey: "category_id",
     as: "categories",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Voucher.belongsToMany(Nominal, {
@@ -64,14 +61,12 @@ export default function BootstrapModels() {
     foreignKey: "nominal_id",
     as: "nominals",
     constraints: true,
-    onDelete: "CASCADE",
   });
   Nominal.belongsToMany(Voucher, {
     through: VoucherNominal,
     foreignKey: "voucher_id",
     as: "vouchers",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   PaymentMethod.belongsToMany(Bank, {
@@ -79,7 +74,6 @@ export default function BootstrapModels() {
     foreignKey: "bank_id",
     as: "banks",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Bank.belongsToMany(PaymentMethod, {
@@ -87,7 +81,6 @@ export default function BootstrapModels() {
     foreignKey: "payment_method_id",
     as: "payment_methods",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Category.hasMany(Transaction, {
@@ -99,7 +92,6 @@ export default function BootstrapModels() {
     foreignKey: "category_id",
     as: "categories",
     constraints: true,
-    onDelete: "CASCADE",
   });
 
   Player.hasMany(Transaction, {
@@ -107,23 +99,29 @@ export default function BootstrapModels() {
     as: "transactions",
   });
 
-  Transaction.belongsTo(Player, {
-    foreignKey: "player_id",
-    as: "players",
-    constraints: true,
-    onDelete: "CASCADE",
-  });
-
   PaymentMethod.hasMany(Transaction, {
     foreignKey: "payment_method_id",
     as: "transactions",
   });
 
+  Transaction.belongsTo(Player, {
+    foreignKey: "player_id",
+    as: "players",
+    constraints: true,
+  });
   Transaction.belongsTo(PaymentMethod, {
     foreignKey: "payment_method_id",
     as: "payment_methods",
     constraints: true,
-    onDelete: "CASCADE",
+  });
+  Transaction.belongsTo(History, {
+    foreignKey: "history_id",
+    as: "histories",
+    constraints: true,
+  });
+  History.hasOne(Transaction, {
+    foreignKey: "history_id",
+    as: "transactions",
   });
 }
 
