@@ -20,6 +20,11 @@ Player.init(
       type: DataTypes.STRING,
       field: "phone_number",
     },
+    favorite: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+      field: "favorite",
+    },
   },
   {
     sequelize: ConnectSequelize,

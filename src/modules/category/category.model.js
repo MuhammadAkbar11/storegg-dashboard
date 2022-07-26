@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../../helpers/connect.helper";
+import ConnectSequelize from "../../helpers/connect.helper.js";
 
 class Category extends Model {}
 
