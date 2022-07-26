@@ -42,7 +42,7 @@ AutoIncrement.init(
     // Other model options go here
     sequelize: ConnectSequelize, // We need to pass the connection instance
     modelName: "AutoIncrements", // We need to choose the model name
-    tableName: "auto_increments",
+    tableName: "gg_auto_increments",
   }
 );
 
