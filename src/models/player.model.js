@@ -10,16 +10,14 @@ Player.init(
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20),
+      field: "player_id",
     },
     user_id: {
       allowNull: false,
       type: DataTypes.BIGINT(20),
       field: "user_id",
     },
-    phone_number: {
-      type: DataTypes.STRING(20),
-      field: "phone_number",
-    },
+
     favorite: {
       allowNull: true,
       type: DataTypes.INTEGER,

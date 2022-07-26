@@ -17,10 +17,6 @@ Administrator.init(
       type: DataTypes.BIGINT(20),
       field: "user_id",
     },
-    phone_number: {
-      type: DataTypes.STRING,
-      field: "phone_number",
-    },
   },
   {
     sequelize: ConnectSequelize,

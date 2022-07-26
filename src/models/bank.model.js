@@ -18,7 +18,7 @@ Bank.init(
       field: "name",
     },
     bank_name: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(25),
       allowNull: false,
       field: "bank_name",
     },

@@ -1,4 +1,5 @@
 import { DataTypes, Model } from "sequelize";
+import { faker } from "@faker-js/faker";
 import ConnectSequelize from "../helpers/connect.helper.js";
 
 class User extends Model {}
@@ -13,7 +14,7 @@ User.init(
       field: "user_id",
     },
     name: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(25),
       allowNull: false,
       field: "name",
     },
@@ -36,6 +37,11 @@ User.init(
     image: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    phone_number: {
+      type: DataTypes.STRING(20),
+      defaultValue: faker.phone.number("+62###-####-####"),
+      field: "phone_number",
     },
   },
   {
