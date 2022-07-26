@@ -24,6 +24,7 @@ import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";
 import Logger from "./src/helpers/logger.helper.js";
 import ConnectSequelize from "./src/helpers/connect.helper.js";
+import BootstrapModels from "./src/models/index.model.js";
 
 const MySQLStore = expressMysqlSession(session);
 
@@ -118,6 +119,8 @@ MainRoutes(app);
 app.use(logErrorMiddleware);
 app.use(return404);
 app.use(returnError);
+
+BootstrapModels();
 
 (async () => {
   await ConnectSequelize.sync({ force: true });
