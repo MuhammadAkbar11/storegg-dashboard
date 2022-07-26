@@ -9,6 +9,9 @@ import AutoIncrement from "./autoIncrement.model.js";
 import Voucher from "./voucher.model.js";
 import Nominal from "./nominal.model.js";
 import VoucherNominal from "./voucherNominal.model.js";
+import PaymentMethod from "./paymentMethod.model.js";
+import Bank from "./bank.model.js";
+import PaymentBank from "./paymentBank.model.js";
 
 export default function BootstrapModels() {
   User.hasOne(Player, {
@@ -66,6 +69,22 @@ export default function BootstrapModels() {
     through: VoucherNominal,
     foreignKey: "voucher_id",
     as: "vouchers",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  PaymentMethod.belongsToMany(Bank, {
+    through: PaymentBank,
+    foreignKey: "bank_id",
+    as: "banks",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  Bank.belongsToMany(PaymentMethod, {
+    through: PaymentBank,
+    foreignKey: "payment_method_id",
+    as: "payment_methods",
     constraints: true,
     onDelete: "CASCADE",
   });
