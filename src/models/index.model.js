@@ -6,6 +6,7 @@ import Category from "./category.model.js";
 import Player from "./player.model.js";
 import User from "./user.model.js";
 import AutoIncrement from "./autoIncrement.model.js";
+import Voucher from "./voucher.model.js";
 
 export default function BootstrapModels() {
   User.hasOne(Player, {
@@ -36,7 +37,18 @@ export default function BootstrapModels() {
   });
   Player.belongsTo(Category, {
     foreignKey: "favorite",
-    as: "Categories",
+    as: "categories",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  Category.hasOne(Voucher, {
+    foreignKey: "category_id",
+    as: "vouchers",
+  });
+  Voucher.belongsTo(Category, {
+    foreignKey: "category_id",
+    as: "categories",
     constraints: true,
     onDelete: "CASCADE",
   });

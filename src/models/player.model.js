@@ -17,7 +17,7 @@ Player.init(
       field: "user_id",
     },
     phone_number: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(20),
       field: "phone_number",
     },
     favorite: {
