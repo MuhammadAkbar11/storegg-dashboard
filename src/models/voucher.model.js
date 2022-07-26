@@ -16,7 +16,7 @@ Voucher.init(
       type: DataTypes.BIGINT(20),
       field: "admin_id",
     },
-    name: {
+    game_name: {
       type: DataTypes.STRING(128),
       allowNull: false,
       field: "name",

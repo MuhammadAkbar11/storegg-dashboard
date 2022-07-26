@@ -1,39 +1,39 @@
 import { DataTypes, Model } from "sequelize";
 import ConnectSequelize from "../helpers/connect.helper.js";
 
-class Bank extends Model {}
+class HistoryPlayer extends Model {}
 
-Bank.init(
+HistoryPlayer.init(
   {
-    bank_id: {
-      primaryKey: true,
+    history_player_id: {
       allowNull: false,
       autoIncrement: true,
-      type: DataTypes.INTEGER,
-      field: "bank_id",
+      type: DataTypes.BIGINT(20),
+      field: "history_player_id",
     },
-    account_name: {
+    name: {
       type: DataTypes.STRING(25),
       allowNull: false,
       field: "name",
     },
-    bank_name: {
-      type: DataTypes.STRING(25),
+    email: {
+      unique: true,
+      type: DataTypes.STRING(128),
       allowNull: false,
-      field: "bank_name",
+      field: "email",
     },
-    no_rekening: {
+    phone_number: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      field: "no_rekening",
+      field: "phone_number",
     },
   },
   {
     sequelize: ConnectSequelize,
-    modelName: "Banks",
-    tableName: "gg_banks",
+    modelName: "HistoryPlayers",
+    tableName: "gg_history_players",
     deletedAt: false,
   }
 );
 
-export default Bank;
+export default HistoryPlayer;

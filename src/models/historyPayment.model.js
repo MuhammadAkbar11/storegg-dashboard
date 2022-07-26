@@ -1,21 +1,26 @@
 import { DataTypes, Model } from "sequelize";
 import ConnectSequelize from "../helpers/connect.helper.js";
 
-class Bank extends Model {}
+class HistoryPayment extends Model {}
 
-Bank.init(
+HistoryPayment.init(
   {
-    bank_id: {
+    history_payment_id: {
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      type: DataTypes.INTEGER,
-      field: "bank_id",
+      type: DataTypes.BIGINT(20),
+      field: "history_payment_id",
     },
     account_name: {
       type: DataTypes.STRING(25),
       allowNull: false,
-      field: "name",
+      field: "account_name",
+    },
+    type: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      field: "type",
     },
     bank_name: {
       type: DataTypes.STRING(25),
@@ -30,10 +35,10 @@ Bank.init(
   },
   {
     sequelize: ConnectSequelize,
-    modelName: "Banks",
-    tableName: "gg_banks",
+    modelName: "HistoryPayments",
+    tableName: "gg_history_payments",
     deletedAt: false,
   }
 );
 
-export default Bank;
+export default HistoryPayment;
