@@ -24,7 +24,9 @@ import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";
 import Logger from "./src/helpers/logger.helper.js";
 import ConnectSequelize from "./src/helpers/connect.helper.js";
-import BootstrapModels from "./src/models/index.model.js";
+import BootstrapModels, {
+  initAutoIncrementsData,
+} from "./src/models/index.model.js";
 
 const MySQLStore = expressMysqlSession(session);
 
@@ -123,7 +125,15 @@ app.use(returnError);
 BootstrapModels();
 
 (async () => {
-  await ConnectSequelize.sync({ force: true });
+  // let force = false;
+  let force = true;
+  const connect = await ConnectSequelize.sync({ force }).then(res => res);
+
+  // const models = co;
+  const tables = await connect.query("SHOW TABLES;");
+
+  if (force) initAutoIncrementsData(tables);
+
   app.listen(envConfigs.PORT, () =>
     Logger.info(`Server Running on port ${envConfigs.PORT}`)
   );

@@ -23,7 +23,6 @@ const ConnectSequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   dialect: DB_DRIVER,
   host: DB_HOST,
   define,
-  timezone: "+00:00",
   logging: (query, options, time) => {
     Logger.info(query);
   },
