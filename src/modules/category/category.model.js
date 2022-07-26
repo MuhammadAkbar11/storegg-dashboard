@@ -1,25 +1,34 @@
-import mongoose from "mongoose";
+import { DataTypes, Model } from "sequelize";
+import ConnectSequelize from "../../helpers/connect.helper";
 
-const categorySchema = mongoose.Schema(
+class Category extends Model {}
+
+Category.init(
   {
+    category_id: {
+      primaryKey: true,
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      field: "category_id",
+    },
     name: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      field: "name",
     },
     description: {
-      type: String,
-      required: true,
+      unique: true,
+      type: DataTypes.STRING,
+      allowNull: false,
+      field: "description",
     },
   },
   {
-    timestamps: true,
+    sequelize: ConnectSequelize,
+    modelName: "Categories",
+    tableName: "gg_categories",
+    deletedAt: false,
   }
 );
 
-const CategoryModel = mongoose.model(
-  "CategoryModel",
-  categorySchema,
-  "categories"
-);
-
-export default CategoryModel;
+export default Category;
