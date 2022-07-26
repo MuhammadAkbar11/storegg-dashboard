@@ -24,7 +24,7 @@ import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";
 import Logger from "./src/helpers/logger.helper.js";
 import ConnectSequelize from "./src/helpers/connect.helper.js";
-import BootstrapModels, {
+import ModelsAssociations, {
   initAutoIncrementsData,
 } from "./src/models/index.model.js";
 
@@ -122,7 +122,7 @@ app.use(logErrorMiddleware);
 app.use(return404);
 app.use(returnError);
 
-BootstrapModels();
+ModelsAssociations();
 
 (async () => {
   let force = false;

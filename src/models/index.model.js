@@ -18,7 +18,7 @@ import HistoryVoucherTopup from "./historyVoucherTopup.model.js";
 import HistoryPayment from "./historyPayment.model.js";
 import HistoryPlayer from "./historyPlayer.model.js";
 
-export default function BootstrapModels() {
+export default function ModelsAssociations() {
   User.hasOne(Player, {
     foreignKey: "user_id",
     as: "players",
