@@ -8,6 +8,7 @@ Nominal.init(
     nominal_id: {
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
       type: DataTypes.BIGINT(20),
       field: "nominal_id",
     },

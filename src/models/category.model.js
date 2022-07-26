@@ -8,6 +8,7 @@ Category.init(
     category_id: {
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       field: "category_id",
     },

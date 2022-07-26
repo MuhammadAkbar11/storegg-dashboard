@@ -6,6 +6,7 @@ class User extends Model {}
 User.init(
   {
     user_id: {
+      autoIncrement: true,
       primaryKey: true,
       allowNull: false,
       type: DataTypes.BIGINT(20),
