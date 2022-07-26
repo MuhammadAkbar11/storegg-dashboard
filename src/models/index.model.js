@@ -14,6 +14,9 @@ import Bank from "./bank.model.js";
 import PaymentBank from "./paymentBank.model.js";
 import Transaction from "./transaction.model.js";
 import History from "./history.model.js";
+import HistoryVoucherTopup from "./historyVoucherTopup.model.js";
+import HistoryPayment from "./historyPayment.model.js";
+import HistoryPlayer from "./historyPlayer.model.js";
 
 export default function BootstrapModels() {
   User.hasOne(Player, {
@@ -114,14 +117,43 @@ export default function BootstrapModels() {
     as: "payment_methods",
     constraints: true,
   });
+
+  History.hasOne(Transaction, {
+    foreignKey: "history_id",
+    as: "transactions",
+  });
   Transaction.belongsTo(History, {
     foreignKey: "history_id",
     as: "histories",
     constraints: true,
   });
-  History.hasOne(Transaction, {
-    foreignKey: "history_id",
-    as: "transactions",
+
+  HistoryVoucherTopup.hasOne(History, {
+    foreignKey: "history_vcrtopup_id",
+    as: "histories",
+  });
+  History.belongsTo(HistoryVoucherTopup, {
+    foreignKey: "history_vcrtopup_id",
+    as: "history_vcrtopups",
+  });
+
+  HistoryPayment.hasOne(History, {
+    foreignKey: "history_payment_id",
+    as: "histories",
+  });
+
+  History.belongsTo(HistoryPayment, {
+    foreignKey: "history_payment_id",
+    as: "history_payments",
+  });
+
+  History.belongsTo(HistoryPlayer, {
+    foreignKey: "history_player_id",
+    as: "history_players",
+  });
+  HistoryPlayer.hasOne(History, {
+    foreignKey: "history_player_id",
+    as: "histories",
   });
 }
 

@@ -125,8 +125,8 @@ app.use(returnError);
 BootstrapModels();
 
 (async () => {
-  // let force = false;
-  let force = true;
+  let force = false;
+  // let force = true;
   const connect = await ConnectSequelize.sync({ force }).then(res => res);
 
   // const models = co;
