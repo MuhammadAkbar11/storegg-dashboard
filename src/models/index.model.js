@@ -12,6 +12,7 @@ import VoucherNominal from "./voucherNominal.model.js";
 import PaymentMethod from "./paymentMethod.model.js";
 import Bank from "./bank.model.js";
 import PaymentBank from "./paymentBank.model.js";
+import Transaction from "./transaction.model.js";
 
 export default function BootstrapModels() {
   User.hasOne(Player, {
@@ -83,6 +84,42 @@ export default function BootstrapModels() {
 
   Bank.belongsToMany(PaymentMethod, {
     through: PaymentBank,
+    foreignKey: "payment_method_id",
+    as: "payment_methods",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  Category.hasMany(Transaction, {
+    foreignKey: "category_id",
+    as: "transactions",
+  });
+
+  Transaction.belongsTo(Category, {
+    foreignKey: "category_id",
+    as: "categories",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  Player.hasMany(Transaction, {
+    foreignKey: "player_id",
+    as: "transactions",
+  });
+
+  Transaction.belongsTo(Player, {
+    foreignKey: "player_id",
+    as: "players",
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+
+  PaymentMethod.hasMany(Transaction, {
+    foreignKey: "payment_method_id",
+    as: "transactions",
+  });
+
+  Transaction.belongsTo(PaymentMethod, {
     foreignKey: "payment_method_id",
     as: "payment_methods",
     constraints: true,
