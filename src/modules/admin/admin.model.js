@@ -1,15 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import ConnectSequelize from "../../helpers/connect.helper.js";
 
-class Player extends Model {}
+class Administrator extends Model {}
 
-Player.init(
+Administrator.init(
   {
-    player_id: {
+    admin_id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.BIGINT(20),
+      field: "admin_id",
     },
     user_id: {
       allowNull: false,
@@ -23,10 +24,10 @@ Player.init(
   },
   {
     sequelize: ConnectSequelize,
-    modelName: "Players",
-    tableName: "gg_players",
+    modelName: "Administrators",
+    tableName: "gg_administrators",
     deletedAt: false,
   }
 );
 
-export default Player;
+export default Administrator;
