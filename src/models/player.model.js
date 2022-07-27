@@ -14,7 +14,7 @@ Player.init(
     },
     user_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "user_id",
     },
 

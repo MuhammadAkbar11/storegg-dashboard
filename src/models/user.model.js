@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { faker } from "@faker-js/faker";
+import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
 import ConnectSequelize from "../helpers/connect.helper.js";
 
 class User extends Model {}
@@ -7,16 +7,19 @@ class User extends Model {}
 User.init(
   {
     user_id: {
-      autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "user_id",
     },
     name: {
       type: DataTypes.STRING(25),
       allowNull: false,
       field: "name",
+    },
+    username: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      field: "username",
     },
     email: {
       unique: true,
@@ -40,11 +43,25 @@ User.init(
     },
     phone_number: {
       type: DataTypes.STRING(20),
-      defaultValue: faker.phone.number("+62###-####-####"),
+      defaultValue: "+62813-0000-0000",
       field: "phone_number",
     },
   },
   {
+    hooks: {
+      beforeCreate: async function (user, options) {
+        const ID = await AutoIncrementField("user_id", "_", 7);
+        user.dataValues.user_id = ID;
+      },
+      beforeBulkCreate: async function (users, options) {
+        for (let i = 0; i < users.length; i++) {
+          const ID = await AutoIncrementField("user_id", "_", 7);
+          console.log(ID);
+          users[i].dataValues.user_id = ID;
+        }
+        options.individualHooks = false;
+      },
+    },
     sequelize: ConnectSequelize,
     modelName: "Users",
     tableName: "gg_users",
