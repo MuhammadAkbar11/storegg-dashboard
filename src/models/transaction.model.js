@@ -54,7 +54,7 @@ Transaction.init(
     },
     player_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "player_id",
     },
     payment_method_id: {

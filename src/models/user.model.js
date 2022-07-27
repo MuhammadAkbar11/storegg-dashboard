@@ -1,6 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
 import ConnectSequelize from "../helpers/connect.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class User extends Model {}
 
@@ -50,12 +51,14 @@ User.init(
   {
     hooks: {
       beforeCreate: async function (user, options) {
-        const ID = await AutoIncrementField("user_id", "_", 7);
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoIncrementField("user_id", datePrefix, 12);
         user.dataValues.user_id = ID;
       },
       beforeBulkCreate: async function (users, options) {
         for (let i = 0; i < users.length; i++) {
-          const ID = await AutoIncrementField("user_id", "_", 7);
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoIncrementField("user_id", datePrefix, 12);
           console.log(ID);
           users[i].dataValues.user_id = ID;
         }

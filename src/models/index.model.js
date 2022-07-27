@@ -26,7 +26,7 @@ export default function ModelsAssociations() {
   Player.belongsTo(User, {
     foreignKey: "user_id",
     as: "users",
-    constraints: false,
+    constraints: true,
   });
 
   User.hasOne(Administrator, {
@@ -36,7 +36,7 @@ export default function ModelsAssociations() {
   Administrator.belongsTo(User, {
     foreignKey: "user_id",
     as: "users",
-    constraints: false,
+    constraints: true,
   });
 
   Category.hasOne(Player, {
@@ -46,7 +46,7 @@ export default function ModelsAssociations() {
   Player.belongsTo(Category, {
     foreignKey: "favorite",
     as: "categories",
-    constraints: false,
+    constraints: true,
   });
 
   Category.hasOne(Voucher, {
@@ -56,34 +56,34 @@ export default function ModelsAssociations() {
   Voucher.belongsTo(Category, {
     foreignKey: "category_id",
     as: "categories",
-    constraints: false,
+    constraints: true,
   });
 
   Voucher.belongsToMany(Nominal, {
     through: VoucherNominal,
     foreignKey: "nominal_id",
     as: "nominals",
-    constraints: false,
+    constraints: true,
   });
   Nominal.belongsToMany(Voucher, {
     through: VoucherNominal,
     foreignKey: "voucher_id",
     as: "vouchers",
-    constraints: false,
+    constraints: true,
   });
 
   PaymentMethod.belongsToMany(Bank, {
     through: PaymentBank,
     foreignKey: "bank_id",
     as: "banks",
-    constraints: false,
+    constraints: true,
   });
 
   Bank.belongsToMany(PaymentMethod, {
     through: PaymentBank,
     foreignKey: "payment_method_id",
     as: "payment_methods",
-    constraints: false,
+    constraints: true,
   });
 
   Category.hasMany(Transaction, {
@@ -94,7 +94,7 @@ export default function ModelsAssociations() {
   Transaction.belongsTo(Category, {
     foreignKey: "category_id",
     as: "categories",
-    constraints: false,
+    constraints: true,
   });
 
   Player.hasMany(Transaction, {
@@ -110,12 +110,12 @@ export default function ModelsAssociations() {
   Transaction.belongsTo(Player, {
     foreignKey: "player_id",
     as: "players",
-    constraints: false,
+    constraints: true,
   });
   Transaction.belongsTo(PaymentMethod, {
     foreignKey: "payment_method_id",
     as: "payment_methods",
-    constraints: false,
+    constraints: true,
   });
 
   History.hasOne(Transaction, {
@@ -125,7 +125,7 @@ export default function ModelsAssociations() {
   Transaction.belongsTo(History, {
     foreignKey: "history_id",
     as: "histories",
-    constraints: false,
+    constraints: true,
   });
 
   HistoryVoucherTopup.hasOne(History, {
