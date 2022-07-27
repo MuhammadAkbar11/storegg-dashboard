@@ -53,6 +53,16 @@ export default function ModelsAssociations() {
     foreignKey: "category_id",
     as: "vouchers",
   });
+
+  Administrator.hasMany(Voucher, {
+    foreignKey: "admin_id",
+    as: "vouchers",
+  });
+
+  Voucher.belongsTo(Administrator, {
+    foreignKey: "admin_id",
+    as: "administrators",
+  });
   Voucher.belongsTo(Category, {
     foreignKey: "category_id",
     as: "categories",

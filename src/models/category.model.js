@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
 
 class Category extends Model {}
 
@@ -26,13 +27,13 @@ Category.init(
     hooks: {
       beforeBulkCreate: async function (admins, options) {
         for (let i = 0; i < admins.length; i++) {
-          const ID = await AutoIncrementField("category_id", "", 6);
+          const ID = await AutoIncrementField("category_id", "", 7);
           admins[i].dataValues.category_id = ID;
         }
         options.individualHooks = false;
       },
       beforeCreate: async function (admin, options) {
-        const ID = await AutoIncrementField("category_id", "", 6);
+        const ID = await AutoIncrementField("category_id", "", 7);
         admin.dataValues.category_id = ID;
       },
     },

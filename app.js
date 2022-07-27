@@ -1,3 +1,5 @@
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -14,7 +16,6 @@ import {
   return404,
   returnError,
 } from "./src/middleware/errorHandler.js";
-
 import {
   DEV_STATIC_FOLDER,
   STATIC_FOLDER,
@@ -27,6 +28,8 @@ import sequelizeConnection from "./src/config/db.config.js";
 import ModelsAssociations, {
   initAutoIncrementsData,
 } from "./src/models/index.model.js";
+
+const argv = yargs(hideBin(process.argv)).argv;
 
 const MySQLStore = expressMysqlSession(session);
 
@@ -125,7 +128,9 @@ app.use(returnError);
 ModelsAssociations();
 
 (async () => {
-  let force = false;
+  console.log(argv);
+  let force = argv.force ?? false;
+  console.log(force);
   // let force = true;
   const connect = await sequelizeConnection.sync({ force }).then(res => res);
 

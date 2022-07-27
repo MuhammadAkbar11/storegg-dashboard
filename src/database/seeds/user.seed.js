@@ -5,7 +5,6 @@ import bcryptjs from "bcryptjs";
 import User from "../../models/user.model.js";
 import Logger from "../../helpers/logger.helper.js";
 import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
-import AutoIncrement from "../../models/autoIncrement.model.js";
 import Administrator from "../../models/admin.model.js";
 import Player from "../../models/player.model.js";
 
