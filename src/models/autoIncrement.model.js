@@ -17,24 +17,19 @@ AutoIncrement.init(
       allowNull: false,
       field: "table_name",
     },
-    attribute: {
+    field: {
       type: DataTypes.STRING(20),
-      field: "attribute",
-      defaultValue: "attribute_name",
+      field: "field",
+      defaultValue: "field",
     },
     prefix: {
       type: DataTypes.STRING(25),
       field: "prefix",
       defaultValue: "prefix",
     },
-    zero: {
-      type: DataTypes.STRING(10),
-      field: "zero",
-      defaultValue: "000",
-    },
-    increment: {
+    value: {
       type: DataTypes.BIGINT(20),
-      field: "increment",
+      field: "value",
       defaultValue: 0,
     },
   },

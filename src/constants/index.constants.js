@@ -12,21 +12,18 @@ export const httpStatusCodes = {
 
 export const TABLE_AUTO_INCREMENT = {
   users: {
-    attribute: "user_id",
+    field: "user_id",
     prefix: "USR",
-    zero: "000",
     increment: 0,
   },
   players: {
-    attribute: "player_id",
+    field: "player_id",
     prefix: "PLY",
-    zero: "000",
     increment: 0,
   },
   administrators: {
-    attribute: "admin_id",
+    field: "admin_id",
     prefix: "ADM",
-    zero: "000",
     increment: 0,
   },
 };
