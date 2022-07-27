@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class PaymentBank extends Model {}
 
@@ -24,7 +24,7 @@ PaymentBank.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "PaymentBanks",
     tableName: "gg_payment_banks",
   }

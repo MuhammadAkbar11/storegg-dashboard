@@ -1,13 +1,12 @@
 import { Sequelize } from "sequelize";
-
+import Logger from "../helpers/logger.helper.js";
 import {
   DB_DRIVER,
   DB_HOST,
   DB_NAME,
   DB_PASSWORD,
   DB_USERNAME,
-} from "../config/env.config.js";
-import Logger from "./logger.helper.js";
+} from "./env.config.js";
 
 const define = {
   timestamps: true,
@@ -19,7 +18,7 @@ const define = {
   deletedAt: "deleted_at",
 };
 
-const ConnectSequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
+const sequelizeConnection = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   dialect: DB_DRIVER,
   host: DB_HOST,
   define,
@@ -28,5 +27,4 @@ const ConnectSequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   },
 });
 
-export default ConnectSequelize;
-// export default connectDB;
+export default sequelizeConnection;

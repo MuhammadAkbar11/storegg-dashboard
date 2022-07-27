@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class AutoIncrement extends Model {}
 
@@ -35,7 +35,7 @@ AutoIncrement.init(
   },
   {
     // Other model options go here
-    sequelize: ConnectSequelize, // We need to pass the connection instance
+    sequelize: sequelizeConnection, // We need to pass the connection instance
     modelName: "AutoIncrements", // We need to choose the model name
     tableName: "gg_auto_increments",
   }

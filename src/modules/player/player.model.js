@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../../helpers/connect.helper.js";
+import sequelizeConnection from "../../config/db.config.js";
 
 class Player extends Model {}
 
@@ -27,7 +27,7 @@ Player.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "Players",
     tableName: "gg_players",
     deletedAt: false,

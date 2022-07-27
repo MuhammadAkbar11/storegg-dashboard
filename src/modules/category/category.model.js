@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../../helpers/connect.helper.js";
+import sequelizeConnection from "../../config/db.config.js";
 
 class Category extends Model {}
 
@@ -24,7 +24,7 @@ Category.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "Categories",
     tableName: "gg_categories",
     deletedAt: false,

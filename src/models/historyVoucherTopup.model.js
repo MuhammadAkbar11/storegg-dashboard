@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class HistoryVoucherTopup extends Model {}
 
@@ -43,7 +43,7 @@ HistoryVoucherTopup.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "HistoryVoucherTopups",
     tableName: "gg_history_vcrtopup",
   }

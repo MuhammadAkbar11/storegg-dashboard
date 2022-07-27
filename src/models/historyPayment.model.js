@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class HistoryPayment extends Model {}
 
@@ -34,7 +34,7 @@ HistoryPayment.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "HistoryPayments",
     tableName: "gg_history_payments",
     deletedAt: false,

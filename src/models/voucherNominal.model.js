@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class VoucherNominal extends Model {}
 
@@ -24,7 +24,7 @@ VoucherNominal.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "VoucherNominals",
     tableName: "gg_voucher_nominals",
   }

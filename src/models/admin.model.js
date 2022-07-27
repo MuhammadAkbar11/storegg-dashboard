@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
 class Administrator extends Model {}
@@ -33,7 +33,7 @@ Administrator.init(
         admin.dataValues.admin_id = ID;
       },
     },
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "Administrators",
     tableName: "gg_administrators",
     deletedAt: false,

@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import ConnectSequelize from "../helpers/connect.helper.js";
+import sequelizeConnection from "../config/db.config.js";
 
 class Transaction extends Model {}
 
@@ -64,7 +64,7 @@ Transaction.init(
     },
   },
   {
-    sequelize: ConnectSequelize,
+    sequelize: sequelizeConnection,
     modelName: "Transactions",
     tableName: "gg_transactions",
     deletedAt: false,
