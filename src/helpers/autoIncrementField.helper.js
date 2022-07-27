@@ -3,15 +3,7 @@ import { TransfromError } from "./baseError.helper.js";
 import Logger from "./logger.helper.js";
 
 async function AutoIncrementField(field, customPrefix = "", length = 6) {
-  const customPrefixLength = customPrefix.length;
-
   try {
-    await AutoIncrement.increment("value", {
-      where: {
-        field: field,
-      },
-    });
-
     const table = await AutoIncrement.findOne({
       where: {
         field: field,
@@ -19,15 +11,20 @@ async function AutoIncrementField(field, customPrefix = "", length = 6) {
     });
     let zero = [];
 
-    const defaultPrefix = table.prefix;
-    const counter = table.value;
-
-    const num = length - +customPrefixLength - +counter;
+    const prefix = `${table.prefix}${customPrefix}`;
+    const counter = +table.value;
+    const prefixLength = prefix.length;
+    const num = length - +prefixLength - counter.toString().length;
     for (let i = 0; i < num; i++) {
       zero.push("0");
     }
 
-    return `${defaultPrefix}${customPrefix}${zero.join("")}${counter}`;
+    const result = `${prefix}${zero.join("")}${counter}`;
+
+    await table.increment("value");
+
+    Logger.info(`Done Increment Value = ${result}, Length = ${length} `);
+    return result;
   } catch (error) {
     Logger.error(error);
     new TransfromError(error);

@@ -1,6 +1,6 @@
 import { SESSION_SECRET } from "../config/env.config.js";
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
-import { VerifyJWT } from "../helpers/jwt.helper.js";
+import { VerifyJWT } from "../helpers/auth.helper.js";
 // import { findOnePlayer } from "../modules/player/player.repository.js";
 
 function ensureAuth(req, res, next) {

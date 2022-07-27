@@ -9,7 +9,7 @@ Administrator.init(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.BIGINT(25),
       field: "admin_id",
     },
     user_id: {

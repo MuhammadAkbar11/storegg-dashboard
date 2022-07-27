@@ -30,7 +30,7 @@ AutoIncrement.init(
     value: {
       type: DataTypes.BIGINT(20),
       field: "value",
-      defaultValue: 0,
+      defaultValue: 1,
     },
   },
   {
