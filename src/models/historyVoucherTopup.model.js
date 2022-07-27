@@ -6,9 +6,7 @@ class HistoryVoucherTopup extends Model {}
 HistoryVoucherTopup.init(
   {
     history_vcrtopup_id: {
-      autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
       type: DataTypes.STRING(25),
       field: "history_vcrtopup_id",
     },

@@ -51,7 +51,7 @@ Transaction.init(
     },
     payment_method_id: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "payment_method_id",
     },
   },
