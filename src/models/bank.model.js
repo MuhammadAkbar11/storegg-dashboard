@@ -8,8 +8,7 @@ Bank.init(
     bank_id: {
       primaryKey: true,
       allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "bank_id",
     },
     account_name: {

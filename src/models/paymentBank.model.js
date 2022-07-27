@@ -7,19 +7,17 @@ PaymentBank.init(
   {
     payment_bank_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "payment_bank_id",
     },
     bank_id: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "bank_id",
     },
     payment_method_id: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "payment_method_id",
     },
   },

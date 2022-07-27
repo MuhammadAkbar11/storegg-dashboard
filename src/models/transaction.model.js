@@ -7,19 +7,11 @@ Transaction.init(
   {
     transaction_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(30),
       field: "transaction_id",
     },
-    transaction_code: {
-      type: DataTypes.STRING(25),
-      allowNull: false,
-      unique: true,
-      field: "transaction_code",
-    },
     name: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(25),
       allowNull: false,
       field: "name",
     },
@@ -44,12 +36,12 @@ Transaction.init(
     },
     history_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "history_id",
     },
     category_id: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "category_id",
     },
     player_id: {

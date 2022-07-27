@@ -6,10 +6,8 @@ class Voucher extends Model {}
 Voucher.init(
   {
     voucher_id: {
-      allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
     },
     admin_id: {
       allowNull: false,
@@ -36,7 +34,7 @@ Voucher.init(
     },
     category_id: {
       allowNull: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "category_id",
     },
   },

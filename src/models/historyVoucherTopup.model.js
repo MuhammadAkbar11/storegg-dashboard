@@ -9,7 +9,7 @@ HistoryVoucherTopup.init(
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "history_vcrtopup_id",
     },
     game_name: {

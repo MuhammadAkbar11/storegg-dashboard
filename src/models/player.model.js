@@ -19,7 +19,7 @@ Player.init(
     },
     favorite: {
       allowNull: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "favorite",
     },
   },

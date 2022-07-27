@@ -7,19 +7,17 @@ VoucherNominal.init(
   {
     voucher_nominal_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(25),
       field: "voucher_nominal_id",
     },
     nominal_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "nominal_id",
     },
     voucher_id: {
       allowNull: false,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "voucher_id",
     },
   },

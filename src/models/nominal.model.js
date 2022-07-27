@@ -7,9 +7,7 @@ Nominal.init(
   {
     nominal_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "nominal_id",
     },
     coin_quantity: {

@@ -6,9 +6,8 @@ class HistoryPlayer extends Model {}
 HistoryPlayer.init(
   {
     history_player_id: {
-      autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "history_player_id",
     },
     name: {

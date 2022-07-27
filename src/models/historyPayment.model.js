@@ -7,9 +7,7 @@ HistoryPayment.init(
   {
     history_payment_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.BIGINT(20),
+      type: DataTypes.STRING(25),
       field: "history_payment_id",
     },
     account_name: {

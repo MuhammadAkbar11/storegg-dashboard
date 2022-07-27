@@ -7,9 +7,7 @@ PaymentMethod.init(
   {
     payment_method_id: {
       primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(15),
       field: "payment_method_id",
     },
     type: {

@@ -22,8 +22,8 @@ const sequelizeConnection = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   dialect: DB_DRIVER,
   host: DB_HOST,
   define,
-  logging: (query, options, time) => {
-    Logger.info(`[sequelize] ${query}`);
+  logging: (query, timing) => {
+    Logger.info(`[sequelize] ${query} `);
   },
 });
 
