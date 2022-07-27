@@ -10,10 +10,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
     "start": "cross-env NODE_ENV=production nodemon app.js",
-    "seed:import": "node ./src/database/seeds/index.js seed=import",
-    "seed:destroy": "node ./src/database/seeds/index.js seed=destroy",
-    "modules": "node ./src/generator/index.js",
-    "module": "node ./core/generateModule.js"
+    "db:import": "cross-env NODE_ENV=development node ./src/database/seeds/index.seed.js --import"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
@@ -51,7 +48,8 @@
     "pino": "^8.3.0",
     "pino-pretty": "^8.1.0",
     "sequelize": "^6.21.3",
-    "sharp": "^0.30.7"
+    "sharp": "^0.30.7",
+    "yargs": "^17.5.1"
   },
   "_moduleAliases": {
     "@root": "src",
