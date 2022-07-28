@@ -5,9 +5,8 @@
   "main": "app.js",
   "author": "MuhammadAkbar11",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/app.js --mode development"
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node --presets=@babel/preset-env ./app.js --mode development"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
@@ -15,6 +14,9 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/node": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.0.0",
     "colors": "^1.4.0",
@@ -30,6 +32,7 @@
     "googleapis": "^92.0.0",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
+    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
@@ -42,5 +45,15 @@
     "sequelize": "^6.21.3",
     "sharp": "^0.30.7",
     "yargs": "^17.5.1"
+  },
+  "_moduleAliases": {
+    "@helpers": "src/helpers",
+    "@models": "./src/models",
+    "@configs": "./src/config",
+    "@modules": "./src/modules",
+    "@middleware": "./src/middleware",
+    "@constants": "./src/constants",
+    "@db": "./src/models/index.model.js",
+    "@routes": "./src/routes"
   }
 }

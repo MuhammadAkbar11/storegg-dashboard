@@ -1,3 +1,4 @@
+import "module-alias/register";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import express from "express";
@@ -8,33 +9,27 @@ import session from "express-session";
 import passport from "passport";
 import methodOverride from "method-override";
 import connectFlash from "connect-flash";
-import * as envConfigs from "./src/config/env.config.js";
+import * as envConfigs from "@configs/env.config.js";
 import {
   isOperationalError,
   logError,
   logErrorMiddleware,
   return404,
   returnError,
-} from "./src/middleware/errorHandler.js";
+} from "@middleware/errorHandler.js";
 import {
   DEV_STATIC_FOLDER,
   STATIC_FOLDER,
 } from "./src/constants/index.constants.js";
-import passportConfig from "./src/config/passport.config.js";
-import MainRoutes from "./src/routes/index.routes.js";
-import { responseType } from "./src/middleware/responseType.js";
-import Logger from "./src/helpers/logger.helper.js";
-import sequelizeConnection from "./src/config/db.config.js";
-import ModelsAssociations, {
-  initAutoIncrementsData,
-} from "./src/models/index.model.js";
+import passportConfig from "@configs/passport.config.js";
+import { responseType } from "@middleware/responseType.js";
+import Logger from "@helpers/logger.helper.js";
+import db from "@db";
 
 const argv = yargs(hideBin(process.argv)).argv;
-
 const MySQLStore = expressMysqlSession(session);
 
 envConfigs.dotenvConfig;
-
 passportConfig();
 // connectDB();
 
@@ -46,7 +41,7 @@ const sessiontStore = new MySQLStore({
   expiration: 86400000,
   insecureAuth: true,
   host: envConfigs.DB_HOST,
-  database: envConfigs.DB_NAME,
+  database: envConfigs.DB_DATABASE,
   user: envConfigs.DB_USERNAME,
   password: envConfigs.DB_PASSWORD,
   schema: {
@@ -119,25 +114,21 @@ if (envConfigs.MODE == "development") {
 
 app.use(responseType);
 
-MainRoutes(app);
-
 app.use(logErrorMiddleware);
 app.use(return404);
 app.use(returnError);
 
-ModelsAssociations();
-
 (async () => {
-  console.log(argv);
   let force = argv.force ?? false;
-  console.log(force);
-  // let force = true;
-  const connect = await sequelizeConnection.sync({ force }).then(res => res);
 
-  // const models = co;
-  const tables = await connect.query("SHOW TABLES;");
+  await db.sequelize.sync({ force });
 
-  if (force) initAutoIncrementsData(tables);
+  const users = await db.User.findAll({});
+  console.log(users, "users");
+
+  // const tables = await connect.query("SHOW TABLES;");
+
+  // if (force) initAutoIncrementsData(tables);
 
   app.listen(envConfigs.PORT, () =>
     Logger.info(`Server Running on port ${envConfigs.PORT}`)
