@@ -27,16 +27,16 @@ if (mode == "development") {
   if (!fs.existsSync(path.resolve(__dirname, uploadPath))) {
     Logger.warn("Development directory not found!");
     fs.mkdirSync(path.resolve(__dirname, uploadPath), { recursive: true });
-    Logger.info("[server] Development directory created!");
+    Logger.info("[config] Development directory created!");
   } else {
-    Logger.info("[server] Development directory founded!");
+    Logger.info("[config] Development directory founded!");
   }
 }
 
 export const PORT = process.env.PORT | 3000;
 export const MODE = mode;
 export const MONGO_URI = process.env.MONGO_URI;
-export const DB_NAME = process.env.DB_DATABASE;
+export const DB_DATABASE = process.env.DB_DATABASE;
 export const DB_USERNAME = process.env.DB_USERNAME;
 export const DB_PASSWORD = process.env.DB_PASSWORD;
 export const DB_HOST = process.env.DB_HOST;
