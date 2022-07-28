@@ -1,10 +1,10 @@
-import AutoIncrement from "../models/autoIncrement.model.js";
+import { AutoNumber } from "../models/index.model.js";
 import { TransfromError } from "./baseError.helper.js";
 import Logger from "./logger.helper.js";
 
-async function AutoIncrementField(field, customPrefix = "", length = 6) {
+async function AutoNumberField(field, customPrefix = "", length = 6) {
   try {
-    const table = await AutoIncrement.findOne({
+    const table = await AutoNumber.findOne({
       where: {
         field: field,
       },
@@ -23,7 +23,9 @@ async function AutoIncrementField(field, customPrefix = "", length = 6) {
 
     await table.increment("value");
 
-    Logger.info(`Done Increment Value = ${result}, Length = ${length} `);
+    Logger.info(
+      `[helper] Auto number done!, Value = ${result}, Length = ${length} `
+    );
     return result;
   } catch (error) {
     Logger.error(error);
@@ -31,4 +33,4 @@ async function AutoIncrementField(field, customPrefix = "", length = 6) {
   }
 }
 
-export default AutoIncrementField;
+export default AutoNumberField;
