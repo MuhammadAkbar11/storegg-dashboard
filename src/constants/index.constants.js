@@ -14,17 +14,30 @@ export const TABLE_AUTO_INCREMENT = {
   users: {
     field: "user_id",
     prefix: "USR",
-    increment: 0,
   },
   players: {
     field: "player_id",
     prefix: "PLY",
-    increment: 0,
+  },
+  categories: {
+    field: "category_id",
+    prefix: "CTGR",
   },
   administrators: {
     field: "admin_id",
     prefix: "ADM",
-    increment: 0,
+  },
+  vouchers: {
+    field: "voucher_id",
+    prefix: "VCR",
+  },
+  nominals: {
+    field: "nominal_id",
+    prefix: "NML",
+  },
+  voucher_nominals: {
+    field: "voucher_nominal_id",
+    prefix: "VCNL",
   },
 };
 
