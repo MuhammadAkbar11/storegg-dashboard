@@ -1,11 +1,11 @@
-import { DB_NAME } from "../config/env.config.js";
+import { DB_DATABASE } from "../config/env.config.js";
 import { TABLE_AUTO_INCREMENT } from "../constants/index.constants.js";
 import Logger from "../helpers/logger.helper.js";
 import Administrator from "./admin.model.js";
 import Category from "./category.model.js";
 import Player from "./player.model.js";
 import User from "./user.model.js";
-import AutoIncrement from "./autoIncrement.model.js";
+import AutoIncrement from "./autoNumber.model.js";
 import Voucher from "./voucher.model.js";
 import Nominal from "./nominal.model.js";
 import VoucherNominal from "./voucherNominal.model.js";
@@ -18,7 +18,7 @@ import HistoryVoucherTopup from "./historyVoucherTopup.model.js";
 import HistoryPayment from "./historyPayment.model.js";
 import HistoryPlayer from "./historyPlayer.model.js";
 
-export default function ModelsAssociations() {
+export default function BoostrapingModels() {
   User.hasOne(Player, {
     foreignKey: "user_id",
     as: "players",
@@ -167,17 +167,20 @@ export default function ModelsAssociations() {
   });
 }
 
-export async function initAutoIncrementsData(tables) {
+export async function createAutoNumberTable(tables) {
   const data = [];
 
   for (const table of tables["0"]) {
-    const tbName = table[`Tables_in_${DB_NAME}`];
-    const shortTbName = tbName.split("_")[1];
+    const tbName = table[`Tables_in_${DB_DATABASE}`];
+    const splitTbName = tbName.split("_");
+    const shortTbName = splitTbName.splice(1, splitTbName.length).join("_");
+    console.log(shortTbName);
     const tbData = {
-      table_name: table[`Tables_in_${DB_NAME}`],
+      table_name: table[`Tables_in_${DB_DATABASE}`],
       ...TABLE_AUTO_INCREMENT[shortTbName],
     };
-
+    console.log(table);
+    console.log(tbData);
     data.push(tbData);
 
     if (tbData.field) {

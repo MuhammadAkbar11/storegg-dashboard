@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class Nominal extends Model {}
 
@@ -28,6 +30,21 @@ Nominal.init(
     },
   },
   {
+    hooks: {
+      beforeCreate: async function (nominal, options) {
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoNumberField("nominal_id", datePrefix, 12);
+        nominal.dataValues.nominal_id = ID;
+      },
+      beforeBulkCreate: async function (nominals, options) {
+        for (let i = 0; i < nominals.length; i++) {
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoNumberField("nominal_id", datePrefix, 12);
+          nominals[i].dataValues.nominal_id = ID;
+        }
+        options.individualHooks = false;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "Nominals",
     tableName: "gg_nominals",

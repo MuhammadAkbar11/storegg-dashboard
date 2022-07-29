@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
+import AutoIncrementField from "../helpers/autoNumberField.helper.js";
 import sequelizeConnection from "../config/db.config.js";
 import DayjsUTC from "../helpers/date.helper.js";
 

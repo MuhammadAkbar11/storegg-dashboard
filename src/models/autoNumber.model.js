@@ -1,9 +1,9 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
 
-class AutoIncrement extends Model {}
+class AutoNumber extends Model {}
 
-AutoIncrement.init(
+AutoNumber.init(
   {
     id: {
       primaryKey: true,
@@ -36,9 +36,9 @@ AutoIncrement.init(
   {
     // Other model options go here
     sequelize: sequelizeConnection, // We need to pass the connection instance
-    modelName: "AutoIncrements", // We need to choose the model name
-    tableName: "gg_auto_increments",
+    modelName: "AutoNumber", // We need to choose the model name
+    tableName: "gg_auto_numbers",
   }
 );
 
-export default AutoIncrement;
+export default AutoNumber;

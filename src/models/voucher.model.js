@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class Voucher extends Model {}
 
@@ -39,6 +41,22 @@ Voucher.init(
     },
   },
   {
+    hooks: {
+      beforeCreate: async function (voucher, options) {
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoNumberField("voucher_id", datePrefix, 12);
+        voucher.dataValues.voucher_id = ID;
+      },
+      beforeBulkCreate: async function (vouchers, options) {
+        for (let i = 0; i < vouchers.length; i++) {
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoNumberField("voucher_id", datePrefix, 12);
+
+          vouchers[i].dataValues.voucher_id = ID;
+        }
+        options.individualHooks = false;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "Vouchers",
     tableName: "gg_vouchers",

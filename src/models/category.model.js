@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
-import AutoIncrementField from "../helpers/autoIncrementField.helper.js";
+import AutoIncrementField from "../helpers/autoNumberField.helper.js";
 
 class Category extends Model {}
 
