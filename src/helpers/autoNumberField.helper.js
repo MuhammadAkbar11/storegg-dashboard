@@ -1,4 +1,4 @@
-import { AutoNumber } from "../models/index.model.js";
+import AutoNumber from "../models/autoNumber.model.js";
 import { TransfromError } from "./baseError.helper.js";
 import Logger from "./logger.helper.js";
 
