@@ -4,16 +4,15 @@ import { hideBin } from "yargs/helpers";
 import path from "path";
 import fs from "fs";
 import Logger from "../helpers/logger.helper.js";
+import { ROOT_FOLDER } from "../constants/index.constants.js";
 
 const argv = yargs(hideBin(process.argv)).argv;
 
-const __dirname = path.resolve();
-
 const mode = argv.mode;
-
+console.log(ROOT_FOLDER);
 const envPath = {
-  production: path.resolve(__dirname, ".env.dev"),
-  development: path.resolve(__dirname, ".env.dev"),
+  production: path.join(ROOT_FOLDER, ".env"),
+  development: path.join(ROOT_FOLDER, ".env.dev"),
 };
 
 export const dotenvConfig = dotenv.config({
@@ -24,9 +23,9 @@ let uploadPath = "public/uploads";
 
 if (mode == "development") {
   let uploadPath = process.env.UPLOAD_PATH;
-  if (!fs.existsSync(path.resolve(__dirname, uploadPath))) {
+  if (!fs.existsSync(path.join(ROOT_FOLDER, uploadPath))) {
     Logger.warn("Development directory not found!");
-    fs.mkdirSync(path.resolve(__dirname, uploadPath), { recursive: true });
+    fs.mkdirSync(path.join(ROOT_FOLDER, uploadPath), { recursive: true });
     Logger.info("[config] Development directory created!");
   } else {
     Logger.info("[config] Development directory founded!");

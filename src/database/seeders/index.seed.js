@@ -7,6 +7,8 @@ import sequelizeConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
 import { seedImportUsers } from "./user.seed.js";
 import { seedImportCategories } from "./categories.seed.js";
+import { seedImportVouchers } from "./voucher.seed.js";
+import { seedImportNominals } from "./nominal.seed.js";
 
 envConfigs.dotenvConfig;
 
@@ -15,7 +17,12 @@ const argv = yargs(hideBin(process.argv)).argv;
 async function importSeeds() {
   try {
     await seedImportUsers();
-    await seedImportCategories();
+    await seedImportNominals();
+    const createdCategries = await seedImportCategories();
+
+    if (createdCategries) {
+      await seedImportVouchers();
+    }
     Logger.info("[seed] success import data");
     process.exit();
   } catch (error) {
@@ -28,7 +35,7 @@ async function importSeeds() {
 (async () => {
   // let force = false;
   const connect = await sequelizeConnection
-    .sync({ force: false })
+    .sync({ force: argv.force })
     .then(res => res);
 
   if (argv.import) {

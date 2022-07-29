@@ -20,6 +20,7 @@ export async function seedImportCategories() {
 
     // // await UserModel.insertMany(users);
     Logger.info("[seed] Categories imported!");
+    return true;
   } catch (error) {
     throw new TransfromError(error);
   }
