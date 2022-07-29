@@ -1,4 +1,3 @@
-import "module-alias/register";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import express from "express";
@@ -9,22 +8,26 @@ import session from "express-session";
 import passport from "passport";
 import methodOverride from "method-override";
 import connectFlash from "connect-flash";
-import * as envConfigs from "@configs/env.config.js";
+import * as envConfigs from "./src/config/env.config.js";
 import {
   isOperationalError,
   logError,
   logErrorMiddleware,
   return404,
   returnError,
-} from "@middleware/errorHandler.js";
+} from "./src/middleware/errorHandler.js";
 import {
   DEV_STATIC_FOLDER,
   STATIC_FOLDER,
 } from "./src/constants/index.constants.js";
-import passportConfig from "@configs/passport.config.js";
-import { responseType } from "@middleware/responseType.js";
-import Logger from "@helpers/logger.helper.js";
-import db from "@db";
+import passportConfig from "./src/config/passport.config.js";
+import { responseType } from "./src/middleware/responseType.js";
+import Logger from "./src/helpers/logger.helper.js";
+import sequelizeConnection from "./src/config/db.config.js";
+import BoostrapingModels, {
+  createAutoNumberTable,
+} from "./src/models/index.model.js";
+import User from "./src/models/user.model.js";
 
 const argv = yargs(hideBin(process.argv)).argv;
 const MySQLStore = expressMysqlSession(session);
@@ -118,17 +121,16 @@ app.use(logErrorMiddleware);
 app.use(return404);
 app.use(returnError);
 
+BoostrapingModels();
+
 (async () => {
   let force = argv.force ?? false;
 
-  await db.sequelize.sync({ force });
+  const connect = await sequelizeConnection.sync({ force });
 
-  const users = await db.User.findAll({});
-  console.log(users, "users");
+  const tables = await connect.query("SHOW TABLES;");
 
-  // const tables = await connect.query("SHOW TABLES;");
-
-  // if (force) initAutoIncrementsData(tables);
+  if (force) createAutoNumberTable(tables);
 
   app.listen(envConfigs.PORT, () =>
     Logger.info(`Server Running on port ${envConfigs.PORT}`)
@@ -136,6 +138,7 @@ app.use(returnError);
 })();
 
 process.on("unhandledRejection", error => {
+  Logger.error(error);
   throw error;
 });
 

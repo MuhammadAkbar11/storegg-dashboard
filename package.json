@@ -5,13 +5,15 @@
   "main": "app.js",
   "author": "MuhammadAkbar11",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node --presets=@babel/preset-env ./app.js --mode development"
+    "dev": "nodemon ./app.js --mode development",
+    "db:import": "node ./src/database/seeders/index.seed.js --mode development --import"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
     "cross-env": "^7.0.3",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.19"
   },
   "dependencies": {
     "@babel/core": "^7.18.9",
@@ -32,7 +34,7 @@
     "googleapis": "^92.0.0",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
-    "module-alias": "^2.2.2",
+    "module-alias": "2.2.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
