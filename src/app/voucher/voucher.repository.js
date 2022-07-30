@@ -1,15 +1,31 @@
-import { TransfromError } from "../../helpers/baseError.helper.js";
-import { deleteFile } from "../../utils/index.js";
 import sharp from "sharp";
-import VoucherModel from "./voucher.model.js";
 import path from "path";
+import { TransfromError } from "../../helpers/baseError.helper.js";
 import { MODE } from "../../config/env.config.js";
+import Voucher from "../../models/voucher.model.js";
+import { UnlinkFile } from "../../helpers/index.helper.js";
+import Category from "../../models/category.model.js";
+import Nominal from "../../models/nominal.model.js";
+import sequelizeConnection from "../../config/db.config.js";
 
-export const findAllVoucher = async () => {
+export const findListVoucher = async () => {
   try {
-    const result = await VoucherModel.find({})
-      .populate("category")
-      .populate("nominals");
+    const result = await Voucher.findAll({
+      where: {},
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: { exclude: ["created_at", "updated_at"] },
+        },
+        {
+          model: Nominal,
+          as: "nominals",
+          attributes: { exclude: ["created_at", "updated_at"] },
+        },
+      ],
+    });
+
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllVoucher", error);
@@ -19,7 +35,20 @@ export const findAllVoucher = async () => {
 
 export const findVoucherById = async id => {
   try {
-    const result = await VoucherModel.findById(id);
+    const result = await Voucher.findByPk(id, {
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: { exclude: ["created_at", "updated_at"] },
+        },
+        {
+          model: Nominal,
+          as: "nominals",
+          attributes: { exclude: ["created_at", "updated_at"] },
+        },
+      ],
+    });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOneVoucher", error);
@@ -29,7 +58,7 @@ export const findVoucherById = async id => {
 
 export const findOneVoucher = async filter => {
   try {
-    const result = await VoucherModel.findOne({ ...filter })
+    const result = await Voucher.findOne({ ...filter })
       .select("name category _id thumbnail user")
       .populate("category")
       .populate("user");
@@ -42,7 +71,7 @@ export const findOneVoucher = async filter => {
 
 export const findVoucherNominals = async id => {
   try {
-    const result = await VoucherModel.findById(id)
+    const result = await Voucher.findById(id)
       .populate("category")
       .populate("nominals");
     return result;
@@ -52,19 +81,43 @@ export const findVoucherNominals = async id => {
   }
 };
 
-export const createVoucher = async data => {
+export const createVoucher = async (voucher, nominals) => {
+  const t = await sequelizeConnection.transaction();
   try {
-    const result = await VoucherModel.create({ ...data });
+    const result = await Voucher.create({ ...voucher }, { transaction: t });
+
+    for (const nominal of nominals) {
+      await result.addNominal(nominal, {
+        through: {
+          self_granted: true,
+        },
+        transaction: t,
+      });
+    }
+
+    t.commit();
     return result;
   } catch (error) {
+    t.rollback();
     console.error("[EXCEPTION] createVoucher", error);
+    throw new TransfromError(error);
+  }
+};
+
+export const createVoucherNominals = async data => {
+  try {
+    let result = [];
+
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] createVoucherNominals", error);
     throw new TransfromError(error);
   }
 };
 
 export const updateVoucher = async (id, data) => {
   try {
-    const result = await VoucherModel.findById(id);
+    const result = await Voucher.findById(id);
 
     const oldThumbnail = result.thumbnail;
     const fileImgData = data.fileimg.data;
@@ -74,7 +127,7 @@ export const updateVoucher = async (id, data) => {
         .resize(281, 381)
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileImgData.destination, resultImg));
-      deleteFile(fileImgData.path);
+      UnlinkFile(fileImgData.path);
       result.thumbnail = `/uploads/vouchers/${resultImg}`;
 
       if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
@@ -86,7 +139,7 @@ export const updateVoucher = async (id, data) => {
           oldThumbnailPath,
           oldThumbnail
         );
-        deleteFile(oldThumbnailPath + oldThumbnail);
+        UnlinkFile(oldThumbnailPath + oldThumbnail);
       }
     }
 
@@ -104,9 +157,9 @@ export const updateVoucher = async (id, data) => {
 
 export const updateVoucherStatusById = async id => {
   try {
-    let voucher = await VoucherModel.findOne({ _id: id });
+    let voucher = await Voucher.findOne({ _id: id });
     let status = voucher.status === "Y" ? "N" : "Y";
-    voucher = await VoucherModel.findOneAndUpdate(
+    voucher = await Voucher.findOneAndUpdate(
       {
         _id: id,
       },
@@ -120,7 +173,7 @@ export const updateVoucherStatusById = async id => {
 
 export const deleteVoucherById = async id => {
   try {
-    const result = await VoucherModel.deleteOne({ _id: id });
+    const result = await Voucher.deleteOne({ _id: id });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] deleteVoucherById", error);
