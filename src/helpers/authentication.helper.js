@@ -7,9 +7,9 @@ export async function GeneratePassword(password) {
   return password_hash;
 }
 
-export async function ComparePassword(password, compare_password) {
+export async function ComparePassword(enteredPassword, password) {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(password, compare_password, function (error, res) {
+    bcrypt.compare(enteredPassword, password, function (error, res) {
       if (error) reject(error);
       resolve(res);
     });
