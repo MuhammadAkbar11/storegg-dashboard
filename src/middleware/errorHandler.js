@@ -3,10 +3,14 @@ import BaseError from "../helpers/apiError.helper.js";
 import { TransfromError } from "../helpers/baseError.helper.js";
 import Logger from "../helpers/logger.helper.js";
 import { httpStatusCodes } from "../constants/index.constants.js";
+import chalk from "chalk";
+
+const errorText = chalk.hex("#DA1212");
 
 function logError(err) {
-  Logger.error(`${err.name} : ${err.message}`);
-  Logger.error(`${err.statusCode} ${err.stack}`);
+  Logger.error(chalk.red(`[name] : ${err.name}`));
+  Logger.error(chalk.red(`[message] : ${err.message}`));
+  Logger.error(`${errorText("[stack] : ")} \n${errorText(err.stack)}`);
 }
 
 function logErrorMiddleware(err, req, res, next) {
@@ -46,18 +50,30 @@ function returnError(err, req, res, next) {
     });
   }
 
+  if (err.name.includes("AUTH")) {
+    req.logout();
+
+    res.redirect("/auth");
+    return;
+  }
+
   const view = err?.errorView || "errors/500";
   const errData = {
     message: message,
+    name: err.name,
+    statusCode: status,
     ...err,
   };
 
-  const renderData = err?.renderData || { title: message, path: "/error" };
+  const renderData = err?.renderData || {
+    title: `(${status}) ${err.name}`,
+    path: "/error",
+  };
 
   return res.status(status).render(view, {
     errors: errData,
     ...renderData,
-    stack,
+    stack: stack,
   });
 }
 
