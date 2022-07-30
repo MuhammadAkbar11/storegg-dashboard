@@ -3,6 +3,7 @@ import BaseError from "../helpers/baseError.helper.js";
 import { findUserById } from "../app/user/user.repository.js";
 import GoogleStrategy from "./strategies/google.strategy.js";
 import LocalStrategy from "./strategies/local.strategy.js";
+import { findOneAdmin } from "../app/admin/admin.repository.js";
 
 export default function () {
   passport.use(LocalStrategy);
@@ -13,10 +14,23 @@ export default function () {
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log(id, "IIDD");
     try {
       const user = await findUserById(id);
-      done(null, user);
+
+      if (!user) {
+        throw new BaseError("AUTHENTICATION", "Failed to Login", 400, true);
+      }
+
+      const admin = await findOneAdmin({
+        where: {
+          user_id: user.user_id,
+        },
+      });
+      const reqUser = {
+        ...admin.dataValues,
+        ...user.dataValues,
+      };
+      done(null, reqUser);
     } catch (err) {
       const error = new BaseError(
         "AUTHENTICATION",
@@ -25,7 +39,7 @@ export default function () {
         true,
         { ...err }
       );
-      done(error, user);
+      done(error, null);
     }
   });
 }
