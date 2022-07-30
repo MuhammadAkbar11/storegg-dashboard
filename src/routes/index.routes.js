@@ -1,4 +1,5 @@
 import UserRoutes from "../app/user/user.routes.js";
+import VoucherRoutes from "../app/voucher/voucher.routes.js";
 import { ensureAuth } from "../middleware/auth.js";
 
 function MainRoutes(app) {
@@ -10,6 +11,7 @@ function MainRoutes(app) {
   });
 
   UserRoutes(app);
+  VoucherRoutes(app);
 }
 
 export default MainRoutes;
