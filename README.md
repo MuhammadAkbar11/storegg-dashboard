@@ -1,9 +1,10 @@
-# Nodejs Authentication Boilerplate Support Google OAuth
+# StoreGG - Game voucher top up website
 
 ## Requirments
 
-- **Yarn** v1.17+
+- **Yarn** v1.20+
 - **NodeJS** v14.16+
+- **Sequelize** v6+
 
 ## Technology Stack
 
@@ -19,5 +20,6 @@
 
 1. Clone repository
 2. Create Google ClientID & Refresh Token
-3. Setup ENV File. Go to `docs > .env.example` for example
-4. Open Command or Terminal and Write **yarn dev**
+3. Setup ENV File (read env example in `docs > .env.example` for setup)
+4. Open Command or Terminal and Write **yarn install**
+6. Write **yarn dev** in terminal
