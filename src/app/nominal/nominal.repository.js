@@ -1,9 +1,9 @@
 import { TransfromError } from "../../helpers/baseError.helper.js";
-import NominalModel from "./nominal.model.js";
+import Nominal from "../../models/nominal.model.js";
 
-export const findAllNominal = async (filter = {}, sort = {}) => {
+export const findAllNominal = async filter => {
   try {
-    const result = await NominalModel.find({ ...filter }, null, { ...sort });
+    const result = await Nominal.findAll({ ...filter });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllNominal", error);
@@ -13,7 +13,7 @@ export const findAllNominal = async (filter = {}, sort = {}) => {
 
 export const findOneNominal = async filter => {
   try {
-    const result = await NominalModel.findById({ ...filter });
+    const result = await Nominal.findOne({ ...filter });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOneNominal", error);
@@ -23,7 +23,7 @@ export const findOneNominal = async filter => {
 
 export const findNominalById = async id => {
   try {
-    const result = await NominalModel.findById(id);
+    const result = await Nominal.findByPk(id);
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOneNominal", error);
@@ -33,7 +33,7 @@ export const findNominalById = async id => {
 
 export const createNominal = async data => {
   try {
-    const result = await NominalModel.create({ ...data });
+    const result = await Nominal.create({ ...data });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] createNominal", error);
@@ -43,7 +43,7 @@ export const createNominal = async data => {
 
 export const updateNominal = async (id, { coinName, coinNominal, price }) => {
   try {
-    const result = await NominalModel.findById(id);
+    const result = await Nominal.findByPk(id);
 
     result.coinName = coinName;
     result.coinNominal = coinNominal;
@@ -56,9 +56,9 @@ export const updateNominal = async (id, { coinName, coinNominal, price }) => {
   }
 };
 
-export const deleteNominalById = async id => {
+export const deleteNominalById = async filter => {
   try {
-    const result = await NominalModel.deleteOne({ _id: id });
+    const result = await Nominal.destroy({ ...filter });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] deleteNominalById", error);

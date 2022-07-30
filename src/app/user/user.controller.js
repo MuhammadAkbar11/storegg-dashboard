@@ -1,9 +1,11 @@
 import { validationResult } from "express-validator";
+import { httpStatusCodes } from "../../constants/index.constants.js";
+import { ComparePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import httpStatusCodes from "../../utils/httpStatusCode.js";
+import Logger from "../../helpers/logger.helper.js";
 import { findOneUser } from "./user.repository.js";
 
 export const getUserSignin = async (req, res, next) => {
@@ -35,7 +37,7 @@ export const postUserSignin = async (req, res, next) => {
       throw errValidate;
     }
 
-    const user = await findOneUser({ email: email });
+    const user = await findOneUser({ where: { email: email } });
 
     if (!user) {
       throw new BaseError(
@@ -46,7 +48,7 @@ export const postUserSignin = async (req, res, next) => {
       );
     }
 
-    const passwordMatch = await user.matchPassword(password);
+    const passwordMatch = await ComparePassword(password, user.password);
 
     if (!passwordMatch) {
       throw new BaseError(
@@ -59,11 +61,21 @@ export const postUserSignin = async (req, res, next) => {
 
     next();
   } catch (error) {
-    error.errors.errorView = "auth/login";
-    error.renderData = { title: "Login", values: req.body };
-    const baseError = new TransfromError(error);
-    console.error("[EXCEPTION] signin user", baseError);
-    next(baseError);
+    // error.errors["errorView"] = "auth/login";
+    // error.renderData = { title: "Login", values: req.body };
+    // // const error
+    const baseError = new BaseError(
+      error?.name,
+      error?.statusCode,
+      error.message,
+      true,
+      {
+        errorView: "auth/login",
+        renderData: { title: "Login", values: req.body },
+      }
+    );
+    Logger.error("[EXCEPTION] signin user", baseError);
+    next(new TransfromError(baseError));
   }
 };
 
