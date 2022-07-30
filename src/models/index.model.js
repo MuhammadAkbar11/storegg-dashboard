@@ -65,22 +65,42 @@ export default function BoostrapingModels() {
   });
   Voucher.belongsTo(Category, {
     foreignKey: "category_id",
-    as: "categories",
+    as: "category",
     constraints: true,
   });
 
   Voucher.belongsToMany(Nominal, {
     through: VoucherNominal,
     foreignKey: "nominal_id",
+    // uniqueKey: "nominal_id",
     as: "nominals",
-    constraints: true,
   });
   Nominal.belongsToMany(Voucher, {
     through: VoucherNominal,
     foreignKey: "voucher_id",
+    // uniqueKey: "voucher_id",
     as: "vouchers",
-    constraints: true,
   });
+
+  // Voucher.hasMany(VoucherNominal, {
+  //   foreignKey: "voucher_id",
+  //   as: "voucher_nominals",
+  // });
+
+  // Nominal.hasMany(VoucherNominal, {
+  //   foreignKey: "nominal_id",
+  //   as: "nominals",
+  // });
+
+  // VoucherNominal.belongsTo(Voucher, {
+  //   foreignKey: "voucher_id",
+  //   as: "voucher",
+  // });
+
+  // VoucherNominal.belongsTo(Nominal, {
+  //   foreignKey: "nominal_id",
+  //   as: "nominal",
+  // });
 
   PaymentMethod.belongsToMany(Bank, {
     through: PaymentBank,
