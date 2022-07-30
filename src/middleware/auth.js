@@ -5,6 +5,11 @@ import { VerifyJWT } from "../helpers/authentication.helper.js";
 
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) {
+    if (!req.user.role.includes("ADMIN")) {
+      res.redirect("/auth");
+      return;
+    }
+
     return next();
   } else {
     res.redirect("/auth");
