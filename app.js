@@ -27,6 +27,7 @@ import sequelizeConnection from "./src/config/db.config.js";
 import BoostrapingModels, {
   createAutoNumberTable,
 } from "./src/models/index.model.js";
+import MainRoutes from "./src/routes/index.routes.js";
 import User from "./src/models/user.model.js";
 
 const argv = yargs(hideBin(process.argv)).argv;
@@ -116,6 +117,8 @@ if (envConfigs.MODE == "development") {
 }
 
 app.use(responseType);
+
+MainRoutes(app);
 
 app.use(logErrorMiddleware);
 app.use(return404);

@@ -1,3 +1,4 @@
+import UserRoutes from "../app/user/user.routes.js";
 import { ensureAuth } from "../middleware/auth.js";
 
 function MainRoutes(app) {
@@ -7,6 +8,8 @@ function MainRoutes(app) {
       path: "/",
     });
   });
+
+  UserRoutes(app);
 }
 
 export default MainRoutes;
