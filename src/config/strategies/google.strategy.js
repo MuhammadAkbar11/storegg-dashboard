@@ -1,6 +1,6 @@
 import { Strategy } from "passport-google-oauth20";
 import { TransfromError } from "../../helpers/baseError.helper.js";
-import { findOneUser } from "../../modules/user/user.repository.js";
+import { findOneUser } from "../../app/user/user.repository.js";
 import { OAUTH_CLIENTID, OAUTH_CLIENT_SECRET } from "../env.config.js";
 
 const GoogleStrategy = new Strategy(

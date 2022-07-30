@@ -1,7 +1,7 @@
 import { Strategy } from "passport-local";
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
 import Logger from "../../helpers/logger.helper.js";
-import { findOneUser } from "../../modules/user/user.repository.js";
+import { findOneUser } from "../../app/user/user.repository.js";
 
 const LocalStrategy = new Strategy(
   {
@@ -11,12 +11,10 @@ const LocalStrategy = new Strategy(
   async function (email, password, done) {
     try {
       const user = await findOneUser({
-        where: {
-          email: email,
-        },
+        where: { email: email },
       });
       if (user) {
-        return done(null, user);
+        return done(null, user.dataValues);
       }
       throw new BaseError("AUTHENTICATION", "Failed to Login", 400, true, {
         errorView: "auth/login",
