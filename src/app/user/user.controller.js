@@ -48,6 +48,15 @@ export const postUserSignin = async (req, res, next) => {
       );
     }
 
+    if (!user.role.includes("ADMIN")) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        "Email is not an admin email",
+        true
+      );
+    }
+
     const passwordMatch = await ComparePassword(password, user.password);
 
     if (!passwordMatch) {
