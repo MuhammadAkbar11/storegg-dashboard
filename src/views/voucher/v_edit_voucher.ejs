@@ -57,7 +57,7 @@
                     <div class="mb-1">
                       <label class="form-label" for="name">Game</label>
                       <input type="text" id="name" class="form-control" name="name" placeholder="Nama Game"
-                        value="<%= voucher.name %>" />
+                        value="<%= voucher.game_name %>" />
                       <% if(errors && errors?.validation?.name) {  %>
                       <small class=" text-danger "> <%= errors?.validation?.name?.message[0] %></small>
                       <% } %>
@@ -65,7 +65,7 @@
                     <div class="mb-1">
                       <label class="form-label" for="gameCoinName">Nama Koin</label>
                       <input type="text" id="gameCoinName" class="form-control" name="gameCoinName"
-                        placeholder="Nama Koin" value="<%= voucher.gameCoinName %>" />
+                        placeholder="Nama Koin" value="<%= voucher.game_coin_name %>" />
                       <% if(errors && errors?.validation?.gameCoinName) {  %>
                       <small class=" text-danger "> <%= errors?.validation?.gameCoinName?.message[0] %></small>
                       <% } %>
@@ -75,7 +75,7 @@
                       <select class="form-select" id="category" name="category">
                         <option>-- Pilih Kategori</option>
                         <% for (let category of categories) { %>
-                        <% if (category._id.toString()===voucher?.category?._id.toString()) { %>
+                        <% if (category.category_id ===voucher?.category?.category_id) { %>
                         <option value="<%= category._id %>" selected><%= category.name %></option>
                         <% } else {  %>
                         <option value="<%= category._id %>"><%= category.name %></option>
@@ -113,8 +113,8 @@
                           id="nominal_<%= nm._id %>" value="<%= nm._id %>" <%= nm.checked %> />
                         <label class="custom-option-item p-1" for="nominal_<%= nm._id %>">
                           <span class="d-flex mb-50">
-                            <span class="fw-bolder "><%= nm.coinNominal %></span>
-                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coinName %> </span>
+                            <span class="fw-bolder "><%= nm.coin_quantity %></span>
+                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
                           </span>
                           <small class="d-block"><%= nm.price.toLocaleString("id", {
                                     style: "currency",
@@ -130,18 +130,15 @@
                       <% if(!nm.checked) { %>
                       <div class="col-md-3">
                         <input class="custom-option-item-check" type="checkbox" name="nominals"
-                          id="nominal_<%= nm._id %>" value="<%= nm._id %>" />
-                        <label class="custom-option-item p-1" for="nominal_<%= nm._id %>">
+                          id="nominal_<%= nm.nominal_id %>" value="<%= nm.nominal_id %>" />
+                        <label class="custom-option-item p-1" for="nominal_<%= nm.nominal_id %>">
                           <span class="d-flex mb-50">
-                            <span class="fw-bolder "><%= nm.coinNominal %></span>
-                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coinName %>
+                            <span class="fw-bolder "><%= nm.coin_quantity %></span>
+                            <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %>
                             </span>
 
                           </span>
-                          <small class="d-block"><%= nm.price.toLocaleString("id", {
-                                      style: "currency",
-                                      currency: "IDR",
-                                    });  %>
+                          <small class="d-block"><%= nm.price;  %>
                           </small>
                         </label>
                       </div>

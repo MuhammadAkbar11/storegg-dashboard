@@ -35,12 +35,12 @@
                 <td style="width: 180px;">
                   <div class="d-flex gap-1">
                     <img height="80" src="<%= vcr.thumbnail  %>" alt="">
-                    <%= vcr.name  %>
+                    <%= vcr.game_name  %>
                   </div>
                 </td>
-                <td><%= vcr.gameCoinName  %></td>
-                <td><%= vcr.category.name  %></td>
-                <td><a href="/voucher-info/<%= vcr._id %>" data-bs-toggle="tooltip" data-bs-placement="top"
+                <td><%= vcr.game_coin_name  %></td>
+                <td><%= vcr?.category?.name  %></td>
+                <td><a href="/voucher-info/<%= vcr.voucher_id %>" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Klik untuk detail"><span class=" badge badge-light-primary "><%= vcr.nominals.length %>
                       Item</span></a> </td>
                 <td><% if(vcr.status == "Y")  { %>
@@ -53,7 +53,7 @@
                 </td>
                 <td data-order="false">
                   <div class="d-flex">
-                    <form action="/voucher/status/<%= vcr._id %>" method="POST" style="display: inline-block;">
+                    <form action="/voucher/status/<%= vcr.voucher_id %>" method="POST" style="display: inline-block;">
                       <input type="hidden" name="status" value="<%= vcr.status  %>">
                       <input type="hidden" name="_method" value="PUT">
                       <% if(vcr.status === 'Y') { %>
@@ -70,12 +70,12 @@
 
                     </form>
                     <div>
-                      <a href="/voucher-edit/<%= vcr._id %>"
+                      <a href="/voucher-edit/<%= vcr.voucher_id %>"
                         class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
                         <i data-feather="edit"></i>
                       </a>
                     </div>
-                    <form action="/voucher/<%= vcr._id %>" method="post">
+                    <form action="/voucher/<%= vcr.voucher_id %>" method="post">
 
                       <input type="hidden" name="_method" value="DELETE">
                       <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">

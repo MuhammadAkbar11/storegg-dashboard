@@ -1,27 +1,30 @@
 import { validationResult } from "express-validator";
-import {
+import { Op } from "sequelize";
+import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
+import { GetRandom } from "../../helpers/index.helper.js";
+import Logger from "../../helpers/logger.helper.js";
 import { getRandom } from "../../utils/index.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findAllNominal } from "../nominal/nominal.repository.js";
 import {
   createVoucher,
   deleteVoucherById,
-  findAllVoucher,
+  findListVoucher,
   findVoucherById,
   findVoucherNominals,
   updateVoucher,
   updateVoucherStatusById,
 } from "./voucher.repository.js";
+import { faker } from "@faker-js/faker";
 
 export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    const vouchers = await findAllVoucher();
-
+    const vouchers = await findListVoucher();
     res.render("voucher/v_voucher", {
       title: "Voucher",
       path: "/voucher",
@@ -43,22 +46,24 @@ export const viewPutVoucher = async (req, res, next) => {
     const errors = req.flash("errors")[0];
 
     const voucher = await findVoucherById(req.params.id);
-    const nominals = await findAllNominal(
-      {},
-      {
-        sort: {
-          coinName: 1,
-          coinNominal: 1,
-        },
-      }
-    );
-    const categories = await findAllCategories({});
 
+    if (!voucher) {
+      throw new BaseError("NOT_FOUND", 404, "Voucher is not found!", true, {
+        errorView: "errors/404",
+        renderData: {
+          title: "Page Not Found",
+        },
+        responseType: "page",
+      });
+    }
+    // console.log(voucher.nominals[]);
+    const nominals = await findAllNominal({});
+    const categories = await findAllCategories({});
     const transformNominal = nominals.map(nominal => {
-      const data = nominal._doc;
+      const data = nominal.dataValues;
       let checked = null;
       voucher.nominals.map(vcn => {
-        if (vcn._id.toString() === data._id.toString()) {
+        if (vcn.nominal_id === data.nominal_id) {
           checked = "checked";
         }
       });
@@ -79,6 +84,7 @@ export const viewPutVoucher = async (req, res, next) => {
       params: req.params.id,
     });
   } catch (error) {
+    Logger.error(error);
     const baseError = new TransfromError(error);
     next(baseError);
   }
@@ -108,19 +114,21 @@ export const viewListVoucherNominals = async (req, res, next) => {
 export const postVoucher = async (req, res) => {
   try {
     const categories = await findAllCategories();
-    const nominals = await findAllNominal({ coinName: "Gold" });
-    const nominalsId = nominals.map(doc => doc._id);
+    const nominals = await findAllNominal({
+      where: {
+        coin_name: { [Op.like]: `%Gold%` },
+      },
+    });
 
     const newVoucher = {
-      name: "Generate Game",
+      game_name: faker.commerce.productName(),
       thumbnail: "/uploads/Default-Thumbnail.png",
-      category: getRandom(categories)._id,
-      nominals: nominalsId,
-      user: req.user._id,
-      gameCoinName: "Gold",
+      category_id: GetRandom(categories).dataValues.category_id,
+      admin_id: req.user.admin_id,
+      game_coin_name: "Gold",
     };
 
-    const result = await createVoucher(newVoucher);
+    const result = await createVoucher(newVoucher, nominals);
 
     req.flash("flashdata", {
       type: "success",
@@ -133,7 +141,7 @@ export const postVoucher = async (req, res) => {
       message:
         "Jika ingin membatalkan silahkan klik tombol batal dan hapus untuk membatalkan pembuatan Voucher baru ",
     });
-    res.redirect(`/voucher-edit/${result._id}`);
+    res.redirect(`/voucher-edit/${result.voucher_id}`);
   } catch (error) {
     req.flash("flashdata", {
       type: "error",
