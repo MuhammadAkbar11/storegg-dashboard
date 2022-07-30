@@ -28,7 +28,6 @@ import BoostrapingModels, {
   createAutoNumberTable,
 } from "./src/models/index.model.js";
 import MainRoutes from "./src/routes/index.routes.js";
-import User from "./src/models/user.model.js";
 
 const argv = yargs(hideBin(process.argv)).argv;
 const MySQLStore = expressMysqlSession(session);
@@ -129,12 +128,14 @@ BoostrapingModels();
 (async () => {
   let force = argv.force ?? false;
 
+  force && Logger.info("Sync sequelize...");
+
   const connect = await sequelizeConnection.sync({ force });
 
   const tables = await connect.query("SHOW TABLES;");
 
   if (force) createAutoNumberTable(tables);
-
+  force && Logger.info("Sync sequelize done!");
   app.listen(envConfigs.PORT, () =>
     Logger.info(`Server Running on port ${envConfigs.PORT}`)
   );
