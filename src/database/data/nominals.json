@@ -1,0 +1,57 @@
+[
+  {
+    "coin_quantity": 150,
+    "coin_name": "Gold",
+    "price": 90000
+  },
+  {
+    "coin_quantity": 100,
+    "coin_name": "Diamond",
+    "price": 30000
+  },
+  {
+    "coin_quantity": 500,
+    "coin_name": "Gold",
+    "price": 900000
+  },
+  {
+    "coin_quantity": 200,
+    "coin_name": "Gold",
+    "price": 500000
+  },
+  {
+    "coin_quantity": 100,
+    "coin_name": "Points",
+    "price": 250000
+  },
+  {
+    "coin_quantity": 90,
+    "coin_name": "Gold",
+    "price": 16000
+  },
+  {
+    "coin_quantity": 44,
+    "coin_name": "Diamonds",
+    "price": 12700
+  },
+  {
+    "coin_quantity": 60,
+    "coin_name": "UC",
+    "price": 15000
+  },
+  {
+    "coin_quantity": 235,
+    "coin_name": "UC",
+    "price": 75000
+  },
+  {
+    "coin_quantity": 150,
+    "coin_name": "Points",
+    "price": 300000
+  },
+  {
+    "coin_quantity": 120,
+    "coin_name": "UC",
+    "price": 45000
+  }
+]

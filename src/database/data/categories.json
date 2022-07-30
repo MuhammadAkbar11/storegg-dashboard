@@ -1,0 +1,10 @@
+[{
+  "name": "Mobile",
+  "description": "Mobile Games"
+},{
+  "name": "Desktop",
+  "description": "PC / Laptop Game"
+},{
+  "name": "Others",
+  "description": "Others Games like Xbox , PS 5 & Nintendo"
+}]

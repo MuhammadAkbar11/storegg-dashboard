@@ -1,0 +1,32 @@
+[
+  {
+    "name": "superadmin",
+    "email": "superadmin@gmail.com",
+    "password": "superadmin",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "name": "baaev",
+    "email": "baaev@gmail.com",
+    "password": "baaev",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "name": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin",
+    "role": "ADMIN"
+  },
+  {
+    "name": "guest001",
+    "email": "guest001@gmail.com",
+    "password": "guest",
+    "role": "PLAYER"
+  },
+  {
+    "name": "guest002",
+    "email": "guest002@gmail.com",
+    "password": "guest",
+    "role": "PLAYER"
+  }
+]

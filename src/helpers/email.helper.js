@@ -1,7 +1,7 @@
 import createTransporter from "../config/nodemailer.config.js";
 import BaseError from "./baseError.helper.js";
 
-const sendEmail = async emailOptions => {
+const SendEmail = async emailOptions => {
   try {
     let emailTransporter = await createTransporter();
     await emailTransporter.sendMail(emailOptions);
@@ -16,4 +16,4 @@ const sendEmail = async emailOptions => {
   }
 };
 
-export { sendEmail };
+export { SendEmail };

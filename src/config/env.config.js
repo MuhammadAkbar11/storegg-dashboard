@@ -1,22 +1,45 @@
 import dotenv from "dotenv";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
 import path from "path";
+import fs from "fs";
+import Logger from "../helpers/logger.helper.js";
+import { ROOT_FOLDER } from "../constants/index.constants.js";
 
-const __dirname = path.resolve();
+const argv = yargs(hideBin(process.argv)).argv;
 
-export const MODE = process.env.NODE_ENV;
-
-const DEV_ENV = path.resolve(__dirname, ".env.dev");
-const PRODUCTION_ENV = path.resolve(__dirname, ".env");
-
-const DEV_MODE = "development";
+const mode = argv.mode;
+console.log(ROOT_FOLDER);
+const envPath = {
+  production: path.join(ROOT_FOLDER, ".env"),
+  development: path.join(ROOT_FOLDER, ".env.dev"),
+};
 
 export const dotenvConfig = dotenv.config({
-  path: MODE == DEV_MODE ? DEV_ENV : PRODUCTION_ENV,
+  path: envPath[mode],
 });
 
-export const PORT = process.env.PORT | 3000;
+let uploadPath = "public/uploads";
 
+if (mode == "development") {
+  let uploadPath = process.env.UPLOAD_PATH;
+  if (!fs.existsSync(path.join(ROOT_FOLDER, uploadPath))) {
+    Logger.warn("Development directory not found!");
+    fs.mkdirSync(path.join(ROOT_FOLDER, uploadPath), { recursive: true });
+    Logger.info("[config] Development directory created!");
+  } else {
+    Logger.info("[config] Development directory founded!");
+  }
+}
+
+export const PORT = process.env.PORT | 3000;
+export const MODE = mode;
 export const MONGO_URI = process.env.MONGO_URI;
+export const DB_DATABASE = process.env.DB_DATABASE;
+export const DB_USERNAME = process.env.DB_USERNAME;
+export const DB_PASSWORD = process.env.DB_PASSWORD;
+export const DB_HOST = process.env.DB_HOST;
+export const DB_DRIVER = process.env.DB_DRIVER;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MAIL_USER = process.env.MAIL_USERNAME;
 export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
@@ -25,5 +48,4 @@ export const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
 export const OAUTH_REFRESH_TOKEN = process.env.OAUTH_REFRESH_TOKEN;
 export const OAUTH_PLAYGROUND = process.env.OAUTH_PLAYGROUND;
 export const EMAIL = process.env.EMAIL;
-export const UPLOAD_PATH =
-  MODE == DEV_MODE ? process.env.UPLOAD_PATH : "public/uploads";
+export const UPLOAD_PATH = uploadPath;

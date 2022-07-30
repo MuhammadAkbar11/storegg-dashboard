@@ -31,12 +31,12 @@
               }); %>
               <tr>
                 <td><%= no++  %></td>
-                <td><%= nm.coinNominal  %></td>
-                <td><%= nm.coinName  %></td>
+                <td><%= nm.coin_quantity  %></td>
+                <td><%= nm.coin_name  %></td>
                 <td><%= price  %></td>
                 <td data-order="false">
-                  <form action="/nominal/<%= nm._id %>" method="post">
-                    <a href="/nominal-edit/<%= nm._id %>"
+                  <form action="/nominal/<%= nm.nominal_id %>" method="post">
+                    <a href="/nominal-edit/<%= nm.nominal_id %>"
                       class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
                       <i data-feather="edit"></i>
                     </a>

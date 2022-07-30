@@ -1,4 +1,4 @@
-import httpStatusCodes from "../utils/httpStatusCode.js";
+import { httpStatusCodes } from "../constants/index.constants.js";
 
 class BaseError extends Error {
   constructor(name, statusCode, message, isOperational, errors = {}) {

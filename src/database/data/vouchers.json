@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Pubg Mobile",
+    "game_coin_name": "UC",
+    "status": "Y",
+    "thumbnail": "/uploads/vouchers/GG_PubgMobile_1657632105052.png"
+  },
+  {
+    "name": "APEX Legends Mobile",
+    "game_coin_name": "Gold",
+    "status": "Y",
+    "thumbnail": "/uploads/vouchers/GG_APEXLegendsMobile_1657632164230.jpg"
+  },
+  {
+    "name": "Valorant",
+    "status": "Y",
+    "thumbnail": "/uploads/vouchers/GG_Valorant_1657632096286.png",
+    "game_coin_name": "Points"
+  },
+  {
+    "name": "Mobile Legends Bang Bang",
+    "game_coin_name": "Diamond",
+    "status": "Y",
+    "thumbnail": "/uploads/vouchers/GG_MobileLegendsBangBang_1657632129453.png"
+  },
+  {
+    "name": "Free Fire",
+    "game_coin_name": "Diamond",
+    "status": "N",
+    "thumbnail": "/uploads/vouchers/GG_FF_1657632142421.png"
+  }
+]

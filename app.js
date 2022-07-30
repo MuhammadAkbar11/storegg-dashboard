@@ -1,8 +1,9 @@
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import connectDB from "./src/config/db.config.js";
-import MongoStore from "connect-mongo";
+import expressMysqlSession from "express-mysql-session";
 import session from "express-session";
 import passport from "passport";
 import methodOverride from "method-override";
@@ -15,24 +16,46 @@ import {
   return404,
   returnError,
 } from "./src/middleware/errorHandler.js";
-
-import consoleLog from "./src/utils/consoleLog.js";
-
-import { DEV_STATIC_FOLDER, STATIC_FOLDER } from "./src/utils/constants.js";
+import {
+  DEV_STATIC_FOLDER,
+  STATIC_FOLDER,
+} from "./src/constants/index.constants.js";
 import passportConfig from "./src/config/passport.config.js";
-import MainRoutes from "./src/routes/index.routes.js";
 import { responseType } from "./src/middleware/responseType.js";
+import Logger from "./src/helpers/logger.helper.js";
+import sequelizeConnection from "./src/config/db.config.js";
+import BoostrapingModels, {
+  createAutoNumberTable,
+} from "./src/models/index.model.js";
+import MainRoutes from "./src/routes/index.routes.js";
+import User from "./src/models/user.model.js";
+
+const argv = yargs(hideBin(process.argv)).argv;
+const MySQLStore = expressMysqlSession(session);
 
 envConfigs.dotenvConfig;
-
 passportConfig();
-connectDB();
+// connectDB();
 
 const app = express();
 // Store Session
 
-const store = MongoStore.create({
-  mongoUrl: envConfigs.MONGO_URI,
+const sessiontStore = new MySQLStore({
+  checkExpirationInterval: 900000,
+  expiration: 86400000,
+  insecureAuth: true,
+  host: envConfigs.DB_HOST,
+  database: envConfigs.DB_DATABASE,
+  user: envConfigs.DB_USERNAME,
+  password: envConfigs.DB_PASSWORD,
+  schema: {
+    tableName: "gg_sessions",
+    columnNames: {
+      session_id: "session_id",
+      expires: "expires",
+      data: "data",
+    },
+  },
 });
 
 app.set("view engine", "ejs");
@@ -66,7 +89,7 @@ app.use(
     secret: envConfigs.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: store,
+    store: sessiontStore,
   })
 );
 
@@ -101,13 +124,24 @@ app.use(logErrorMiddleware);
 app.use(return404);
 app.use(returnError);
 
-app.listen(envConfigs.PORT, () => {
-  consoleLog.success(
-    `[server] server running in ${envConfigs.MODE} mode on port ${envConfigs.PORT}`
+BoostrapingModels();
+
+(async () => {
+  let force = argv.force ?? false;
+
+  const connect = await sequelizeConnection.sync({ force });
+
+  const tables = await connect.query("SHOW TABLES;");
+
+  if (force) createAutoNumberTable(tables);
+
+  app.listen(envConfigs.PORT, () =>
+    Logger.info(`Server Running on port ${envConfigs.PORT}`)
   );
-});
+})();
 
 process.on("unhandledRejection", error => {
+  Logger.error(error);
   throw error;
 });
 

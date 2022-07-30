@@ -4,5 +4,5 @@ import timezone from "dayjs/plugin/timezone.js";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-const DateHelper = dayjs.utc;
-export default DateHelper;
+const DayjsUTC = dayjs.utc;
+export default DayjsUTC;
