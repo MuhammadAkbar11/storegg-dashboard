@@ -11,7 +11,7 @@
       <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
           <div class="col-12">
-            <h2 class="content-header-title float-start mb-0">Dash</h2>
+            <h2 class="content-header-title float-start mb-0"><%= voucher.game_name %></h2>
             <div class="breadcrumb-wrapper">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Dashboard</a>
@@ -20,7 +20,7 @@
                 </li>
                 <li class="breadcrumb-item active"><%= title %>
                 </li>
-                <li class="breadcrumb-item active"><%= voucher.name %>
+                <li class="breadcrumb-item active"><%= voucher.game_name %>
                 </li>
               </ol>
             </div>
@@ -46,9 +46,9 @@
               </div>
               <div class="col-12 col-md-7 ">
                 <div class=" d-flex justify-content-between ">
-                  <h2 class="mb-1"><%= voucher.name %></h2>
+                  <h2 class="mb-1"><%= voucher.game_name %></h2>
                   <div>
-                    <a href="/voucher-edit/<%= voucher._id %>" class="btn btn-icon btn-primary waves-effect">
+                    <a href="/voucher-edit/<%= voucher.voucher_id %>" class="btn btn-icon btn-primary waves-effect">
                       <i data-feather="edit"></i> <small>Edit</small>
                     </a>
                   </div>
@@ -67,14 +67,14 @@
 
                 <hr />
                 <div class="">
-                  <h6>Voucher Item</h6>
+                  <h6>Voucher Items</h6>
                   <div class="d-flex flex-row  gap-1">
                     <% for (let nm of voucher.nominals) { %>
-                    <div class="card border ">
-                      <div class="card-body p-1">
+                    <div class="card  border-primary ">
+                      <div class="card-body p-1 text-primary">
                         <span class="d-flex mb-50">
-                          <span class="fw-bolder "><%= nm.coinNominal %></span>
-                          <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coinName %> </span>
+                          <span class="fw-bolder "><%= nm.coin_quantity %></span>
+                          <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
                         </span>
                         <small class="d-block"><%= nm.price.toLocaleString("id", {
                                 style: "currency",

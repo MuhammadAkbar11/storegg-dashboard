@@ -3,10 +3,11 @@ import path from "path";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import { MODE } from "../../config/env.config.js";
 import Voucher from "../../models/voucher.model.js";
-import { UnlinkFile } from "../../helpers/index.helper.js";
+import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
 import Category from "../../models/category.model.js";
 import Nominal from "../../models/nominal.model.js";
 import sequelizeConnection from "../../config/db.config.js";
+import Logger from "../../helpers/logger.helper.js";
 
 export const findListVoucher = async () => {
   try {
@@ -28,7 +29,7 @@ export const findListVoucher = async () => {
 
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findAllVoucher", error);
+    Logger.error("[EXCEPTION] findAllVoucher", error);
     throw new TransfromError(error);
   }
 };
@@ -51,7 +52,7 @@ export const findVoucherById = async id => {
     });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneVoucher", error);
+    Logger.error("[EXCEPTION] findOneVoucher", error);
     throw new TransfromError(error);
   }
 };
@@ -64,7 +65,7 @@ export const findOneVoucher = async filter => {
       .populate("user");
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneVoucher", error);
+    Logger.error("[EXCEPTION] findOneVoucher", error);
     throw new TransfromError(error);
   }
 };
@@ -76,7 +77,7 @@ export const findVoucherNominals = async id => {
       .populate("nominals");
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneVoucher", error);
+    Logger.error("[EXCEPTION] findOneVoucher", error);
     throw new TransfromError(error);
   }
 };
@@ -99,40 +100,39 @@ export const createVoucher = async (voucher, nominals) => {
     return result;
   } catch (error) {
     t.rollback();
-    console.error("[EXCEPTION] createVoucher", error);
-    throw new TransfromError(error);
-  }
-};
-
-export const createVoucherNominals = async data => {
-  try {
-    let result = [];
-
-    return result;
-  } catch (error) {
-    console.error("[EXCEPTION] createVoucherNominals", error);
+    Logger.error("[EXCEPTION] createVoucher", error);
     throw new TransfromError(error);
   }
 };
 
 export const updateVoucher = async (id, data) => {
-  try {
-    const result = await Voucher.findById(id);
+  const { nominals, name, gameCoinName, category, fileimg } = data;
 
-    const oldThumbnail = result.thumbnail;
-    const fileImgData = data.fileimg.data;
+  const t = await sequelizeConnection.transaction();
+  try {
+    const voucher = await findVoucherById(id);
+
+    const oldNominals = await voucher.nominals;
+
+    const oldThumbnail = voucher.thumbnail;
+    const fileImgData = fileimg.data;
     if (fileImgData) {
-      const resultImg = "GG_" + fileImgData.filename;
+      const voucherImg = RenameFile(
+        fileImgData.filename,
+        "GG",
+        voucher.voucher_id
+      );
+
+      console.log(voucherImg);
       await sharp(fileImgData.path)
         .resize(281, 381)
         .jpeg({ quality: 90 })
-        .toFile(path.resolve(fileImgData.destination, resultImg));
+        .toFile(path.resolve(fileImgData.destination, voucherImg));
       UnlinkFile(fileImgData.path);
-      result.thumbnail = `/uploads/vouchers/${resultImg}`;
+      voucher.thumbnail = `/uploads/vouchers/${voucherImg}`;
 
       if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
-        const oldThumbnailPath =
-          MODE == "development" ? ".dev/public" : "public";
+        const oldThumbnailPath = MODE == "development" ? ".dev" : "public";
         console.log(
           "/uploads/Default-Thumbnail.png" != oldThumbnail,
 
@@ -143,14 +143,42 @@ export const updateVoucher = async (id, data) => {
       }
     }
 
-    result.name = data.name;
-    result.category = data.category;
-    result.gameCoinName = data.gameCoinName;
-    result.nominals = data.nominals;
+    voucher.game_name = name;
+    voucher.category_id = category;
+    voucher.game_coin_Name = gameCoinName;
 
-    return await result.save();
+    if (oldNominals.length !== 0) {
+      for (const nominal of oldNominals) {
+        await voucher.removeNominal(nominal, {
+          through: {
+            self_granted: true,
+          },
+          transaction: t,
+        });
+      }
+    }
+
+    if (nominals && nominals.length !== 0) {
+      const newNominals = await Nominal.findAll({
+        where: {
+          nominal_id: data.nominals,
+        },
+      });
+      for (const nominal of newNominals) {
+        await voucher.addNominal(nominal, {
+          through: {
+            self_granted: true,
+          },
+          transaction: t,
+        });
+      }
+    }
+    const result = await voucher.save({ transaction: t });
+    await t.commit();
+    return result;
   } catch (error) {
-    console.error("[EXCEPTION] updateVoucher", error);
+    await t.rollback();
+    Logger.error(error, "[EXCEPTION] updateVoucher");
     throw new TransfromError(error);
   }
 };
@@ -166,17 +194,21 @@ export const updateVoucherStatusById = async id => {
       { status }
     );
   } catch (error) {
-    console.error("[EXCEPTION] updateVoucherStatusById", error);
+    Logger.error(error, "[EXCEPTION] updateVoucherStatusById");
     throw new TransfromError(error);
   }
 };
 
 export const deleteVoucherById = async id => {
   try {
-    const result = await Voucher.deleteOne({ _id: id });
+    const result = await Voucher.destroy({
+      where: {
+        voucher_id: id,
+      },
+    });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] deleteVoucherById", error);
+    Logger.error(error, "[EXCEPTION] deleteVoucherById");
     throw new TransfromError(error);
   }
 };

@@ -4,7 +4,7 @@ import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import { GetRandom } from "../../helpers/index.helper.js";
+import { GetRandom, UnlinkFile } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import { getRandom } from "../../utils/index.js";
 import { findAllCategories } from "../category/category.repository.js";
@@ -96,7 +96,7 @@ export const viewListVoucherNominals = async (req, res, next) => {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
 
-    const voucher = await findVoucherNominals(ID);
+    const voucher = await findVoucherById(ID);
 
     res.render("voucher/v_info_voucher", {
       title: "Detail Voucher",
@@ -162,8 +162,11 @@ export const putVoucher = async (req, res, next) => {
   // }
   const fileimg = req.fileimg;
   try {
+    // const {}
+    console.log(req.file);
     await updateVoucher(req.params.id, { ...req.body, fileimg: fileimg });
 
+    // return;
     req.flash("flashdata", {
       type: "success",
       title: "Diubah!",
@@ -195,9 +198,13 @@ export const deleteVoucher = async (req, res, next) => {
       return;
     }
 
-    const message = `Anda telah menghapus Voucher <strong class=" text-warning" >${voucher.name}</strong> `;
+    const message = `Anda telah menghapus Voucher <strong class=" text-warning" >${voucher.game_name}</strong> `;
 
-    await deleteVoucherById(ID);
+    const result = await deleteVoucherById(ID);
+
+    if (result) {
+      UnlinkFile(".dev" + voucher.thumbnail);
+    }
 
     req.flash("flashdata", {
       type: "warning",

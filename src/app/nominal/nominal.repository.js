@@ -56,7 +56,7 @@ export const updateNominal = async (id, { coinName, coinNominal, price }) => {
   }
 };
 
-export const deleteNominalById = async filter => {
+export const deleteNominal = async filter => {
   try {
     const result = await Nominal.destroy({ ...filter });
     return result;

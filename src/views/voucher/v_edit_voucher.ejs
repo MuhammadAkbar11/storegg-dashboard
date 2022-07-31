@@ -48,8 +48,8 @@
         <div class="col-12 col-md-12 col-lg-10">
           <div class="card">
             <div class="card-body">
-              <form class="form form-vertical" action="/voucher-edit/<%= voucher._id %>?_method=PUT" method="post"
-                enctype="multipart/form-data">
+              <form class="form form-vertical" action="/voucher-edit/<%= voucher.voucher_id %>?_method=PUT"
+                method="post" enctype="multipart/form-data">
                 <!-- <input type="hidden" value="PUT" name="_method"> -->
                 <input type="hidden" value="<%= voucher.name %>" name="filename" id="filename">
                 <div class="row">
@@ -75,10 +75,10 @@
                       <select class="form-select" id="category" name="category">
                         <option>-- Pilih Kategori</option>
                         <% for (let category of categories) { %>
-                        <% if (category.category_id ===voucher?.category?.category_id) { %>
-                        <option value="<%= category._id %>" selected><%= category.name %></option>
+                        <% if (category.category_id === voucher?.category?.category_id) { %>
+                        <option value="<%= category.category_id %>" selected><%= category.name %></option>
                         <% } else {  %>
-                        <option value="<%= category._id %>"><%= category.name %></option>
+                        <option value="<%= category.category_id %>"><%= category.name %></option>
                         <% } %>
 
                         <%  } %>
@@ -110,8 +110,8 @@
                       <% if(nm.checked) { %>
                       <div class="col-md-3">
                         <input class="custom-option-item-check" type="checkbox" name="nominals"
-                          id="nominal_<%= nm._id %>" value="<%= nm._id %>" <%= nm.checked %> />
-                        <label class="custom-option-item p-1" for="nominal_<%= nm._id %>">
+                          id="nominal_<%= nm.nominal_id %>" value="<%= nm.nominal_id %>" <%= nm.checked %> />
+                        <label class="custom-option-item p-1" for="nominal_<%= nm.nominal_id %>">
                           <span class="d-flex mb-50">
                             <span class="fw-bolder "><%= nm.coin_quantity %></span>
                             <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
@@ -138,7 +138,10 @@
                             </span>
 
                           </span>
-                          <small class="d-block"><%= nm.price;  %>
+                          <small class="d-block"><%= nm.price.toLocaleString("id", {
+                            style: "currency",
+                            currency: "IDR",
+                          });  %>
                           </small>
                         </label>
                       </div>
