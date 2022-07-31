@@ -22,7 +22,7 @@ export const dotenvConfig = dotenv.config({
 let uploadPath = "public/uploads";
 
 if (mode == "development") {
-  let uploadPath = process.env.UPLOAD_PATH;
+  uploadPath = process.env.UPLOAD_PATH;
   if (!fs.existsSync(path.join(ROOT_FOLDER, uploadPath))) {
     Logger.warn("Development directory not found!");
     fs.mkdirSync(path.join(ROOT_FOLDER, uploadPath), { recursive: true });
