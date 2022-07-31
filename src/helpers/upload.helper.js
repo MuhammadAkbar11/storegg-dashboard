@@ -2,8 +2,9 @@ import path from "path";
 import multer from "multer";
 import dayjs from "dayjs";
 import BaseError from "./baseError.helper.js";
+import fs from "fs";
 import { UPLOAD_PATH } from "../config/env.config.js";
-
+import { ROOT_FOLDER } from "../constants/index.constants.js";
 class Upload {
   constructor({
     fieldName = "image",
@@ -15,6 +16,10 @@ class Upload {
     this.folderName = folderName;
     this.fileTypes = fileTypes;
     this.filename = filename;
+
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(path.join(ROOT_FOLDER, folderName), { recursive: true });
+    }
   }
 
   diskStorage() {
@@ -24,7 +29,6 @@ class Upload {
       },
       filename: (req, file, cb) => {
         let filename = req.body.filename ?? this.filename;
-
         if (!filename) {
           filename = file.fieldname;
         }
