@@ -29,12 +29,11 @@ export function ApiURL(path = "/") {
   return `${PREFIX_VERSION}${path}`;
 }
 
-export function RenameImageFile(originalname, prefix = "GG", name = "Name") {
+export function RenameFile(originalname, prefix = "GG", name = "Name") {
   const resultFileName = name
     .replace(/[^A-Za-z0-9]/g, "")
     .replace(/\s+/g, "")
-    .trim()
-    .toLocaleLowerCase();
+    .trim();
   const filenameToArr = originalname.split(" ").join("").split(".");
   const ext = filenameToArr[filenameToArr.length - 1];
   return `${prefix}_${resultFileName}_${DayjsUTC().valueOf()}.${ext}`;
