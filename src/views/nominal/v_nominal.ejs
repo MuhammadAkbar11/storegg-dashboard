@@ -44,7 +44,11 @@
   var dt_nomial_table = $('#nominal-datatable')
 
   if (dt_nomial_table.length) {
-    dt_nomial_table.DataTable({});
+    dt_nomial_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
   }
 </script>
 

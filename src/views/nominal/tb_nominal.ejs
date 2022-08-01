@@ -36,12 +36,13 @@
                 <td><%= price  %></td>
                 <td data-order="false">
                   <form action="/nominal/<%= nm.nominal_id %>" method="post">
-                    <a href="/nominal-edit/<%= nm.nominal_id %>" class="btn btn-icon btn-flat-primary waves-effect">
-                      <small>Ubah</small>
+                    <a href="/nominal-edit/<%= nm.nominal_id %>"
+                      class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
+                      <i data-feather="edit"></i>
                     </a>
                     <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-icon btn-icon ms-5px btn-flat-danger waves-effect">
-                      <small>Hapus</small>
+                    <button type="submit" class="btn btn-icon rounded-circle ms-5px btn-flat-danger waves-effect">
+                      <i data-feather="trash"></i>
                     </button>
                   </form>
                 </td>
