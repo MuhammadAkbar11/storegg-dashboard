@@ -223,7 +223,7 @@ export const deleteVoucher = async (req, res, next) => {
 
 export const updateVoucherStatus = async (req, res, next) => {
   const ID = req.params.id;
-  const status = req.body === "Y" ? "Menonaktifkan" : "Mengaktifkan";
+  const status = req.body.status === "Y" ? "Menonaktifkan" : "Mengaktifkan";
 
   try {
     const voucher = await findVoucherById(ID);

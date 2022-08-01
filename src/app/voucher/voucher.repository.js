@@ -137,7 +137,7 @@ export const updateVoucher = async (id, data) => {
 
     voucher.game_name = name;
     voucher.category_id = category;
-    voucher.game_coin_Name = gameCoinName;
+    voucher.game_coin_name = gameCoinName;
 
     if (oldNominals.length !== 0) {
       for (const nominal of oldNominals) {
