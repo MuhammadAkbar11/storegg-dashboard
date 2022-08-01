@@ -9,7 +9,6 @@ import { ROOT_FOLDER } from "../constants/index.constants.js";
 const argv = yargs(hideBin(process.argv)).argv;
 
 const mode = argv.mode;
-console.log(ROOT_FOLDER);
 const envPath = {
   production: path.join(ROOT_FOLDER, ".env"),
   development: path.join(ROOT_FOLDER, ".env.dev"),

@@ -3,17 +3,17 @@ import { ensurePlayerAuth } from "../../middleware/auth.js";
 import { uploadSingleImage } from "../../middleware/upload.js";
 import playerValidation from "../player/player.validator.js";
 import userValidation from "../user/user.validator.js";
-// import {
-//   apiGetCategories,
-//   apiGetDashboard,
-//   apiGetDetailHistory,
-//   apiGetDetailVoucher,
-//   apiGetListHistory,
-//   apiGetProfile,
-//   apiGetVouchers,
-//   apiPostCheckout,
-//   apiPutProfile,
-// } from "./api.controller.js";
+import {
+  //   apiGetCategories,
+  //   apiGetDashboard,
+  //   apiGetDetailHistory,
+  //   apiGetDetailVoucher,
+  //   apiGetListHistory,
+  //   apiGetProfile,
+  apiGetVouchers,
+  //   apiPostCheckout,
+  //   apiPutProfile,
+} from "./api.controller.js";
 import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
 
 function APIsRoutes(app) {
@@ -39,7 +39,7 @@ function APIsRoutes(app) {
   //     apiPutProfile
   //   );
   // app.route(joinAPIsURL("/categories")).get(apiGetCategories);
-  // app.route(joinAPIsURL("/vouchers")).get(apiGetVouchers);
+  app.route(ApiURL("/vouchers")).get(apiGetVouchers);
 }
 
 export default APIsRoutes;
