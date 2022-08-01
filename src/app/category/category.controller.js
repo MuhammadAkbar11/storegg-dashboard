@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import { httpStatusCodes } from "../../constants/index.constants.js";
 import {
   TransfromError,
   ValidationError,
@@ -35,6 +36,8 @@ export const viewEditCategory = async (req, res, next) => {
   const flashdata = req.flash("flashdata");
   const errors = req.flash("errors")[0];
   try {
+    const category = await findCategoryById(id);
+
     res.render("category/view_edit_category", {
       title: "Edit Kategori",
       path: "/category",
@@ -47,18 +50,7 @@ export const viewEditCategory = async (req, res, next) => {
   } catch (error) {
     // console.log(first)
     const baseError = new TransfromError(error);
-    if (baseError?.kind == "ObjectId") {
-      res.render("category/view_edit_category", {
-        title: "Edit Kategori",
-        path: "/category",
-        flashdata: flashdata,
-        errors: errors,
-        category: null,
-        values: null,
-        params: id,
-      });
-      return;
-    }
+
     next(baseError);
   }
 };

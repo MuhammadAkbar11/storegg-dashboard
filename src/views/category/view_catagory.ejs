@@ -99,7 +99,11 @@
   var dt_basic_table = $('#category-datatable')
 
   if (dt_basic_table.length) {
-    dt_basic_table.DataTable({});
+    dt_basic_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
   }
 
   const createCanvasEnd = document.getElementById('createCanvasEnd')

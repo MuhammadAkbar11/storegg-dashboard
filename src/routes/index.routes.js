@@ -1,3 +1,4 @@
+import CategoryRoutes from "../app/category/category.routes.js";
 import NominalRoutes from "../app/nominal/nominal.routes.js";
 import UserRoutes from "../app/user/user.routes.js";
 import VoucherRoutes from "../app/voucher/voucher.routes.js";
@@ -14,6 +15,7 @@ function MainRoutes(app) {
   UserRoutes(app);
   VoucherRoutes(app);
   NominalRoutes(app);
+  CategoryRoutes(app);
 }
 
 export default MainRoutes;

@@ -30,8 +30,8 @@
                 <td><%= cat.description  %></td>
                 <td data-order="false">
 
-                  <form action="/category/<%= cat._id %>" method="post">
-                    <a href="/category-edit/<%= cat._id %>"
+                  <form action="/category/<%= cat.category_id %>" method="post">
+                    <a href="/category-edit/<%= cat.category_id %>"
                       class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
                       <i data-feather="edit"></i>
                     </a>
