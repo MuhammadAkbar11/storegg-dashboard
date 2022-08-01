@@ -59,7 +59,7 @@
     // Extract info from data-bs-* attributes
     const bankData = button.getAttribute('data-bs-bank')
     const {
-      _id: bankId
+      bank_id: bankId
     } = JSON.parse(bankData)
 
     form.setAttribute("action", "/bank/" + bankId)

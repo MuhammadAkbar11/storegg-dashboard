@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import sequelizeConnection from "../../config/db.config.js";
 import BaseError, {
   TransfromError,
   ValidationError,
@@ -42,10 +43,10 @@ export const viewPutPayment = async (req, res, next) => {
     let banks = await findAllBank();
 
     banks = banks.map(bank => {
-      const data = bank._doc;
+      const data = bank.dataValues;
       let checked = null;
       payment.banks.map(pyBnk => {
-        if (pyBnk._id.toString() === data._id.toString()) {
+        if (pyBnk.bank_id === data.bank_id) {
           checked = "checked";
         }
       });
@@ -72,16 +73,15 @@ export const viewPutPayment = async (req, res, next) => {
 
 export const postPayment = async (req, res, next) => {
   try {
-    const banks = await findAllBank();
-    const bank1 = getRandom(banks);
+    const banks = await findAllBank({ where: {} });
+    const selectedBank = getRandom(banks);
 
     const newPaymentData = {
       type: "Transfer",
       status: "N",
-      banks: [bank1._id],
     };
 
-    const result = await createPayment(newPaymentData);
+    const result = await createPayment(newPaymentData, selectedBank);
 
     req.flash("flashdata", {
       type: "success",
@@ -94,7 +94,7 @@ export const postPayment = async (req, res, next) => {
       message:
         "Jika ingin membatalkan silahkan klik tombol batal dan hapus untuk membatalkan pembuatan Voucher baru ",
     });
-    res.redirect(`/payment-edit/${result._id}`);
+    res.redirect(`/payment-edit/${result.payment_method_id}`);
   } catch (error) {
     req.flash("flashdata", {
       type: "error",
@@ -124,10 +124,19 @@ export const putPayment = async (req, res, next) => {
     if (!payment) {
       throw new BaseError("NOT_FOUND", 404, "payment tidak ditemukan", true);
     }
-    console.log(req.body);
+
+    const oldBanks = payment.banks;
+
+    const updatedBanks = await findAllBank({
+      where: {
+        bank_id: banks,
+      },
+    });
+
     const updatedPaymentData = {
       type: type,
-      banks: banks,
+      oldBanks,
+      newBanks: updatedBanks,
     };
 
     await updatePayment(ID, updatedPaymentData);
@@ -166,7 +175,7 @@ export const deletePayment = async (req, res, next) => {
 
     await deletePaymentById(ID);
 
-    const message = `Anda telah menghapus metode pembayaran ${payment.type} `;
+    const message = `Anda telah menghapus metode pembayaran <span class="text-warning" >${payment.type}</span> `;
 
     req.flash("flashdata", {
       type: "warning",
@@ -187,7 +196,7 @@ export const deletePayment = async (req, res, next) => {
 
 export const updatePaymentStatus = async (req, res, next) => {
   const ID = req.params.id;
-  const status = req.body === "Y" ? "Menonaktifkan" : "Mengaktifkan";
+  const status = req.body.status === "Y" ? "Menonaktifkan" : "Mengaktifkan";
 
   try {
     const payment = await findPaymentById(ID);

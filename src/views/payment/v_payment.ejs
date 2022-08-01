@@ -59,7 +59,7 @@
     // Extract info from data-bs-* attributes
     const paymentData = button.getAttribute('data-bs-payment')
     const {
-      _id: paymentId
+      payment_method_id: paymentId
     } = JSON.parse(paymentData)
 
     form.setAttribute("action", "/payment/" + paymentId)

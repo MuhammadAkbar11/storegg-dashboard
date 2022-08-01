@@ -60,7 +60,7 @@ export const postBank = async (req, res, next) => {
     const result = await createBank({
       account_name: faker.fake("{{name.firstName}} {{name.lastName}}"),
       bank_name: GetRandom(["Mandiri", "BRI", "BNI", "BCA"]),
-      no_rekening: faker.finance.creditCardNumber(),
+      no_rekening: faker.finance.account(10),
     });
 
     req.flash("flashdata", {

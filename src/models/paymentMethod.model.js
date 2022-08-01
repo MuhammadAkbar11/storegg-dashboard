@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
 
 class PaymentMethod extends Model {}
 
@@ -22,6 +23,19 @@ PaymentMethod.init(
     },
   },
   {
+    hooks: {
+      beforeBulkCreate: async function (records, options) {
+        for (let i = 0; i < records.length; i++) {
+          const ID = await AutoNumberField("payment_method_id", "", 7);
+          records[i].dataValues.payment_method_id = ID;
+        }
+        options.individualHooks = false;
+      },
+      beforeCreate: async function (record, options) {
+        const ID = await AutoNumberField("payment_method_id", "", 7);
+        record.dataValues.payment_method_id = ID;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "PaymentMethods",
     tableName: "gg_payment_methods",

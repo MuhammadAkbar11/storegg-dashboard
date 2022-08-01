@@ -24,10 +24,10 @@
               </tr>
             </thead>
             <tbody>
-              <% let no = 1 %>
+
               <% payments && payments.forEach(py => { %>
               <tr>
-                <td><%= no++  %></td>
+                <td><%= py.payment_method_id  %></td>
                 <td><%= py.type  %></td>
                 <td>
                   <div class="d-flex flex-wrap  ">
@@ -35,7 +35,7 @@
                     <div class=" btn-group dropend " style=" margin: 5px;">
                       <a role="button" class="badge badge-light-primary" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <%= bnk.bankName %> <i data-feather='chevron-right'></i>
+                        <%= bnk.bank_name %> <i data-feather='chevron-right'></i>
                       </a>
                       <ul class="dropdown-menu" style="min-width: 350px;">
                         <ul class="list-group list-group-flush " id="content">
@@ -43,16 +43,16 @@
                             <p class=" text-muted  mb-0">Detail Bank</p>
                           </li>
                           <li class="list-group-item d-flex justify-content-between py-0  ">
-                            <span class=" text-primary ">Nama Pemilik </span><span><%= bnk.name %>
+                            <span class=" text-primary ">Nama Pemilik </span><span><%= bnk.account_name %>
                             </span>
                           </li>
                           <li class="list-group-item d-flex justify-content-between py-0  ">
-                            <span class=" text-primary ">Bank </span><span><%= bnk.bankName %>
+                            <span class=" text-primary ">Bank </span><span><%= bnk.bank_name %>
                             </span>
 
                           </li>
                           <li class="list-group-item d-flex justify-content-between py-0 ">
-                            <span class=" text-primary ">No Rekening </span><span><%= bnk.noRekening %>
+                            <span class=" text-primary ">No Rekening </span><span><%= bnk.no_rekening %>
                             </span>
                           </li>
                         </ul>
@@ -69,7 +69,8 @@
                   <% } %>
                 </td>
                 <td data-order="false" class=" text-nowrap ">
-                  <form action="/payment/status/<%= py._id %>" method="POST" style="display: inline-block;">
+                  <form action="/payment/status/<%= py.payment_method_id %>" method="POST"
+                    style="display: inline-block;">
                     <input type="hidden" name="status" value="<%= py.status  %>">
                     <input type="hidden" name="_method" value="PUT">
                     <% if(py.status === 'Y') { %>
@@ -86,7 +87,7 @@
 
                   </form>
                   <!-- <form action="/payment/<%= py._id %>" method="post"> -->
-                  <a href="/payment-edit/<%= py._id %>"
+                  <a href="/payment-edit/<%= py.payment_method_id %>"
                     class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
                     <i data-feather="edit"></i>
                   </a>
