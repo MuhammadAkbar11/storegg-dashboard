@@ -75,18 +75,6 @@ export const findOneVoucher = async filter => {
   }
 };
 
-export const findVoucherNominals = async id => {
-  try {
-    const result = await Voucher.findById(id)
-      .populate("category")
-      .populate("nominals");
-    return result;
-  } catch (error) {
-    Logger.error("[EXCEPTION] findOneVoucher", error);
-    throw new TransfromError(error);
-  }
-};
-
 export const createVoucher = async (voucher, nominals) => {
   const t = await sequelizeConnection.transaction();
   try {
@@ -196,7 +184,6 @@ export const updateVoucherStatusById = async id => {
     });
 
     let status = voucher.status === "Y" ? "N" : "Y";
-    Logger.info(status, "STATUS VOUCHER");
     return await Voucher.update(
       {
         status: status,

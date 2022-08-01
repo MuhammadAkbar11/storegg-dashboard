@@ -6,7 +6,6 @@ import BaseError, {
 } from "../../helpers/baseError.helper.js";
 import { GetRandom, UnlinkFile } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
-import { getRandom } from "../../utils/index.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findAllNominal } from "../nominal/nominal.repository.js";
 import {
@@ -14,7 +13,6 @@ import {
   deleteVoucherById,
   findListVoucher,
   findVoucherById,
-  findVoucherNominals,
   updateVoucher,
   updateVoucherStatusById,
 } from "./voucher.repository.js";
