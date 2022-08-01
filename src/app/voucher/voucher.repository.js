@@ -9,10 +9,15 @@ import Nominal from "../../models/nominal.model.js";
 import sequelizeConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
 
-export const findListVoucher = async () => {
+export const findListVoucher = async (
+  filter = {
+    where: {},
+    order: [["game_name", "asc"]],
+  }
+) => {
   try {
     const result = await Voucher.findAll({
-      where: {},
+      ...filter,
       include: [
         {
           model: Category,
