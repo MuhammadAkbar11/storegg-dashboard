@@ -22,11 +22,11 @@ import chalk from "chalk";
 export default function BoostrapingModels() {
   User.hasOne(Player, {
     foreignKey: "user_id",
-    as: "players",
+    as: "player",
   });
   Player.belongsTo(User, {
     foreignKey: "user_id",
-    as: "users",
+    as: "user",
     constraints: true,
   });
 
@@ -40,13 +40,13 @@ export default function BoostrapingModels() {
     constraints: true,
   });
 
-  Category.hasOne(Player, {
+  Category.hasMany(Player, {
     foreignKey: "favorite",
-    as: "players",
+    as: "player",
   });
   Player.belongsTo(Category, {
     foreignKey: "favorite",
-    as: "categories",
+    as: "category",
     constraints: true,
   });
 

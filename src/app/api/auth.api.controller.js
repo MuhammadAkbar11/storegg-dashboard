@@ -6,13 +6,17 @@ import {
   DEFAULT_USER_PP,
   httpStatusCodes,
 } from "../../constants/index.constants.js";
-import { GeneratePassword } from "../../helpers/authentication.helper.js";
+import {
+  ComparePassword,
+  GeneratePassword,
+  SignJWT,
+} from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
 import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
-import Logger from "../../helpers/logger.helper.js";
+import Category from "../../models/category.model.js";
 import { createPlayer, findOnePlayer } from "../player/player.repository.js";
 import { findOneUser } from "../user/user.repository.js";
 
@@ -91,9 +95,13 @@ export const apiPlayerSignin = async (req, res, next) => {
       throw errValidate;
     }
 
-    const player = await findOnePlayer({ email: email });
+    const user = await findOneUser({
+      where: {
+        email: email,
+      },
+    });
 
-    if (!player) {
+    if (!user) {
       throw new BaseError(
         "BAD_REQUEST",
         httpStatusCodes.BAD_REQUEST,
@@ -101,18 +109,45 @@ export const apiPlayerSignin = async (req, res, next) => {
         true
       );
     }
-    const matchPassword = await player.matchPassword(password);
+
+    if (!user.role.includes("PLAYER")) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Tidak dapat masuk menggunakan admin email`,
+        true
+      );
+    }
+
+    const getPlayer = await findOnePlayer({
+      where: {
+        user_id: user.user_id,
+      },
+      include: [
+        {
+          model: Category,
+          as: "category",
+        },
+      ],
+    });
+
+    const player = {
+      ...user.dataValues,
+    };
+
+    const matchPassword = await ComparePassword(password, user.password);
     if (matchPassword) {
       const payloadJWT = {
-        id: player._id,
+        user_id: player.user_id,
         username: player.username,
         name: player.name,
         email: player.email,
         phoneNumber: player.phoneNumber,
         avatar: player.avatar,
+        favorite: getPlayer.dataValues.category.name,
       };
 
-      const token = signJWT(payloadJWT, SESSION_SECRET, "7d");
+      const token = SignJWT(payloadJWT, SESSION_SECRET, "7d");
 
       res.status(200).json({
         message: "Signin berhasil!",

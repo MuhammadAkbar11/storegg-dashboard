@@ -26,7 +26,7 @@ export async function seedImportUsers() {
       username: user.name,
       phone_number: faker.phone.number("+62###-####-####"),
       password: bcryptjs.hashSync(user.password, 12),
-      image: DEFAULT_USER_PP,
+      avatar: DEFAULT_USER_PP,
     };
 
     return data;
