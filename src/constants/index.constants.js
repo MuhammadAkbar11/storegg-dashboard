@@ -43,6 +43,34 @@ export const TABLE_AUTO_INCREMENT = {
     field: "bank_id",
     prefix: "BNK",
   },
+  payment_methods: {
+    field: "payment_method_id",
+    prefix: "PYM",
+  },
+  payment_banks: {
+    field: "payment_bank_id",
+    prefix: "PYMB",
+  },
+  transactions: {
+    field: "transaction_id",
+    prefix: "GG",
+  },
+  histories: {
+    field: "history_id",
+    prefix: "HTR",
+  },
+  history_payments: {
+    field: "history_payment_id",
+    prefix: "HPY",
+  },
+  history_players: {
+    field: "history_player_id",
+    prefix: "HPLY",
+  },
+  history_vcrtopup: {
+    field: "history_vcrtopup_id",
+    prefix: "HVTP",
+  },
 };
 
 export const STATIC_FOLDER = path.join(__dirname, "public");

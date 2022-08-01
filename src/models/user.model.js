@@ -38,7 +38,7 @@ User.init(
       allowNull: false,
       field: "role",
     },
-    image: {
+    avatar: {
       type: DataTypes.STRING,
       allowNull: false,
     },

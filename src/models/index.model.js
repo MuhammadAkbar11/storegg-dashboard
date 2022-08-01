@@ -17,6 +17,7 @@ import History from "./history.model.js";
 import HistoryVoucherTopup from "./historyVoucherTopup.model.js";
 import HistoryPayment from "./historyPayment.model.js";
 import HistoryPlayer from "./historyPlayer.model.js";
+import chalk from "chalk";
 
 export default function BoostrapingModels() {
   User.hasOne(Player, {
@@ -190,17 +191,16 @@ export default function BoostrapingModels() {
 export async function createAutoNumberTable(tables) {
   const data = [];
 
+  Logger.info("[SEQUELIZE] Setup AutoNumber table...");
+
   for (const table of tables["0"]) {
     const tbName = table[`Tables_in_${DB_DATABASE}`];
     const splitTbName = tbName.split("_");
     const shortTbName = splitTbName.splice(1, splitTbName.length).join("_");
-    console.log(shortTbName);
     const tbData = {
       table_name: table[`Tables_in_${DB_DATABASE}`],
       ...TABLE_AUTO_INCREMENT[shortTbName],
     };
-    console.log(table);
-    console.log(tbData);
     data.push(tbData);
 
     if (tbData.field) {
@@ -211,10 +211,16 @@ export async function createAutoNumberTable(tables) {
       });
 
       if (!existTable) {
-        await AutoIncrement.create(tbData);
-        console.log("");
-        Logger.info("Table AutoIncrement Created!");
+        const result = await AutoIncrement.create(tbData);
+        Logger.info(`[SEQUELIZE] successfully added the "${chalk.bold(
+          result.table_name
+        )}" table to the autonumber table and "${chalk.bold(
+          result.field
+        )}" as auto number field
+        `);
       }
     }
   }
+
+  Logger.info("[SEQUELIZE] Setup AutoNumber table Done!");
 }
