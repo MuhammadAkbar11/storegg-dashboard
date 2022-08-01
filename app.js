@@ -1,7 +1,6 @@
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import express from "express";
-import morgan from "morgan";
 import cors from "cors";
 import expressMysqlSession from "express-mysql-session";
 import session from "express-session";
@@ -28,6 +27,7 @@ import BoostrapingModels, {
   createAutoNumberTable,
 } from "./src/models/index.model.js";
 import MainRoutes from "./src/routes/index.routes.js";
+import pinoHttpLogger from "./src/middleware/logging.js";
 
 const argv = yargs(hideBin(process.argv)).argv;
 const MySQLStore = expressMysqlSession(session);
@@ -93,7 +93,8 @@ app.use(
 );
 
 if (envConfigs.MODE == "development") {
-  app.use(morgan("dev"));
+  // app.use(morgan("dev"));
+  app.use(pinoHttpLogger);
 }
 
 // Passport middleware
@@ -137,7 +138,7 @@ BoostrapingModels();
   if (force) createAutoNumberTable(tables);
   force && Logger.info("Sync sequelize done!");
   app.listen(envConfigs.PORT, () =>
-    Logger.info(`[server] app running on port ${envConfigs.PORT}`)
+    Logger.info(`[SERVER] app running on port ${envConfigs.PORT}`)
   );
 })();
 

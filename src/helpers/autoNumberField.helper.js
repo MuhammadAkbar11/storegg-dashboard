@@ -24,7 +24,7 @@ async function AutoNumberField(field, customPrefix = "", length = 6) {
     await table.increment("value");
 
     Logger.info(
-      `[helper] Auto number done!, Value = ${result}, Length = ${length} `
+      `[HELPER] Auto number done!, Value = ${result}, Length = ${length} `
     );
     return result;
   } catch (error) {
