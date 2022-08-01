@@ -240,7 +240,7 @@ export const updateVoucherStatus = async (req, res, next) => {
       return;
     }
 
-    const message = `Berhasil ${status} Voucher <strong class="text-success" >${voucher.name}</strong> `;
+    const message = `Berhasil ${status} Voucher <strong class="text-success" >${voucher.game_name}</strong> `;
 
     await updateVoucherStatusById(ID);
 

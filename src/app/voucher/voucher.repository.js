@@ -128,7 +128,6 @@ export const updateVoucher = async (id, data) => {
         voucher.voucher_id
       );
 
-      console.log(voucherImg);
       await sharp(fileImgData.path)
         .resize(281, 381)
         .jpeg({ quality: 90 })
@@ -190,13 +189,23 @@ export const updateVoucher = async (id, data) => {
 
 export const updateVoucherStatusById = async id => {
   try {
-    let voucher = await Voucher.findOne({ _id: id });
-    let status = voucher.status === "Y" ? "N" : "Y";
-    voucher = await Voucher.findOneAndUpdate(
-      {
-        _id: id,
+    let voucher = await Voucher.findOne({
+      where: {
+        voucher_id: id,
       },
-      { status }
+    });
+
+    let status = voucher.status === "Y" ? "N" : "Y";
+    Logger.info(status, "STATUS VOUCHER");
+    return await Voucher.update(
+      {
+        status: status,
+      },
+      {
+        where: {
+          voucher_id: id,
+        },
+      }
     );
   } catch (error) {
     Logger.error(error, "[EXCEPTION] updateVoucherStatusById");
