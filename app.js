@@ -129,14 +129,14 @@ BoostrapingModels();
 (async () => {
   let force = argv.force ?? false;
 
-  force && Logger.info("Sync sequelize...");
+  force && Logger.info("[SEQUELIZE] Sync force sequelize...");
 
   const connect = await sequelizeConnection.sync({ force });
 
   const tables = await connect.query("SHOW TABLES;");
 
   if (force) createAutoNumberTable(tables);
-  force && Logger.info("Sync sequelize done!");
+  force && Logger.info("[SEQUELIZE] Sync sequelize done!");
   app.listen(envConfigs.PORT, () =>
     Logger.info(`[SERVER] app running on port ${envConfigs.PORT}`)
   );

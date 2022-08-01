@@ -1,1 +1,1 @@
-export const PREFIX_VERSION = "/api/v1";
+export const PREFIX_VERSION = "/api/v2";

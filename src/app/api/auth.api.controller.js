@@ -2,15 +2,19 @@ import { validationResult } from "express-validator";
 import path from "path";
 import sharp from "sharp";
 import { SESSION_SECRET } from "../../config/env.config.js";
+import {
+  DEFAULT_USER_PP,
+  httpStatusCodes,
+} from "../../constants/index.constants.js";
+import { GeneratePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import { DEFAULT_USER_PP } from "../../utils/constants.js";
-import httpStatusCodes from "../../utils/httpStatusCode.js";
-import { deleteFile, transformFilename } from "../../utils/index.js";
-import { signJWT } from "../../utils/jwt.js";
+import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
+import Logger from "../../helpers/logger.helper.js";
 import { createPlayer, findOnePlayer } from "../player/player.repository.js";
+import { findOneUser } from "../user/user.repository.js";
 
 export const apiPlayerSignup = async (req, res, next) => {
   const { email, name, password, category } = req.body;
@@ -24,7 +28,11 @@ export const apiPlayerSignup = async (req, res, next) => {
       throw errValidate;
     }
 
-    const existPlayer = await findOnePlayer({ email: email });
+    const existPlayer = await findOneUser({
+      where: {
+        email: email,
+      },
+    });
 
     if (existPlayer) {
       throw new BaseError(
@@ -38,16 +46,12 @@ export const apiPlayerSignup = async (req, res, next) => {
     let avatar = DEFAULT_USER_PP;
 
     if (fileimgData) {
-      const resultImg = transformFilename(
-        fileimgData.filename,
-        "GGPlayer",
-        name
-      );
+      const resultImg = RenameFile(fileimgData.filename, "GGPlayer", name);
       await sharp(fileimgData.path)
         .resize(200, 200)
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileimgData.destination, resultImg));
-      deleteFile(fileimgData.path);
+      UnlinkFile(fileimgData.path);
       avatar = `/uploads/users/${resultImg}`;
     }
 
@@ -55,14 +59,14 @@ export const apiPlayerSignup = async (req, res, next) => {
       name: name,
       username: name.split(" ")[0].toLocaleLowerCase().trim(),
       email: email,
-      password: password,
+      password: await GeneratePassword(password),
       avatar: avatar,
+      role: "PLAYER",
       favorite: category,
     };
 
     const player = await createPlayer(newPlayer);
 
-    delete player._doc.password;
     res.status(201).json({
       message:
         "Selamat! Akun anda telah terdaftar untuk langkah berikutnya silahkan masuk!",
@@ -71,7 +75,7 @@ export const apiPlayerSignup = async (req, res, next) => {
     return;
   } catch (error) {
     if (fileimgData) {
-      deleteFile(fileimgData.path);
+      UnlinkFile(fileimgData.path);
     }
     next(new TransfromError(error));
   }

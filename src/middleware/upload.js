@@ -3,7 +3,7 @@ import { UPLOAD_PATH } from "../config/env.config.js";
 import Upload from "../helpers/upload.helper.js";
 
 export const uploadSingleImage =
-  (folderPath = UPLOAD_PATH) =>
+  (folderPath = "/files") =>
   (req, res, next) => {
     const uploadSingle = new Upload({
       fieldName: "image",

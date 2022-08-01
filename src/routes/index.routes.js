@@ -1,3 +1,4 @@
+import APIsRoutes from "../app/api/api.routes.js";
 import BankRoutes from "../app/bank/bank.routes.js";
 import CategoryRoutes from "../app/category/category.routes.js";
 import NominalRoutes from "../app/nominal/nominal.routes.js";
@@ -20,6 +21,8 @@ function MainRoutes(app) {
   CategoryRoutes(app);
   BankRoutes(app);
   PaymentRoutes(app);
+
+  APIsRoutes(app);
 }
 
 export default MainRoutes;

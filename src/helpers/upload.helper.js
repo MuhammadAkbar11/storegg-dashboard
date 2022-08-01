@@ -5,6 +5,7 @@ import BaseError from "./baseError.helper.js";
 import fs from "fs";
 import { UPLOAD_PATH } from "../config/env.config.js";
 import { ROOT_FOLDER } from "../constants/index.constants.js";
+import Logger from "./logger.helper.js";
 class Upload {
   constructor({
     fieldName = "image",
@@ -28,6 +29,7 @@ class Upload {
         cb(null, this.folderName);
       },
       filename: (req, file, cb) => {
+        Logger.info(file, " [UPLOAD] Request new file");
         let filename = req.body.filename ?? this.filename;
         if (!filename) {
           filename = file.fieldname;
