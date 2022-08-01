@@ -1,9 +1,10 @@
 import { validationResult } from "express-validator";
+import { faker } from "@faker-js/faker";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import BankModel from "./bank.model.js";
+
 import {
   createBank,
   deleteBankById,
@@ -11,6 +12,7 @@ import {
   findBankById,
   updateBank,
 } from "./bank.repository.js";
+import { GetRandom } from "../../helpers/index.helper.js";
 
 export const index = async (req, res, next) => {
   try {
@@ -38,13 +40,13 @@ export const viewPutBank = async (req, res, next) => {
     const errors = req.flash("errors")[0];
 
     const bank = await findBankById(req.params.id);
-
     res.render("bank/v_edit_bank", {
       title: "Edit Bank",
       path: "/bank",
       flashdata: flashdata,
       errors: errors,
       bank: bank,
+      params: req.params.id,
       values: null,
     });
   } catch (error) {
@@ -55,12 +57,10 @@ export const viewPutBank = async (req, res, next) => {
 
 export const postBank = async (req, res, next) => {
   try {
-    const allBanks = await BankModel.find({}).countDocuments();
-
     const result = await createBank({
-      name: `Nama Pemilik Bank ${allBanks + 1}`,
-      bankName: "Mandiri",
-      noRekening: "000000000000",
+      account_name: faker.fake("{{name.firstName}} {{name.lastName}}"),
+      bank_name: GetRandom(["Mandiri", "BRI", "BNI", "BCA"]),
+      no_rekening: faker.finance.creditCardNumber(),
     });
 
     req.flash("flashdata", {
@@ -74,7 +74,7 @@ export const postBank = async (req, res, next) => {
       message:
         "Jika ingin membatalkan silahkan klik tombol batal dan hapus untuk membatalkan pembuatan Bank baru ",
     });
-    res.redirect(`/bank-edit/${result._id}`);
+    res.redirect(`/bank-edit/${result.bank_id}`);
   } catch (error) {
     console.log(error);
     req.flash("flashdata", {
@@ -109,7 +109,11 @@ export const putBank = async (req, res, next) => {
     }
     // code here
 
-    await updateBank(ID, { name, bankName, noRekening });
+    await updateBank(ID, {
+      account_name: name,
+      bank_name: bankName,
+      no_rekening: noRekening,
+    });
 
     req.flash("flashdata", {
       type: "success",

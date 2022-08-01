@@ -39,6 +39,10 @@ export const TABLE_AUTO_INCREMENT = {
     field: "voucher_nominal_id",
     prefix: "VCNL",
   },
+  banks: {
+    field: "bank_id",
+    prefix: "BNK",
+  },
 };
 
 export const STATIC_FOLDER = path.join(__dirname, "public");

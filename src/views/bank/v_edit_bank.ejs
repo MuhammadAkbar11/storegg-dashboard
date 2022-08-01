@@ -35,7 +35,7 @@
         <div class="col-12">
           <div class="alert alert-info" role="alert">
             <div class="alert-body">
-              <strong>Info:</strong> Bank dengan ID "<%= params %>" tidak ditemukan
+              <strong>Info:</strong> Bank dengan ID "<%= params ? params : "" %>" tidak ditemukan
               ! <a class="text-info text-decoration-underline fw-light " href="/bank">Kembali ke Halaman
                 Bank</a>
             </div>
@@ -43,23 +43,24 @@
         </div>
         <% } %>
 
-        <%
-        let nameValue = bank.name
-        let bankNameValue = bank.bankName
-        let noRekeningValue = bank.noRekening
 
-        if(errors && errors?.renderData?.values) {
-          nameValues = errors?.renderData?.values?.name
-          bankNameValue = errors?.renderData?.values?.bankName
-          noRekeningValue = errors?.renderData?.values?.noRekening
-        }
-
-        %>
         <% if(bank) { %>
+        <%
+          let nameValue = bank.account_name
+          let bankNameValue = bank.bank_name
+          let noRekeningValue = bank.no_rekening
+
+          if(errors && errors?.renderData?.values) {
+            nameValues = errors?.renderData?.values?.name
+            bankNameValue = errors?.renderData?.values?.bankName
+            noRekeningValue = errors?.renderData?.values?.noRekening
+          }
+
+          %>
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card">
             <div class="card-body">
-              <form class="form form-vertical" action="/bank/<%= bank._id %>" method="post">
+              <form class="form form-vertical" action="/bank/<%= bank.bank_id %>" method="post">
                 <input type="hidden" value="PUT" name="_method">
                 <div class="row">
                   <div class="col-12">
@@ -81,7 +82,7 @@
                     </div>
                     <div class="mb-1">
                       <label class="form-label" for="noRekening">No Rekening</label>
-                      <input type="number" id="noRekening" class="form-control" name="noRekening" placeholder="Harga"
+                      <input type="text" id="noRekening" class="form-control" name="noRekening" placeholder="Harga"
                         value="<%= noRekeningValue %>" />
                       <% if(errors && errors?.validation?.noRekening) {  %>
                       <small class=" text-danger "> <%= errors?.validation?.noRekening?.message[0] %></small>

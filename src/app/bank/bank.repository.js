@@ -1,9 +1,13 @@
 import { TransfromError } from "../../helpers/baseError.helper.js";
-import BankModel from "./bank.model.js";
+import Bank from "../../models/bank.model.js";
 
-export const findAllBank = async () => {
+export const findAllBank = async (
+  filter = {
+    where: {},
+  }
+) => {
   try {
-    const result = await BankModel.find({});
+    const result = await Bank.findAll({ ...filter });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findAllBank", error);
@@ -13,7 +17,7 @@ export const findAllBank = async () => {
 
 export const findBankById = async id => {
   try {
-    const result = await BankModel.findById(id);
+    const result = await Bank.findByPk(id);
     return result;
   } catch (error) {
     console.error("[EXCEPTION] findOneBank", error);
@@ -23,7 +27,7 @@ export const findBankById = async id => {
 
 export const createBank = async data => {
   try {
-    const result = await BankModel.create(data);
+    const result = await Bank.create({ ...data });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] createBank", error);
@@ -33,8 +37,17 @@ export const createBank = async data => {
 
 export const updateBank = async (id, data) => {
   try {
-    const result = await BankModel.findByIdAndUpdate(id, { ...data });
-    return await result.save();
+    const result = await Bank.update(
+      {
+        ...data,
+      },
+      {
+        where: {
+          bank_id: id,
+        },
+      }
+    );
+    return await result;
   } catch (error) {
     console.error("[EXCEPTION] updateBank", error);
     throw new TransfromError(error);
@@ -43,7 +56,11 @@ export const updateBank = async (id, data) => {
 
 export const deleteBankById = async id => {
   try {
-    const result = await BankModel.deleteOne({ _id: id });
+    const result = await Bank.destroy({
+      where: {
+        bank_id: id,
+      },
+    });
     return result;
   } catch (error) {
     console.error("[EXCEPTION] deleteBankById", error);

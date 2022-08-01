@@ -20,6 +20,7 @@ PaymentBank.init(
       type: DataTypes.STRING(15),
       field: "payment_method_id",
     },
+    self_granted: DataTypes.BOOLEAN,
   },
   {
     sequelize: sequelizeConnection,
