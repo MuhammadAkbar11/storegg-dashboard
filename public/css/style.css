@@ -14,3 +14,10 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 	object-fit: cover;
 }
 
+.ms-5px{
+	margin-left: 5px;
+}
+.me-5px{
+	margin-right: 5px;
+}
+
