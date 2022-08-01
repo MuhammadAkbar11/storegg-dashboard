@@ -165,7 +165,11 @@ export const deleteNominal = async (req, res, next) => {
 
     const message = `Anda telah menghapus Nominal <strong class=" text-warning" >${nominal.coin_quantity} ${nominal.coin_name}</strong> `;
 
-    await deleteNominalById(id);
+    await deleteNominalById({
+      where: {
+        nominal_id: id,
+      },
+    });
 
     req.flash("flashdata", {
       type: "warning",
