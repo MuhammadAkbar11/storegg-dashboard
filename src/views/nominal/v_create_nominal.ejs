@@ -31,7 +31,6 @@
     </div>
     <div class="content-body">
       <div class="row">
-
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card">
             <div class="card-body">
@@ -41,22 +40,24 @@
                   <div class="col-12">
                     <div class="mb-1">
                       <label class="form-label" for="coinName">Nama Koin</label>
-                      <input type="text" id="coinName" class="form-control" name="coinName" placeholder="Name Koin" />
+                      <input type="text" id="coinName" class="form-control" name="coinName" placeholder="Name Koin"
+                        value="<%= errors?.renderData?.values?.coinName  %>" />
                       <% if(errors && errors?.validation?.coinName) {  %>
-                      <small class=" text-danger "> <%= errors?.validation?.coinName?.message[0] %></small>
+                      <small class=" text-danger "><%= errors?.validation?.coinName?.message[0] %></small>
                       <% } %>
                     </div>
                     <div class="mb-1">
-                      <label class="form-label" for="coinNominal">Nominal</label>
-                      <input type="number" id="coinNominal" class="form-control" name="coinNominal"
-                        placeholder="Nominal" />
-                      <% if(errors && errors?.validation?.coinNominal) {  %>
-                      <small class=" text-danger "> <%= errors?.validation?.coinNominal?.message[0] %></small>
+                      <label class="form-label" for="coinQuantity">Nominal</label>
+                      <input type="number" id="coinQuantity" class="form-control" name="coinQuantity"
+                        placeholder="Nominal" value="<%= errors?.renderData?.values?.coinQuantity  %>" />
+                      <% if(errors && errors?.validation?.coinQuantity) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.coinQuantity?.message[0] %></small>
                       <% } %>
                     </div>
                     <div class="mb-1">
                       <label class="form-label" for="price">Harga</label>
-                      <input type="number" id="price" class="form-control" name="price" placeholder="Harga" />
+                      <input type="number" id="price" class="form-control" name="price" placeholder="Harga"
+                        value="<%= errors?.renderData?.values?.price  %>" />
                       <% if(errors && errors?.validation?.price) {  %>
                       <small class=" text-danger "> <%= errors?.validation?.price?.message[0] %></small>
                       <% } %>
@@ -64,8 +65,8 @@
                   </div>
 
                   <div class="col-12">
+                    <a href="/nominal" class=" btn btn-link text-secondary  me-5px">Batal</a>
                     <button type="submit" class="btn btn-primary me-1">Simpan </button>
-                    <a href="/nominal" class=" btn btn-outline-secondary">Batal</a>
                   </div>
                 </div>
               </form>

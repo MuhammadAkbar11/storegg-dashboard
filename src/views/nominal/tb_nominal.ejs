@@ -6,7 +6,7 @@
         <div class="card-header">
           <h6 class="mb-0">Data Nominal</h6>
 
-          <a href="/nominal-create" class="btn btn-primary">
+          <a href="/nominal-create" class="btn btn-primary waves-effect">
             <i data-feather="plus"></i> Buat Nomimal
           </a>
         </div>
@@ -36,13 +36,12 @@
                 <td><%= price  %></td>
                 <td data-order="false">
                   <form action="/nominal/<%= nm.nominal_id %>" method="post">
-                    <a href="/nominal-edit/<%= nm.nominal_id %>"
-                      class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
-                      <i data-feather="edit"></i>
+                    <a href="/nominal-edit/<%= nm.nominal_id %>" class="btn btn-icon btn-flat-primary waves-effect">
+                      <small>Ubah</small>
                     </a>
                     <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
-                      <i data-feather="trash"></i>
+                    <button type="submit" class="btn btn-icon btn-icon ms-5px btn-flat-danger waves-effect">
+                      <small>Hapus</small>
                     </button>
                   </form>
                 </td>

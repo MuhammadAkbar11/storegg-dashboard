@@ -44,13 +44,13 @@
         <% } %>
 
         <%
-        let coinNameValue = nominal.coinName
-        let coinNominalValue = nominal.coinNominal
+        let coinNameValue = nominal.coin_name
+        let coinQuantityValue = nominal.coin_quantity
         let priceValue = nominal.price
 
         if(errors && errors?.renderData?.values) {
           coinNameValues = errors?.renderData?.values?.coinName
-          coinNominalValue = errors?.renderData?.values?.coinNominal
+          coinQuantityValue = errors?.renderData?.values?.coinQuantity
           priceValue = errors?.renderData?.values?.price
         }
 
@@ -59,7 +59,7 @@
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card">
             <div class="card-body">
-              <form class="form form-vertical" action="/nominal/<%= nominal._id %>" method="post">
+              <form class="form form-vertical" action="/nominal/<%= nominal.nominal_id %>" method="post">
                 <input type="hidden" value="PUT" name="_method">
                 <div class="row">
                   <div class="col-12">
@@ -72,11 +72,11 @@
                       <% } %>
                     </div>
                     <div class="mb-1">
-                      <label class="form-label" for="coinNominal">Nominal</label>
-                      <input type="number" id="coinNominal" class="form-control" name="coinNominal"
-                        placeholder="Nominal" value="<%= coinNominalValue %>" />
-                      <% if(errors && errors?.validation?.coinNominal) {  %>
-                      <small class=" text-danger "> <%= errors?.validation?.coinNominal?.message[0] %></small>
+                      <label class="form-label" for="coinQuantity">Nominal</label>
+                      <input type="number" id="coinQuantity" class="form-control" name="coinQuantity"
+                        placeholder="Nominal" value="<%= coinQuantityValue %>" />
+                      <% if(errors && errors?.validation?.coinQuantity) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.coinQuantity?.message[0] %></small>
                       <% } %>
                     </div>
                     <div class="mb-1">

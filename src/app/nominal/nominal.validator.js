@@ -1,13 +1,13 @@
 import { checkSchema } from "express-validator";
 
 const nominalValidation = checkSchema({
-  coin_quantity: {
+  coinQuantity: {
     trim: true,
     notEmpty: {
       errorMessage: "Nominal tidak boleh kosong",
     },
   },
-  coin_name: {
+  coinName: {
     trim: true,
     notEmpty: {
       errorMessage: "Nama Koin tidak boleh kosong",

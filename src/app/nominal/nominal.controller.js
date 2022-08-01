@@ -18,7 +18,10 @@ export const index = async (req, res, next) => {
     res.render("nominal/v_nominal", {
       title: "Nominal",
       path: "/nominal",
-      nominals: await findAllNominal(),
+      nominals: await findAllNominal({
+        where: {},
+        order: [["created_at", "desc"]],
+      }),
       flashdata: flashdata,
       errors: errors,
       isEdit: false,
@@ -68,10 +71,10 @@ export const viewPutNominal = async (req, res, next) => {
 };
 
 export const postNominal = async (req, res, next) => {
-  const redirect = req.query.redirect || `/create-nominal`;
+  const redirect = req.query.redirect || `/nominal-create`;
   const validate = validationResult(req);
 
-  const { coinNominal, coinName, price } = req.body;
+  const { coinQuantity, coinName, price } = req.body;
 
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
@@ -84,8 +87,8 @@ export const postNominal = async (req, res, next) => {
 
   try {
     await createNominal({
-      coinName,
-      coinNominal,
+      coin_quantity: coinQuantity,
+      coin_name: coinName,
       price,
     });
 
@@ -108,7 +111,7 @@ export const postNominal = async (req, res, next) => {
 
 export const putNominal = async (req, res, next) => {
   const id = req.params.id;
-  const { coinNominal, coinName, price } = req.body;
+  const { coinQuantity, coinName, price } = req.body;
 
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
@@ -122,8 +125,8 @@ export const putNominal = async (req, res, next) => {
 
   try {
     await updateNominal(id, {
-      coinName,
-      coinNominal,
+      coin_quantity: coinQuantity,
+      coin_name: coinName,
       price,
     });
 
@@ -132,6 +135,7 @@ export const putNominal = async (req, res, next) => {
       title: "Berhasil!",
       message: "Berhasil mengubah nominal",
     });
+
     res.redirect(`/nominal`);
   } catch (error) {
     req.flash("flashdata", {
@@ -159,7 +163,7 @@ export const deleteNominal = async (req, res, next) => {
       return;
     }
 
-    const message = `Anda telah menghapus Nominal <strong class=" text-warning" >${nominal.coinNominal} ${nominal.coinName}</strong> `;
+    const message = `Anda telah menghapus Nominal <strong class=" text-warning" >${nominal.coin_quantity} ${nominal.coin_name}</strong> `;
 
     await deleteNominalById(id);
 

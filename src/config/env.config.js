@@ -26,9 +26,9 @@ if (mode == "development") {
   if (!fs.existsSync(path.join(ROOT_FOLDER, uploadPath))) {
     Logger.warn("Development directory not found!");
     fs.mkdirSync(path.join(ROOT_FOLDER, uploadPath), { recursive: true });
-    Logger.info("[config] Development directory created!");
+    Logger.info("[CONFIG] Development directory created!");
   } else {
-    Logger.info("[config] Development directory founded!");
+    Logger.info("[CONFIG] Development directory founded!");
   }
 }
 

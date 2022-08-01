@@ -1,4 +1,5 @@
 import { TransfromError } from "../../helpers/baseError.helper.js";
+import Logger from "../../helpers/logger.helper.js";
 import Nominal from "../../models/nominal.model.js";
 
 export const findAllNominal = async filter => {
@@ -6,7 +7,7 @@ export const findAllNominal = async filter => {
     const result = await Nominal.findAll({ ...filter });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findAllNominal", error);
+    Logger.error(error, "[EXCEPTION] findAllNominal");
     throw new TransfromError(error);
   }
 };
@@ -16,7 +17,7 @@ export const findOneNominal = async filter => {
     const result = await Nominal.findOne({ ...filter });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneNominal", error);
+    Logger.error(error, "[EXCEPTION] findOneNominal");
     throw new TransfromError(error);
   }
 };
@@ -26,7 +27,7 @@ export const findNominalById = async id => {
     const result = await Nominal.findByPk(id);
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneNominal", error);
+    Logger.error(error, "[EXCEPTION] findOneNominal");
     throw new TransfromError(error);
   }
 };
@@ -36,32 +37,36 @@ export const createNominal = async data => {
     const result = await Nominal.create({ ...data });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] createNominal", error);
+    Logger.error(error, "[EXCEPTION] createNominal");
+
     throw new TransfromError(error);
   }
 };
 
-export const updateNominal = async (id, { coinName, coinNominal, price }) => {
+export const updateNominal = async (
+  id,
+  { coin_name, coin_quantity, price }
+) => {
   try {
     const result = await Nominal.findByPk(id);
 
-    result.coinName = coinName;
-    result.coinNominal = coinNominal;
+    result.coin_name = coin_name;
+    result.coin_quantity = coin_quantity;
     result.price = price;
 
     return await result.save();
   } catch (error) {
-    console.error("[EXCEPTION] updateNominal", error);
+    Logger.error(error, "[EXCEPTION] updateNominal");
     throw new TransfromError(error);
   }
 };
 
-export const deleteNominal = async filter => {
+export const deleteNominalById = async filter => {
   try {
     const result = await Nominal.destroy({ ...filter });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] deleteNominalById", error);
+    Logger.error(error, "[EXCEPTION] deleteNominalById");
     throw new TransfromError(error);
   }
 };

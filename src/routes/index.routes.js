@@ -1,3 +1,4 @@
+import NominalRoutes from "../app/nominal/nominal.routes.js";
 import UserRoutes from "../app/user/user.routes.js";
 import VoucherRoutes from "../app/voucher/voucher.routes.js";
 import { ensureAuth } from "../middleware/auth.js";
@@ -12,6 +13,7 @@ function MainRoutes(app) {
 
   UserRoutes(app);
   VoucherRoutes(app);
+  NominalRoutes(app);
 }
 
 export default MainRoutes;
