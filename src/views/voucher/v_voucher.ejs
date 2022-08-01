@@ -42,7 +42,11 @@
   var dt_voucher_table = $('#voucher-datatable')
 
   if (dt_voucher_table.length) {
-    dt_voucher_table.DataTable({});
+    dt_voucher_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
   }
 </script>
 
