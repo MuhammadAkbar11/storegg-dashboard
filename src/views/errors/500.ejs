@@ -52,23 +52,23 @@
             <h2 class="brand-text text-primary ms-1">StoreGG</h2>
           </a>
           <div class="misc-inner p-2 p-sm-3 ">
-            <div class="w-100  ">
-              <h2 class="mb-1 text-center">Page Error</h2>
-              <p class="mb-2 text-center">Oops! 😖 Something went wrong.</p>
-              <!-- <h2 class="mb-1"> </h2> -->
-              <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading"> <i data-feather="info" class="me-50"></i> <%= errors.name %></h4>
-                <div class="alert-body d-flex justify-content-start align-items-start text-left ">
-                  <%= errors.message %>
-                </div>
-              </div>
+            <div class="w-100 text-center">
+              <h2 class="mb-1">Opps!😖 Something went wrong! </h2>
+              <p class="mb-2">Server error 500, We apologise and are fixing the problem 🛠️ . please try again at a
+                later stage </p>
+              <div>
+                <% if (stack) { %>
 
-              <% if (stack) { %>
-              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#xlarge">
-                Show Stack
-              </button>
-              <% } %>
+                <button type="button" class="btn btn-flat-danger mb-2 me-5px  btn-sm-block " data-bs-toggle="modal"
+                  data-bs-target="#xlarge">
+                  Show Error
+                </button>
+                <% } %>
+                <a class="btn btn-danger mb-2 btn-sm-block" href="/">Kembali ke dashboard</a>
+              </div>
+              <img class="img-fluid" src="/images/500.svg" alt="Error page" />
             </div>
+
           </div>
 
 
@@ -88,11 +88,17 @@
       <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel16">Stack Error</h4>
+            <h4 class="modal-title" id="myModalLabel16">Error</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="">
+            <div class="alert alert-danger " role="alert">
+              <div class="alert-body ">
+                <h3 class="text-danger"><%= errors.name  %> </h3>
+                <p><%= errors.message %></p>
+              </div>
+            </div>
+            <div class="mt-2">
               <pre class="text-danger p-2">
                 <%= stack  %>
                </pre>
@@ -122,10 +128,7 @@
   <script>
     $(window).on('load', function () {
       if (feather) {
-        feather.replace({
-          width: 14,
-          height: 14
-        });
+        feather.replace({});
       }
     })
   </script>

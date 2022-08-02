@@ -4,6 +4,7 @@ import { findUserById } from "../app/user/user.repository.js";
 import GoogleStrategy from "./strategies/google.strategy.js";
 import LocalStrategy from "./strategies/local.strategy.js";
 import { findOneAdmin } from "../app/admin/admin.repository.js";
+import { httpStatusCodes } from "../constants/index.constants.js";
 
 export default function () {
   passport.use(LocalStrategy);
@@ -18,7 +19,12 @@ export default function () {
       const user = await findUserById(id);
 
       if (!user) {
-        throw new BaseError("AUTHENTICATION", "Failed to Login", 400, true);
+        throw new BaseError(
+          "ERR_AUTHENTICATION",
+          httpStatusCodes.BAD_REQUEST,
+          "Failed to Login",
+          true
+        );
       }
 
       const admin = await findOneAdmin({
@@ -26,6 +32,16 @@ export default function () {
           user_id: user.user_id,
         },
       });
+
+      if (!admin) {
+        throw new BaseError(
+          "ERR_AUTHENTICATION",
+          httpStatusCodes.BAD_REQUEST,
+          "Failed to login because the email has not been registered as an administrative email",
+          true
+        );
+      }
+
       const reqUser = {
         ...admin.dataValues,
         ...user.dataValues,
@@ -33,11 +49,15 @@ export default function () {
       done(null, reqUser);
     } catch (err) {
       const error = new BaseError(
-        "AUTHENTICATION",
-        err?.message || "Failed to Login",
+        err?.name || "ERR_AUTHENTICATION",
         err?.status || 400,
+        err?.message || "Failed to Login",
         true,
-        { ...err }
+        {
+          ...err,
+          errorView: "errors/500",
+          renderData: { title: "Something Went Wrong" },
+        }
       );
       done(error, null);
     }

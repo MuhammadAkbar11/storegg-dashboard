@@ -25,6 +25,8 @@
             <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
               <h2 class="card-title fw-bold mb-1">Welcome to StoreGG Dashboard! 👋</h2>
               <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
+              <%- include("../includes/flashdata.ejs")  %>
+
               <% if(errors && errors?.name !== "BAD_VALIDATION") {  %>
               <div class="alert alert-danger mt-1 alert-validation-msg" role="alert">
                 <div class="alert-body d-flex align-items-center">

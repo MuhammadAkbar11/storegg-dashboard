@@ -1,8 +1,8 @@
 <% if(flashdata) { %>
 <% flashdata.forEach(flash => { %>
-<div class="alert alert-<%= flash?.type || "primary" %>  alert-dismissible" role="alert">
+<div class="alert alert-<%= flash?.type || "primary" %> alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  <div class="alert-message">
+  <div class="alert-body">
     <%= flash.message %>
   </div>
 </div>

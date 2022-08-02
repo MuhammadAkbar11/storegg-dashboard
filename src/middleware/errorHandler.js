@@ -50,9 +50,13 @@ function returnError(err, req, res, next) {
     });
   }
 
-  if (err.name.includes("AUTH")) {
+  if (err.name.includes("ERR_AUTH")) {
     req.logout();
-
+    req.flash("flashdata", {
+      type: "danger",
+      title: "Failed!",
+      message: message,
+    });
     res.redirect("/auth");
     return;
   }

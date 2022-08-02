@@ -11,6 +11,7 @@ import { findOneUser } from "./user.repository.js";
 export const getUserSignin = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
+
     res.render("auth/login", {
       title: "Login",
       flashdata: flashdata,
@@ -18,10 +19,6 @@ export const getUserSignin = async (req, res, next) => {
       values: null,
     });
   } catch (error) {
-    error.errors = {
-      errorView: "auth/login",
-      renderData: { title: "Login", values: req.body },
-    };
     const baseError = new TransfromError(error);
     next(baseError);
   }
@@ -50,9 +47,9 @@ export const postUserSignin = async (req, res, next) => {
 
     if (!user.role.includes("ADMIN")) {
       throw new BaseError(
-        "BAD_REQUEST",
+        "ERR_AUTHENTICATION",
         httpStatusCodes.BAD_REQUEST,
-        "Email is not an admin email",
+        "Failed to login because the email has not been registered as an administration email",
         true
       );
     }
@@ -70,20 +67,18 @@ export const postUserSignin = async (req, res, next) => {
 
     next();
   } catch (error) {
-    // error.errors["errorView"] = "auth/login";
-    // error.renderData = { title: "Login", values: req.body };
-    // // const error
     const baseError = new BaseError(
       error?.name,
       error?.statusCode,
       error.message,
       true,
       {
+        validation: error?.validation || null,
         errorView: "auth/login",
-        renderData: { title: "Login", values: req.body },
+        renderData: { title: "Login", values: req.body, flashdata: null },
       }
     );
-    Logger.error("[EXCEPTION] signin user", baseError);
+    Logger.error(error, "[EXCEPTION] signin user");
     next(new TransfromError(baseError));
   }
 };

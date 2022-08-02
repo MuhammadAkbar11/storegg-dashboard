@@ -16,13 +16,13 @@ const LocalStrategy = new Strategy(
       if (user) {
         return done(null, user.dataValues);
       }
-      throw new BaseError("AUTHENTICATION", "Failed to Login", 400, true, {
+      throw new BaseError("ERR_AUTHENTICATION", "Failed to Login", 400, true, {
         errorView: "auth/login",
       });
     } catch (err) {
       Logger.error(`[passport] LocalStrategy`, err);
       const error = new BaseError(
-        "AUTHENTICATION",
+        "ERR_AUTHENTICATION",
         err?.message || "Failed to Login",
         err?.status || 400,
         true,
