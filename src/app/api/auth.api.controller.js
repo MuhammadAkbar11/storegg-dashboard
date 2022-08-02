@@ -142,7 +142,7 @@ export const apiPlayerSignin = async (req, res, next) => {
         username: player.username,
         name: player.name,
         email: player.email,
-        phoneNumber: player.phoneNumber,
+        phone_number: player?.phone_number,
         avatar: player.avatar,
         favorite: getPlayer.dataValues.category.name,
       };

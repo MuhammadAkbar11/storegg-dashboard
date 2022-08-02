@@ -9,10 +9,10 @@ import {
   //   apiGetDetailHistory,
   apiGetDetailVoucher,
   //   apiGetListHistory,
-  //   apiGetProfile,
+  apiGetProfile,
   apiGetVouchers,
   //   apiPostCheckout,
-  //   apiPutProfile,
+  apiPutProfile,
 } from "./api.controller.js";
 import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
 
@@ -29,15 +29,15 @@ function APIsRoutes(app) {
   // app.route(joinAPIsURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
   // app.route(joinAPIsURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
   // app.route(joinAPIsURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
-  // app
-  //   .route(joinAPIsURL("/profile"))
-  //   .get(ensurePlayerAuth, apiGetProfile)
-  //   .put(
-  //     uploadSingleImage("/users"),
-  //     ensurePlayerAuth,
-  //     playerValidation.update,
-  //     apiPutProfile
-  //   );
+  app
+    .route(ApiURL("/profile"))
+    .get(ensurePlayerAuth, apiGetProfile)
+    .put(
+      uploadSingleImage("/users"),
+      ensurePlayerAuth,
+      playerValidation.update,
+      apiPutProfile
+    );
   app.route(ApiURL("/categories")).get(apiGetCategories);
   app.route(ApiURL("/vouchers")).get(apiGetVouchers);
 }

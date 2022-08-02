@@ -14,7 +14,9 @@ import { findOneVoucher } from "../voucher/voucher.repository.js";
 import { findAllCategories } from "../category/category.repository.js";
 // import { findNominalById } from "../nominal/nominal.repository.js";
 // import { findPaymentById } from "../payment/payment.repository.js";
-// import { findPlayerById, updatePlayer } from "../player/player.repository.js";
+import { findOnePlayer, updatePlayer } from "../player/player.repository.js";
+import { httpStatusCodes } from "../../constants/index.constants.js";
+import { UnlinkFile } from "../../helpers/index.helper.js";
 // import TransactionModel from "../transaction/transaction.model.js";
 // import {
 //   createTransaction,
@@ -27,7 +29,7 @@ import { findAllCategories } from "../category/category.repository.js";
 const Op = Sequelize.Op;
 
 export const apiGetVouchers = async (req, res, next) => {
-  const skip = +req.query.skip || 0;
+  const page = +req.query.page || 0;
   const limit = +req.query.limit ?? 10;
   const search = req.query.search;
 
@@ -40,9 +42,9 @@ export const apiGetVouchers = async (req, res, next) => {
     };
   }
 
-  if (skip) {
+  if (page) {
     query = {
-      offset: skip,
+      offset: limit * (page - 1),
       ...query,
     };
   }
@@ -65,9 +67,11 @@ export const apiGetVouchers = async (req, res, next) => {
       ],
     });
 
-    res
-      .status(200)
-      .json({ message: "Berhasil mengambil data voucher", data: voucher });
+    const pages = Math.ceil(voucher.count / +limit);
+    res.status(200).json({
+      message: "Berhasil mengambil data voucher",
+      data: { pages, page, total: voucher.count, rows: voucher.rows },
+    });
   } catch (err) {
     next(new TransfromError(err));
   }
@@ -286,63 +290,77 @@ export const apiGetCategories = async (req, res, next) => {
 //   }
 // };
 
-// export const apiGetProfile = async (req, res, next) => {
-//   try {
-//     res.status(200).json({
-//       message: "Berhasil mendapat profile",
-//       data: req.player,
-//     });
-//   } catch (error) {
-//     next(new TransfromError(error));
-//   }
-// };
+export const apiGetProfile = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      message: "Berhasil mendapat profile",
+      data: req.player,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
 
-// export const apiPutProfile = async (req, res, next) => {
-//   const ID = req.player._id;
+export const apiPutProfile = async (req, res, next) => {
+  const userId = req.player.user_id;
+  const { username, name, phoneNumber } = req.body;
 
-//   const { username, name, phoneNumber } = req.body;
+  const fileimg = req.fileimg;
 
-//   const fileimg = req.fileimg;
+  try {
+    const validate = validationResult(req);
 
-//   try {
-//     const validate = validationResult(req);
+    if (!validate.isEmpty()) {
+      const errValidate = new ValidationError(validate.array());
+      throw errValidate;
+    }
 
-//     if (!validate.isEmpty()) {
-//       const errValidate = new ValidationError(validate.array());
-//       throw errValidate;
-//     }
+    let player = await findOnePlayer({
+      where: {
+        user_id: userId,
+      },
+    });
 
-//     let player = await findPlayerById(ID);
+    if (!player) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Player tidak ditemukan`,
+        true
+      );
+    }
 
-//     if (!player) {
-//       throw new BaseError(
-//         "BAD_REQUEST",
-//         httpStatusCodes.BAD_REQUEST,
-//         `Player tidak ditemukan`,
-//         true
-//       );
-//     }
+    await updatePlayer(userId, {
+      username: username,
+      phone_number: phoneNumber,
+      name: name,
+      fileimg: fileimg,
+      oldAvatar: player.user.avatar,
+    });
 
-//     await updatePlayer(ID, {
-//       username: username,
-//       phoneNumber: phoneNumber,
-//       name: name,
-//       fileimg: fileimg,
-//       oldAvatar: player.avatar,
-//     });
+    const updatedPlayer = await findOnePlayer({
+      where: {
+        user_id: userId,
+      },
+    });
 
-//     const updatedPlayer = await findPlayerById(ID);
-
-//     delete updatedPlayer._doc.password;
-//     res.status(201).json({
-//       message: "Berhasil mengubah profile",
-//       data: updatedPlayer,
-//     });
-//     return;
-//   } catch (error) {
-//     if (fileimg.data) {
-//       deleteFile(fileimg.data.path);
-//     }
-//     next(new TransfromError(error));
-//   }
-// };
+    res.status(201).json({
+      message: "Berhasil mengubah profile",
+      data: {
+        user_id: updatedPlayer.user.user_id,
+        username: updatedPlayer.user.username,
+        name: updatedPlayer.user.name,
+        email: updatedPlayer.user.email,
+        phone_number: updatedPlayer.user.phone_number,
+        avatar: updatedPlayer.user.avatar,
+        favorite: updatedPlayer.dataValues.category.name,
+      },
+    });
+    return;
+  } catch (error) {
+    if (fileimg.data) {
+      UnlinkFile(fileimg.data.path);
+    }
+    next(new TransfromError(error));
+  }
+};

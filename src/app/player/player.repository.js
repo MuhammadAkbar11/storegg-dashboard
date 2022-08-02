@@ -6,6 +6,7 @@ import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
+import Category from "../../models/category.model.js";
 import Player from "../../models/player.model.js";
 import User from "../../models/user.model.js";
 
@@ -25,7 +26,25 @@ export const findAllPlayer = async (
 
 export const findOnePlayer = async filter => {
   try {
-    const result = await Player.findOne({ ...filter });
+    const result = await Player.findOne({
+      ...filter,
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["created_at", "updated_at", "password"],
+          },
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
+      ],
+    });
     return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] findOnePlayer");
@@ -35,7 +54,24 @@ export const findOnePlayer = async filter => {
 
 export const findPlayerById = async id => {
   try {
-    const result = await Player.findById(id);
+    const result = await Player.findByPk(id, {
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["created_at", "updated_at", "password"],
+          },
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
+      ],
+    });
     return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] findOneById");
@@ -71,7 +107,7 @@ export const createPlayer = async data => {
 
 export const updatePlayer = async (id, payload) => {
   try {
-    const { username, phoneNumber, name, fileimg, oldAvatar } = payload;
+    const { username, phone_number, name, fileimg, oldAvatar } = payload;
     const fileImgData = fileimg.data;
     let avatar = oldAvatar;
     if (fileImgData) {
@@ -88,16 +124,23 @@ export const updatePlayer = async (id, payload) => {
       if (DEFAULT_USER_PP != oldAvatar) {
         const oldAvatarPath = MODE == "development" ? ".dev" : "public";
         const deleteOldAva = UnlinkFile(oldAvatarPath + oldAvatar);
-        console.log(deleteOldAva, "Delete Old Image");
+        Logger.info(deleteOldAva, "Delete old Avatar");
       }
     }
 
-    const result = await Player.findByIdAndUpdate(id, {
-      username,
-      phoneNumber,
-      name,
-      avatar,
-    });
+    const result = await User.update(
+      {
+        username,
+        phone_number,
+        name,
+        avatar,
+      },
+      {
+        where: {
+          user_id: id,
+        },
+      }
+    );
 
     return result;
   } catch (error) {
