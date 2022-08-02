@@ -64,10 +64,21 @@ export const findVoucherById = async id => {
 
 export const findOneVoucher = async filter => {
   try {
-    const result = await Voucher.findOne({ ...filter })
-      .select("name category _id thumbnail user")
-      .populate("category")
-      .populate("user");
+    const result = await Voucher.findOne({
+      ...filter,
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
+      ],
+    });
     return result;
   } catch (error) {
     Logger.error("[EXCEPTION] findOneVoucher", error);

@@ -161,7 +161,6 @@ export const putVoucher = async (req, res, next) => {
   const fileimg = req.fileimg;
   try {
     // const {}
-    console.log(req.file);
     await updateVoucher(req.params.id, { ...req.body, fileimg: fileimg });
 
     // return;
