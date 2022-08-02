@@ -1,7 +1,7 @@
 import { SESSION_SECRET } from "../config/env.config.js";
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import { VerifyJWT } from "../helpers/authentication.helper.js";
-// import { findOnePlayer } from "../modules/player/player.repository.js";
+import { findOnePlayer } from "../app/player/player.repository.js";
 
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) {
@@ -45,9 +45,15 @@ async function ensurePlayerAuth(req, res, next) {
       );
     }
 
-    // const player = await findOnePlayer({ _id: payload.id });
+    let player = await findOnePlayer({
+      where: {
+        user_id: payload.user_id,
+      },
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+    });
 
-    delete player._doc.password;
     if (!player) {
       throw new BaseError(
         "NOT_AUTH",
@@ -57,8 +63,16 @@ async function ensurePlayerAuth(req, res, next) {
       );
     }
 
-    req.player = player;
-
+    const authPlayer = {
+      user_id: player.user.user_id,
+      username: player.user.username,
+      name: player.user.name,
+      email: player.user.email,
+      phone_number: player.user.phone_number,
+      avatar: player.user.avatar,
+      favorite: player.dataValues.category.name,
+    };
+    req.player = authPlayer;
     req.token = token;
     next();
   } catch (err) {
