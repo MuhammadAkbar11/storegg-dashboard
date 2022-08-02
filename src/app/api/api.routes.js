@@ -4,10 +4,10 @@ import { uploadSingleImage } from "../../middleware/upload.js";
 import playerValidation from "../player/player.validator.js";
 import userValidation from "../user/user.validator.js";
 import {
-  //   apiGetCategories,
+  apiGetCategories,
   //   apiGetDashboard,
   //   apiGetDetailHistory,
-  //   apiGetDetailVoucher,
+  apiGetDetailVoucher,
   //   apiGetListHistory,
   //   apiGetProfile,
   apiGetVouchers,
@@ -20,7 +20,7 @@ function APIsRoutes(app) {
   // app
   //   .route(joinAPIsURL("/histories/:id"))
   //   .get(ensurePlayerAuth, apiGetDetailHistory);
-  // app.route(joinAPIsURL("/vouchers/:ID")).get(apiGetDetailVoucher);
+  app.route(ApiURL("/vouchers/:ID")).get(apiGetDetailVoucher);
   app.route(ApiURL("/auth/signin")).post(userValidation.login, apiPlayerSignin);
   app
     .route(ApiURL("/auth/signup"))
@@ -38,7 +38,7 @@ function APIsRoutes(app) {
   //     playerValidation.update,
   //     apiPutProfile
   //   );
-  // app.route(joinAPIsURL("/categories")).get(apiGetCategories);
+  app.route(ApiURL("/categories")).get(apiGetCategories);
   app.route(ApiURL("/vouchers")).get(apiGetVouchers);
 }
 
