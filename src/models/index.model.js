@@ -72,14 +72,12 @@ export default function BoostrapingModels() {
 
   Voucher.belongsToMany(Nominal, {
     through: VoucherNominal,
-    foreignKey: "nominal_id",
-    // uniqueKey: "nominal_id",
+    foreignKey: "voucher_id",
     as: "nominals",
   });
   Nominal.belongsToMany(Voucher, {
     through: VoucherNominal,
-    foreignKey: "voucher_id",
-    // uniqueKey: "voucher_id",
+    foreignKey: "nominal_id",
     as: "vouchers",
   });
 
@@ -105,14 +103,14 @@ export default function BoostrapingModels() {
 
   PaymentMethod.belongsToMany(Bank, {
     through: PaymentBank,
-    foreignKey: "bank_id",
+    foreignKey: "payment_method_id",
     as: "banks",
     constraints: true,
   });
 
   Bank.belongsToMany(PaymentMethod, {
     through: PaymentBank,
-    foreignKey: "payment_method_id",
+    foreignKey: "bank_id",
     as: "payment_methods",
     constraints: true,
   });
