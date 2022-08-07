@@ -29,7 +29,7 @@ const userValidation = {
       notEmpty: {
         errorMessage: "Enter youe email address",
       },
-      normalizeEmail: true,
+      normalizeEmail: false,
       isEmail: {
         errorMessage: "Invalid email",
       },
