@@ -7,24 +7,27 @@ import BaseError, {
 import Category from "../../models/category.model.js";
 import Voucher from "../../models/voucher.model.js";
 import { findOneVoucher } from "../voucher/voucher.repository.js";
-// import httpStatusCodes from "../../utils/httpStatusCode.js";
-// import { deleteFile } from "../../utils/index.js";
-// import { findBankById } from "../bank/bank.repository.js";
+
+import { findBankById } from "../bank/bank.repository.js";
 // import CategoryModel from "../category/category.model.js";
 import { findAllCategories } from "../category/category.repository.js";
-// import { findNominalById } from "../nominal/nominal.repository.js";
-// import { findPaymentById } from "../payment/payment.repository.js";
-import { findOnePlayer, updatePlayer } from "../player/player.repository.js";
+import { findNominalById } from "../nominal/nominal.repository.js";
+import { findPaymentById } from "../payment/payment.repository.js";
+import {
+  findOnePlayer,
+  findPlayerById,
+  updatePlayer,
+} from "../player/player.repository.js";
 import { httpStatusCodes } from "../../constants/index.constants.js";
 import { UnlinkFile } from "../../helpers/index.helper.js";
 // import TransactionModel from "../transaction/transaction.model.js";
-// import {
-//   createTransaction,
-//   findTransactionById,
-//   findTransactionHistory,
-// } from "../transaction/transaction.repository.js";
+import {
+  createTransaction,
+  // findTransactionById,
+  // findTransactionHistory,
+} from "../transaction/transaction.repository.js";
 // import VoucherModel from "../voucher/voucher.model.js";
-// import { findOneVoucher } from "../voucher/voucher.repository.js";
+import Logger from "../../helpers/logger.helper.js";
 
 const Op = Sequelize.Op;
 
@@ -117,99 +120,116 @@ export const apiGetCategories = async (req, res, next) => {
   }
 };
 
-// export const apiPostCheckout = async (req, res, next) => {
-//   const { accountUser, name, nominal, voucher, payment, bank } = req.body;
-//   try {
-//     const resVoucher = await findOneVoucher({ _id: voucher });
+export const apiPostCheckout = async (req, res, next) => {
+  const { accountGame, name, nominal, voucher, payment, bank } = req.body;
+  try {
+    const resVoucher = await findOneVoucher({
+      where: {
+        voucher_id: voucher,
+      },
+      attributes: {
+        exclude: ["created_at", "updated_at", "admin_id"],
+      },
+    });
 
-//     if (!resVoucher) {
-//       throw new BaseError(
-//         "NOT_FOUND",
-//         httpStatusCodes.NOT_FOUND,
-//         "Voucher game tidak ditemukan.",
-//         true
-//       );
-//     }
+    if (!resVoucher) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "Voucher game tidak ditemukan.",
+        true
+      );
+    }
 
-//     const resNominal = await findNominalById(nominal);
+    const resNominal = await findNominalById(nominal);
 
-//     if (!resNominal) {
-//       throw new BaseError(
-//         "NOT_FOUND",
-//         httpStatusCodes.NOT_FOUND,
-//         "Nominal tidak ditemukan.",
-//         true
-//       );
-//     }
+    if (!resNominal) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "Nominal tidak ditemukan.",
+        true
+      );
+    }
 
-//     const resPayment = await findPaymentById(payment);
+    const resPayment = await findPaymentById(payment);
 
-//     if (!resPayment) {
-//       throw new BaseError(
-//         "NOT_FOUND",
-//         httpStatusCodes.NOT_FOUND,
-//         "Metode pembayaran tidak ditemukan.",
-//         true
-//       );
-//     }
+    if (!resPayment) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "Metode pembayaran tidak ditemukan.",
+        true
+      );
+    }
 
-//     const resBank = await findBankById(bank);
+    const resBank = resPayment.banks.find(bnk => bnk.bank_id === bank);
 
-//     if (!resBank) {
-//       throw new BaseError(
-//         "NOT_FOUND",
-//         httpStatusCodes.NOT_FOUND,
-//         "Metode pembayaran tidak ditemukan.",
-//         true
-//       );
-//     }
+    if (!resBank) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "Bank tidak ditemukan.",
+        true
+      );
+    }
 
-//     const player = await findPlayerById(req.player._id);
+    const player = await findOnePlayer({
+      where: {
+        user_id: req.player.user_id,
+      },
+    });
+    // console.log();
 
-//     let tax = (10 / 100) * resNominal._doc.price;
-//     let value = resNominal._doc.price + tax;
+    let tax = (10 / 100) * resNominal.dataValues.price;
+    let value = resNominal.dataValues.price - tax;
 
-//     console.log("[ResPayment] >>", resPayment);
+    const historyVoucherTopup = {
+      game_name: resVoucher.dataValues.game_name,
+      category: resVoucher.dataValues.category ? resVoucher.category.name : "",
+      thumbnail: resVoucher.dataValues.thumbnail,
+      coin_name: resNominal.dataValues.coin_name,
+      coin_quantity: resNominal.dataValues.coin_quantity,
+      price: +resNominal.dataValues.price,
+    };
 
-//     const payload = {
-//       historyVoucherTopup: {
-//         gameName: resVoucher._doc.name,
-//         category: resVoucher._doc.category ? resVoucher._doc.category.name : "",
-//         thumbnail: resVoucher._doc.thumbnail,
-//         coinName: resNominal._doc.coinName,
-//         coinQuantity: resNominal._doc.coinNominal,
-//         price: resNominal._doc.price,
-//       },
-//       historyPayment: {
-//         name: resBank._doc.name,
-//         type: resPayment._doc.type,
-//         bankName: resBank._doc.bankName,
-//         noRekening: resBank._doc.noRekening,
-//       },
-//       name: name,
-//       accountUser: accountUser,
-//       tax: tax,
-//       value: value,
-//       player: player._id,
-//       historyPlayer: {
-//         name: player?.name,
-//         email: player?.email,
-//         phoneNumber: player?.phoneNumber,
-//       },
-//       category: resVoucher._doc.category?._id,
-//       user: resVoucher._doc.user?._id,
-//     };
+    const historyPayment = {
+      account_name: resBank.dataValues.account_name,
+      type: resPayment.dataValues.type,
+      bank_name: resBank.dataValues.bank_name,
+      no_rekening: resBank.dataValues.no_rekening,
+    };
+    const historyPlayer = {
+      name: player?.user.name,
+      email: player?.user.email,
+      phone_number: player?.user.phone_number,
+    };
 
-//     const result = await createTransaction(payload);
+    const payload = {
+      historyVoucherTopup,
+      historyPayment,
+      historyPlayer,
+      name,
+      name: name,
+      account_game: accountGame,
+      tax: tax,
+      value: value,
+      player_id: player.player_id,
+      category_id: resVoucher.dataValues.category_id,
+      payment_method_id: resPayment.dataValues.payment_method_id,
+      status: "pending",
+    };
 
-//     res.status(200).json({
-//       message: "Checkout Berhasil",
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(new TransfromError(error));
-//   }
-// };
+    const result = await createTransaction(payload);
+
+    res.status(200).json({
+      message: "Checkout Berhasil",
+      data: result,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
 
 // export const apiGetListHistory = async (req, res, next) => {
 //   try {

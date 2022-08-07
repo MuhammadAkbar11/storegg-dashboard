@@ -1,3 +1,5 @@
+// import verifyTemplate from "../../config/mail/verify.js";
+// import { SendEmail } from "../../helpers/email.helper.js";
 import { ApiURL } from "../../helpers/index.helper.js";
 import { ensurePlayerAuth } from "../../middleware/auth.js";
 import { uploadSingleImage } from "../../middleware/upload.js";
@@ -11,12 +13,30 @@ import {
   //   apiGetListHistory,
   apiGetProfile,
   apiGetVouchers,
-  //   apiPostCheckout,
+  apiPostCheckout,
   apiPutProfile,
 } from "./api.controller.js";
 import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
 
 function APIsRoutes(app) {
+  // app.route(ApiURL("/email")).get(async (req, res) => {
+  //   try {
+  //     const email = await SendEmail({
+  //       from: "storegg@storegg.com",
+  //       to: "baaev.legieuvn@gmail.com",
+  //       subject: "Nice Nodemailer test",
+  //       html: verifyTemplate(),
+  //     });
+
+  //     res.json({
+  //       message: "Email Berhasil",
+  //       email,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
+
   // app
   //   .route(joinAPIsURL("/histories/:id"))
   //   .get(ensurePlayerAuth, apiGetDetailHistory);
@@ -26,7 +46,7 @@ function APIsRoutes(app) {
     .route(ApiURL("/auth/signup"))
     .post(uploadSingleImage("/users"), userValidation.signup, apiPlayerSignup);
 
-  // app.route(joinAPIsURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
+  app.route(ApiURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
   // app.route(joinAPIsURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
   // app.route(joinAPIsURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
   app

@@ -9,6 +9,10 @@ import Nominal from "../../models/nominal.model.js";
 import sequelizeConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
 
+const attributes = {
+  exclude: ["created_at", "updated_at"],
+};
+
 export const findListVoucher = async (
   filter = {
     where: {},
@@ -62,19 +66,27 @@ export const findVoucherById = async id => {
   }
 };
 
-export const findOneVoucher = async filter => {
+export const findOneVoucher = async (filter = { attributes }) => {
   try {
     const result = await Voucher.findOne({
       ...filter,
-      attributes: {
-        exclude: ["created_at", "updated_at"],
-      },
+
       include: [
         {
           model: Category,
           as: "category",
           attributes: {
             exclude: ["created_at", "updated_at"],
+          },
+        },
+        {
+          model: Nominal,
+          as: "nominals",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+          through: {
+            attributes: [],
           },
         },
       ],

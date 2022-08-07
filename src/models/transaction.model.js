@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class Transaction extends Model {}
 
@@ -56,6 +58,29 @@ Transaction.init(
     },
   },
   {
+    hooks: {
+      beforeBulkCreate: async function (records, options) {
+        for (let i = 0; i < records.length; i++) {
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoNumberField(
+            "transaction_id",
+            `_${datePrefix}`,
+            12
+          );
+          records[i].dataValues.transaction_id = ID;
+        }
+        options.individualHooks = false;
+      },
+      beforeCreate: async function (record, options) {
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoNumberField(
+          "transaction_id",
+          `_${datePrefix}`,
+          12
+        );
+        record.dataValues.transaction_id = ID;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "Transactions",
     tableName: "gg_transactions",

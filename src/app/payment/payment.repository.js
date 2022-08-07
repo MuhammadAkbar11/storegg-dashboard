@@ -25,10 +25,19 @@ export const findAllPayment = async filter => {
 export const findPaymentById = async id => {
   try {
     const result = await PaymentMethod.findByPk(id, {
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
       include: [
         {
           model: Bank,
           as: "banks",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+          through: {
+            attributes: [],
+          },
         },
       ],
     });

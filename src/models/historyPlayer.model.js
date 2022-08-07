@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class HistoryPlayer extends Model {}
 
@@ -7,6 +9,7 @@ HistoryPlayer.init(
   {
     history_player_id: {
       primaryKey: true,
+      allowNull: true,
       type: DataTypes.STRING(25),
       field: "history_player_id",
     },
@@ -27,6 +30,21 @@ HistoryPlayer.init(
     },
   },
   {
+    hooks: {
+      beforeBulkCreate: async function (records, options) {
+        for (let i = 0; i < records.length; i++) {
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoNumberField("history_player_id", datePrefix, 13);
+          records[i].dataValues.history_player_id = ID;
+        }
+        options.individualHooks = false;
+      },
+      beforeCreate: async function (record, options) {
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoNumberField("history_player_id", datePrefix, 13);
+        record.dataValues.history_player_id = ID;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "HistoryPlayers",
     tableName: "gg_history_players",

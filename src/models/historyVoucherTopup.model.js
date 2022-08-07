@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelizeConnection from "../config/db.config.js";
+import AutoNumberField from "../helpers/autoNumberField.helper.js";
+import DayjsUTC from "../helpers/date.helper.js";
 
 class HistoryVoucherTopup extends Model {}
 
@@ -7,18 +9,19 @@ HistoryVoucherTopup.init(
   {
     history_vcrtopup_id: {
       primaryKey: true,
+      allowNull: true,
       type: DataTypes.STRING(25),
       field: "history_vcrtopup_id",
     },
     game_name: {
       type: DataTypes.STRING(128),
       allowNull: false,
-      field: "name",
+      field: "game_name",
     },
     coin_name: {
       allowNull: false,
       type: DataTypes.STRING(15),
-      field: "game_coin_name",
+      field: "coin_name",
     },
     category: {
       allowNull: true,
@@ -41,6 +44,25 @@ HistoryVoucherTopup.init(
     },
   },
   {
+    hooks: {
+      beforeBulkCreate: async function (records, options) {
+        for (let i = 0; i < records.length; i++) {
+          const datePrefix = DayjsUTC().format("DDMMYY");
+          const ID = await AutoNumberField(
+            "history_vcrtopup_id",
+            datePrefix,
+            13
+          );
+          records[i].dataValues.history_vcrtopup_id = ID;
+        }
+        options.individualHooks = false;
+      },
+      beforeCreate: async function (record, options) {
+        const datePrefix = DayjsUTC().format("DDMMYY");
+        const ID = await AutoNumberField("history_vcrtopup_id", datePrefix, 13);
+        record.dataValues.history_vcrtopup_id = ID;
+      },
+    },
     sequelize: sequelizeConnection,
     modelName: "HistoryVoucherTopups",
     tableName: "gg_history_vcrtopup",

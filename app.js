@@ -137,6 +137,7 @@ BoostrapingModels();
 
   if (force) createAutoNumberTable(tables);
   force && Logger.info("[SEQUELIZE] Sync sequelize done!");
+
   app.listen(envConfigs.PORT, () =>
     Logger.info(`[SERVER] app running on port ${envConfigs.PORT}`)
   );
