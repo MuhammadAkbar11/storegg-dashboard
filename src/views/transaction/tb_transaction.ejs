@@ -82,6 +82,8 @@
                 </td>
                 <td data-order="false">
                   <div class="d-flex gap-1 align-items-center ">
+
+                    <% if(ts.status === 'pending') { %>
                     <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
                       style="display: inline-block;">
                       <input type="hidden" name="status" value="failed">
@@ -100,6 +102,9 @@
                         <i data-feather='check-circle'></i>
                       </button>
                     </form>
+                    <%  } %>
+
+
                     <!-- <div>
                       <a href="" class="btn btn-icon rounded-circle btn-flat-info waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Detail Transaksi">

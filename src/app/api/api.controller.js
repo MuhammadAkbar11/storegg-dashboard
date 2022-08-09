@@ -23,7 +23,7 @@ import { UnlinkFile } from "../../helpers/index.helper.js";
 // import TransactionModel from "../transaction/transaction.model.js";
 import {
   createTransaction,
-  // findTransactionById,
+  findTransactionById,
   findTransactionHistory,
 } from "../transaction/transaction.repository.js";
 // import VoucherModel from "../voucher/voucher.model.js";
@@ -249,29 +249,23 @@ export const apiGetListHistory = async (req, res, next) => {
   }
 };
 
-// export const apiGetDetailHistory = async (req, res, next) => {
-//   const { id: ID } = req.params;
-//   try {
-//     const history = await findTransactionById(ID);
+export const apiGetDetailHistory = async (req, res, next) => {
+  const { id: ID } = req.params;
+  try {
+    const history = await findTransactionById(ID);
 
-//     if (!history) {
-//       throw new BaseError("NOT_FOUND", 404, "History tidak ditemukan", true);
-//     }
+    if (!history) {
+      throw new BaseError("NOT_FOUND", 404, "History tidak ditemukan", true);
+    }
 
-//     return res.status(200).json({
-//       message: "History berhasil didapatkan",
-//       data: history,
-//     });
-//   } catch (error) {
-//     if (error.kind == "ObjectId") {
-//       error.name = "NOT_FOUND";
-//       error.statusCode = 404;
-//       error.message = "History Tidak ditemukan";
-//     }
-
-//     next(new TransfromError(error));
-//   }
-// };
+    return res.status(200).json({
+      message: "History berhasil didapatkan",
+      data: history,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
 
 // export const apiGetDashboard = async (req, res, next) => {
 //   try {

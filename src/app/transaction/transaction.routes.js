@@ -2,7 +2,7 @@ import { ensureAuth } from "../../middleware/auth.js";
 import {
   index,
   // postTransaction,
-  putTransaction,
+  // putTransaction,
   updateTransactionStatus,
   // deleteTransaction,
 } from "./transaction.controller.js";

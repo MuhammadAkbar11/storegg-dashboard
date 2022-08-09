@@ -8,7 +8,7 @@ import userValidation from "../user/user.validator.js";
 import {
   apiGetCategories,
   //   apiGetDashboard,
-  //   apiGetDetailHistory,
+  apiGetDetailHistory,
   apiGetDetailVoucher,
   apiGetListHistory,
   apiGetProfile,
@@ -37,9 +37,9 @@ function APIsRoutes(app) {
   //   }
   // });
 
-  // app
-  //   .route(joinAPIsURL("/histories/:id"))
-  //   .get(ensurePlayerAuth, apiGetDetailHistory);
+  app
+    .route(ApiURL("/histories/:id"))
+    .get(ensurePlayerAuth, apiGetDetailHistory);
   app.route(ApiURL("/vouchers/:ID")).get(apiGetDetailVoucher);
   app.route(ApiURL("/auth/signin")).post(userValidation.login, apiPlayerSignin);
   app

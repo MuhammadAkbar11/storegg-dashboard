@@ -71,7 +71,49 @@ export const findAllTransaction = async (filter = {}) => {
 
 export const findTransactionById = async id => {
   try {
-    const result = await Transaction.findById(id);
+    const result = await Transaction.findByPk(id, {
+      attributes: {
+        exclude: ["updated_at", "history_id"],
+      },
+      include: [
+        {
+          model: History,
+          as: "history",
+          attributes: {
+            exclude: [
+              "created_at",
+              "updated_at",
+              "history_vcrtopup_id",
+              "history_payment_id",
+              "history_player_id",
+            ],
+          },
+          include: [
+            {
+              model: HistoryPlayer,
+              as: "history_player",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryPayment,
+              as: "history_payment",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryVoucherTopup,
+              as: "history_voucher",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+          ],
+        },
+      ],
+    });
     return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] findTransactionById");
@@ -161,9 +203,15 @@ export const deleteTransactionById = async id => {
 
 export const updateTransactionStatusById = async (id, statusData) => {
   try {
-    let payment = await Transaction.findOne({ _id: id });
-    payment.status = statusData;
-    return await payment.save();
+    const result = await Transaction.update(
+      { status: statusData },
+      {
+        where: {
+          transaction_id: id,
+        },
+      }
+    );
+    return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] updateTransactionStatusById");
     throw new TransfromError(error);
