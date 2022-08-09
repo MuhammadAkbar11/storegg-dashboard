@@ -149,40 +149,40 @@ export default function BoostrapingModels() {
 
   History.hasOne(Transaction, {
     foreignKey: "history_id",
-    as: "transactions",
+    as: "transaction",
   });
   Transaction.belongsTo(History, {
     foreignKey: "history_id",
-    as: "histories",
+    as: "history",
     constraints: true,
   });
 
   HistoryVoucherTopup.hasOne(History, {
     foreignKey: "history_vcrtopup_id",
-    as: "histories",
+    as: "history",
   });
   History.belongsTo(HistoryVoucherTopup, {
     foreignKey: "history_vcrtopup_id",
-    as: "history_vcrtopups",
+    as: "history_voucher",
   });
 
   HistoryPayment.hasOne(History, {
     foreignKey: "history_payment_id",
-    as: "histories",
+    as: "history",
   });
 
   History.belongsTo(HistoryPayment, {
     foreignKey: "history_payment_id",
-    as: "history_payments",
+    as: "history_payment",
   });
 
   History.belongsTo(HistoryPlayer, {
     foreignKey: "history_player_id",
-    as: "history_players",
+    as: "history_player",
   });
   HistoryPlayer.hasOne(History, {
     foreignKey: "history_player_id",
-    as: "histories",
+    as: "history",
   });
 }
 

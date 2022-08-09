@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import sequelizeConnection from "../../config/db.config.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import Logger from "../../helpers/logger.helper.js";
@@ -7,6 +8,8 @@ import HistoryPlayer from "../../models/historyPlayer.model.js";
 import HistoryVoucherTopup from "../../models/historyVoucherTopup.model.js";
 import Transaction from "../../models/transaction.model.js";
 
+const Op = Sequelize.Op;
+
 export const findAllTransaction = async () => {
   try {
     const result = await Transaction.find({})
@@ -14,7 +17,7 @@ export const findAllTransaction = async () => {
       .sort({ updatedAt: -1 });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findAllTransaction", error);
+    Logger.error(error, "[EXCEPTION] findAllTransaction");
     throw new TransfromError(error);
   }
 };
@@ -24,7 +27,7 @@ export const findTransactionById = async id => {
     const result = await Transaction.findById(id);
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] findOneTransaction", error);
+    Logger.error(error, "[EXCEPTION] findTransactionById");
     throw new TransfromError(error);
   }
 };
@@ -84,7 +87,7 @@ export const createTransaction = async payload => {
     return result;
   } catch (error) {
     await t.rollback();
-    console.error("[EXCEPTION] createTransaction", error);
+    Logger.error(error, "[EXCEPTION] createTransaction");
     throw new TransfromError(error);
   }
 };
@@ -94,7 +97,7 @@ export const updateTransaction = async (id, data) => {
     const result = await Transaction.findByIdAndUpdate(id, data);
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] updateTransaction", error);
+    Logger.error(error, "[EXCEPTION] updateTransaction");
     throw new TransfromError(error);
   }
 };
@@ -104,7 +107,7 @@ export const deleteTransactionById = async id => {
     const result = await Transaction.deleteOne({ _id: id });
     return result;
   } catch (error) {
-    console.error("[EXCEPTION] deleteTransactionById", error);
+    Logger.error(error, "[EXCEPTION] deleteTransactionById");
     throw new TransfromError(error);
   }
 };
@@ -115,44 +118,89 @@ export const updateTransactionStatusById = async (id, statusData) => {
     payment.status = statusData;
     return await payment.save();
   } catch (error) {
-    console.error("[EXCEPTION] updateTransactionStatusById", error);
+    Logger.error(error, "[EXCEPTION] updateTransactionStatusById");
     throw new TransfromError(error);
   }
 };
 
-export const findTransactionHistory = async data => {
+export const findTransactionHistory = async values => {
   try {
-    const { status, player } = data;
-    let query = {};
+    const { status, player } = values;
+    let where = {};
 
-    if (status.length) {
-      query = {
-        ...query,
-        status: { $regex: `${status}`, $options: "i" },
+    if (status?.length) {
+      where = {
+        ...where,
+        status: {
+          [Op.like]: `%${status}%`,
+        },
       };
     }
 
     if (player._id) {
-      query = {
-        ...query,
-        player: player._id,
+      where = {
+        ...where,
+        player: player.player_id,
       };
     }
 
-    const history = await Transaction.find(query);
-    const total = await Transaction.aggregate([
-      { $match: query },
-      {
-        $group: {
-          _id: null,
-          value: { $sum: "$value" },
-        },
+    const history = await Transaction.findAll({
+      where: where,
+      attributes: {
+        exclude: ["updated_at", "history_id"],
       },
-    ]);
+      include: [
+        {
+          model: History,
+          as: "history",
+          attributes: {
+            exclude: [
+              "created_at",
+              "updated_at",
+              "history_vcrtopup_id",
+              "history_payment_id",
+              "history_player_id",
+            ],
+          },
+          include: [
+            {
+              model: HistoryPlayer,
+              as: "history_player",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryPayment,
+              as: "history_payment",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryVoucherTopup,
+              as: "history_voucher",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+          ],
+        },
+      ],
+    });
 
-    return { history, total };
+    const total = await Transaction.findAll({
+      where: where,
+      attributes: [
+        "value",
+        [Sequelize.fn("SUM", Sequelize.col("value")), "value"],
+      ],
+      group: "value",
+    });
+
+    return { history, total: total };
   } catch (error) {
-    console.error("[EXCEPTION] findTransactionHistory", error);
+    Logger.error(error, "[EXCEPTION] findTransactionHistory");
     throw new TransfromError(error);
   }
 };

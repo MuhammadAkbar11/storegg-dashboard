@@ -24,7 +24,7 @@ import { UnlinkFile } from "../../helpers/index.helper.js";
 import {
   createTransaction,
   // findTransactionById,
-  // findTransactionHistory,
+  findTransactionHistory,
 } from "../transaction/transaction.repository.js";
 // import VoucherModel from "../voucher/voucher.model.js";
 import Logger from "../../helpers/logger.helper.js";
@@ -231,24 +231,23 @@ export const apiPostCheckout = async (req, res, next) => {
   }
 };
 
-// export const apiGetListHistory = async (req, res, next) => {
-//   try {
-//     const { status = "" } = req.query;
+export const apiGetListHistory = async (req, res, next) => {
+  try {
+    const { status = "" } = req.query;
+    const { history, total } = await findTransactionHistory({
+      status,
+      player: req.player,
+    });
 
-//     const { history, total } = await findTransactionHistory({
-//       status,
-//       player: req.player,
-//     });
-
-//     res.status(200).json({
-//       message: "Daftar history berhasil didapatkan",
-//       data: history,
-//       total: total.length ? total[0].value : 0,
-//     });
-//   } catch (error) {
-//     next(new TransfromError(error));
-//   }
-// };
+    res.status(200).json({
+      message: "Daftar history berhasil didapatkan",
+      data: history,
+      total: total?.length ? total[0].value : 0,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
 
 // export const apiGetDetailHistory = async (req, res, next) => {
 //   const { id: ID } = req.params;

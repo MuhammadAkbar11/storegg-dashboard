@@ -10,7 +10,7 @@ import {
   //   apiGetDashboard,
   //   apiGetDetailHistory,
   apiGetDetailVoucher,
-  //   apiGetListHistory,
+  apiGetListHistory,
   apiGetProfile,
   apiGetVouchers,
   apiPostCheckout,
@@ -48,7 +48,7 @@ function APIsRoutes(app) {
 
   app.route(ApiURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
   // app.route(joinAPIsURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
-  // app.route(joinAPIsURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
+  app.route(ApiURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
   app
     .route(ApiURL("/profile"))
     .get(ensurePlayerAuth, apiGetProfile)

@@ -47,7 +47,7 @@ async function ensurePlayerAuth(req, res, next) {
 
     let player = await findOnePlayer({
       where: {
-        user_id: payload.user_id,
+        user_id: payload?.user_id ?? null,
       },
       attributes: {
         exclude: ["created_at", "updated_at"],
