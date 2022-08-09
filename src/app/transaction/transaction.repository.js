@@ -6,15 +6,62 @@ import History from "../../models/history.model.js";
 import HistoryPayment from "../../models/historyPayment.model.js";
 import HistoryPlayer from "../../models/historyPlayer.model.js";
 import HistoryVoucherTopup from "../../models/historyVoucherTopup.model.js";
+import Player from "../../models/player.model.js";
 import Transaction from "../../models/transaction.model.js";
 
 const Op = Sequelize.Op;
 
-export const findAllTransaction = async () => {
+export const findAllTransaction = async (filter = {}) => {
   try {
-    const result = await Transaction.find({})
-      .populate("player")
-      .sort({ updatedAt: -1 });
+    const result = await Transaction.findAll({
+      ...filter,
+      include: [
+        {
+          model: Player,
+          as: "player",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
+        {
+          model: History,
+          as: "history",
+          attributes: {
+            exclude: [
+              "created_at",
+              "updated_at",
+              "history_vcrtopup_id",
+              "history_payment_id",
+              "history_player_id",
+            ],
+          },
+          include: [
+            {
+              model: HistoryPlayer,
+              as: "history_player",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryPayment,
+              as: "history_payment",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+            {
+              model: HistoryVoucherTopup,
+              as: "history_voucher",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+          ],
+        },
+      ],
+    });
+
     return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] findAllTransaction");

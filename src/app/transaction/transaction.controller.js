@@ -4,11 +4,11 @@ import BaseError, {
   ValidationError,
 } from "../../helpers/baseError.helper.js";
 import {
-  createTransaction,
-  deleteTransactionById,
+  // createTransaction,
+  // deleteTransactionById,
   findAllTransaction,
   findTransactionById,
-  updateTransaction,
+  // updateTransaction,
   updateTransactionStatusById,
 } from "./transaction.repository.js";
 
@@ -69,57 +69,57 @@ export const index = async (req, res, next) => {
 //   }
 // };
 
-export const putTransaction = async (req, res, next) => {
-  const ID = req.params.id;
-  const {
-    historyVoucherTopup,
-    historyPayment,
-    name,
-    accountUser,
-    tax,
-    value,
-    status,
-  } = req.body;
+// export const putTransaction = async (req, res, next) => {
+//   const ID = req.params.id;
+//   const {
+//     historyVoucherTopup,
+//     historyPayment,
+//     name,
+//     accountUser,
+//     tax,
+//     value,
+//     status,
+//   } = req.body;
 
-  const validate = validationResult(req);
-  if (!validate.isEmpty()) {
-    const errValidate = new ValidationError(validate.array(), "", {
-      values: req.body,
-    });
-    // response error validation
-    return;
-  }
+//   const validate = validationResult(req);
+//   if (!validate.isEmpty()) {
+//     const errValidate = new ValidationError(validate.array(), "", {
+//       values: req.body,
+//     });
+//     // response error validation
+//     return;
+//   }
 
-  try {
-    const transaction = await findTransactionById(ID);
+//   try {
+//     const transaction = await findTransactionById(ID);
 
-    if (!transaction) {
-      throw new BaseError(
-        "NOT_FOUND",
-        404,
-        "transaction tidak ditemukan",
-        true
-      );
-    }
+//     if (!transaction) {
+//       throw new BaseError(
+//         "NOT_FOUND",
+//         404,
+//         "transaction tidak ditemukan",
+//         true
+//       );
+//     }
 
-    const updatedTransactionData = {
-      historyVoucherTopup: historyVoucherTopup,
-      historyPayment: historyPayment,
-      name: name,
-      accountUser: accountUser,
-      tax: tax,
-      value: value,
-      status: status,
-    };
+//     const updatedTransactionData = {
+//       historyVoucherTopup: historyVoucherTopup,
+//       historyPayment: historyPayment,
+//       name: name,
+//       accountUser: accountUser,
+//       tax: tax,
+//       value: value,
+//       status: status,
+//     };
 
-    await updateTransaction(ID, updatedTransactionData);
+//     await updateTransaction(ID, updatedTransactionData);
 
-    // Response Success
-  } catch (error) {
-    const trError = new TransfromError(error);
-    next(trError);
-  }
-};
+//     // Response Success
+//   } catch (error) {
+//     const trError = new TransfromError(error);
+//     next(trError);
+//   }
+// };
 
 export const updateTransactionStatus = async (req, res, next) => {
   const ID = req.params.id;

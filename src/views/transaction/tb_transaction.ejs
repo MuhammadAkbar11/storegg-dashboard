@@ -35,7 +35,7 @@
                   currency: "IDR",
                 }); %>
               <tr>
-                <td style="width: 30px;"><%= no++  %></td>
+                <td><span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
                 <td>
                   <div class=" h-100 text-capitalize ">
                     <%= ts.name  %>
@@ -43,27 +43,27 @@
                 </td>
                 <td>
                   <div class="d-flex ">
-                    <img height="80" src="<%= ts.historyVoucherTopup.thumbnail %>"
-                      alt="Thumbnail <%= ts?.historyVoucherTopup?.gameName %>">
+                    <img height="80" src="<%= ts?.history?.history_voucher?.thumbnail %>"
+                      alt="Thumbnail <%= ts?.history?.history_voucher?.game_name %>">
                     <div class="px-1">
                       <span class="text-primary text-nowrap ">
-                        <%= ts?.historyVoucherTopup?.gameName %>
+                        <%= ts?.history?.history_voucher?.game_name %>
                       </span>
                       <br>
                       <span class="badge badge-light-secondary " style="margin-top: 7px;">
-                        <%= ts?.historyVoucherTopup?.category %>
+                        <%= ts?.history?.history_voucher?.category %>
                       </span>
                     </div>
                   </div>
 
                 </td>
                 <td>
-                  <%= ts.accountUser  %>
+                  <%= ts.account_game  %>
 
                 </td>
                 <td class=" text-nowrap ">
-                  <%= ts?.historyVoucherTopup?.coinQuantity %>
-                  <%= ts?.historyVoucherTopup?.coinName %></td>
+                  <%= ts?.history?.history_voucher?.coin_quantity %>
+                  <%= ts?.history?.history_voucher?.coin_name %></td>
                 <td> <%= totalPrice %></td>
                 <td>
                   <% if(ts.status === 'pending' ) { %>
@@ -82,7 +82,8 @@
                 </td>
                 <td data-order="false">
                   <div class="d-flex gap-1 align-items-center ">
-                    <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
+                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
+                      style="display: inline-block;">
                       <input type="hidden" name="status" value="failed">
                       <input type="hidden" name="_method" value="PUT">
                       <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
@@ -90,7 +91,8 @@
                         <i data-feather='x-circle'></i>
                       </button>
                     </form>
-                    <form action="/transaction/status/<%= ts._id %>" method="POST" style="display: inline-block;">
+                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
+                      style="display: inline-block;">
                       <input type="hidden" name="status" value="success">
                       <input type="hidden" name="_method" value="PUT">
                       <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
@@ -118,11 +120,11 @@
                         <i data-feather='grid'></i>
                       </button>
                       <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="/transaction-info/<%= ts._id %>">
+                        <a class="dropdown-item" href="/transaction-info/<%= ts.transaction_id %>">
                           <i data-feather="info" class="me-50"></i>
                           <span>Invoice</span>
                         </a>
-                        <a class="dropdown-item" href="/transaction-edit/<%= ts._id %>">
+                        <a class="dropdown-item" href="/transaction-edit/<%= ts.transaction_id %>">
                           <i data-feather="edit-2" class="me-50"></i>
                           <span>Edit</span>
                         </a>

@@ -138,7 +138,7 @@ export default function BoostrapingModels() {
 
   Transaction.belongsTo(Player, {
     foreignKey: "player_id",
-    as: "players",
+    as: "player",
     constraints: true,
   });
   Transaction.belongsTo(PaymentMethod, {

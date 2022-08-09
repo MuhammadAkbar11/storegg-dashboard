@@ -42,7 +42,11 @@
   var dt_transaction_table = $('#transaction-datatable')
 
   if (dt_transaction_table.length) {
-    dt_transaction_table.DataTable({});
+    dt_transaction_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
   }
 </script>
 
