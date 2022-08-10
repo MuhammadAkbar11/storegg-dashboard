@@ -64,6 +64,7 @@ async function ensurePlayerAuth(req, res, next) {
     }
 
     const authPlayer = {
+      player_id: player.player_id,
       user_id: player.user.user_id,
       username: player.user.username,
       name: player.user.name,
