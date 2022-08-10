@@ -304,7 +304,6 @@ export const findTransactionHistory = async values => {
         "value",
         [Sequelize.fn("SUM", Sequelize.col("value")), "value"],
       ],
-      group: "value",
     });
 
     return { history, total: total };
