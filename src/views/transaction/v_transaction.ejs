@@ -45,7 +45,14 @@
     dt_transaction_table.DataTable({
       "drawCallback": function (settings) {
         feather.replace();
-      }
+      },
+      order: [
+        [0, "desc"]
+      ],
+      "columnDefs": [{
+        "targets": 7,
+        "orderable": false
+      }]
     });
   }
 </script>
