@@ -122,7 +122,7 @@ export default function BoostrapingModels() {
 
   Transaction.belongsTo(Category, {
     foreignKey: "category_id",
-    as: "categories",
+    as: "category",
     constraints: true,
   });
 

@@ -1,8 +1,5 @@
-import { validationResult } from "express-validator";
-import BaseError, {
-  TransfromError,
-  ValidationError,
-} from "../../helpers/baseError.helper.js";
+// import { validationResult } from "express-validator";
+import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
 import {
   // createTransaction,
   // deleteTransactionById,
@@ -16,7 +13,11 @@ export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    const transactions = await findAllTransaction();
+    const transactions = await findAllTransaction({
+      where: {},
+      order: [["transaction_id", "desc"]],
+    });
+
     res.render("transaction/v_transaction", {
       title: "Transaction",
       path: "/transaction",

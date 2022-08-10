@@ -7,7 +7,7 @@ import playerValidation from "../player/player.validator.js";
 import userValidation from "../user/user.validator.js";
 import {
   apiGetCategories,
-  //   apiGetDashboard,
+  apiGetDashboard,
   apiGetDetailHistory,
   apiGetDetailVoucher,
   apiGetListHistory,
@@ -47,7 +47,7 @@ function APIsRoutes(app) {
     .post(uploadSingleImage("/users"), userValidation.signup, apiPlayerSignup);
 
   app.route(ApiURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
-  // app.route(joinAPIsURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
+  app.route(ApiURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
   app.route(ApiURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
   app
     .route(ApiURL("/profile"))

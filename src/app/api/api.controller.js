@@ -23,11 +23,13 @@ import { UnlinkFile } from "../../helpers/index.helper.js";
 // import TransactionModel from "../transaction/transaction.model.js";
 import {
   createTransaction,
+  findAllTransaction,
   findTransactionById,
   findTransactionHistory,
 } from "../transaction/transaction.repository.js";
 // import VoucherModel from "../voucher/voucher.model.js";
 import Logger from "../../helpers/logger.helper.js";
+import Transaction from "../../models/transaction.model.js";
 
 const Op = Sequelize.Op;
 
@@ -267,41 +269,54 @@ export const apiGetDetailHistory = async (req, res, next) => {
   }
 };
 
-// export const apiGetDashboard = async (req, res, next) => {
-//   try {
-//     const count = await TransactionModel.aggregate([
-//       { $match: { player: req.player._id } },
-//       {
-//         $group: {
-//           _id: "$category",
-//           value: { $sum: "$value" },
-//         },
-//       },
-//     ]);
+export const apiGetDashboard = async (req, res, next) => {
+  try {
+    // const count = await TransactionModel.aggregate([
+    //   { $match: { player: req.player._id } },
+    //   {
+    //     $group: {
+    //       _id: "$category",
+    //       value: { $sum: "$value" },
+    //     },
+    //   },
+    // ]);
 
-//     const category = await CategoryModel.find({});
+    const count = await Transaction.findAll(
+      {
+        where: { player_id: req.player.player_id },
+        attributes: [
+          "category_id",
+          [Sequelize.fn("sum", Sequelize.col("value")), "value"],
+        ],
+        group: ["category_id"],
+        raw: true,
+      },
+      false
+    );
 
-//     category.forEach(element => {
-//       count.forEach(data => {
-//         if (data._id.toString() === element._id.toString()) {
-//           data.name = element.name;
-//         }
-//       });
-//     });
+    const category = await findAllCategories({ where: {} });
 
-//     const history = await TransactionModel.find({ player: req.player._id })
-//       .populate("category")
-//       .sort({ updatedAt: -1 });
+    category.forEach(element => {
+      count.forEach(data => {
+        if (data.category_id === element.category_id) {
+          data.name = element.name;
+        }
+      });
+    });
 
-//     res.status(200).json({
-//       message: "Berhasil mendapat data Dashboard",
-//       data: history,
-//       count: count,
-//     });
-//   } catch (error) {
-//     next(new TransfromError(error));
-//   }
-// };
+    const history = await findAllTransaction({
+      where: { player_id: req.player.player_id },
+    });
+
+    res.status(200).json({
+      message: "Berhasil mendapat data Dashboard",
+      data: history,
+      count: count,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
 
 export const apiGetProfile = async (req, res, next) => {
   try {

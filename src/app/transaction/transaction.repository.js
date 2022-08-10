@@ -2,6 +2,7 @@ import Sequelize from "sequelize";
 import sequelizeConnection from "../../config/db.config.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import Logger from "../../helpers/logger.helper.js";
+import Category from "../../models/category.model.js";
 import History from "../../models/history.model.js";
 import HistoryPayment from "../../models/historyPayment.model.js";
 import HistoryPlayer from "../../models/historyPlayer.model.js";
@@ -11,11 +12,18 @@ import Transaction from "../../models/transaction.model.js";
 
 const Op = Sequelize.Op;
 
-export const findAllTransaction = async (filter = {}) => {
-  try {
-    const result = await Transaction.findAll({
+export const findAllTransaction = async (filter = {}, associate = true) => {
+  if (associate) {
+    filter = {
       ...filter,
       include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
         {
           model: Player,
           as: "player",
@@ -60,6 +68,12 @@ export const findAllTransaction = async (filter = {}) => {
           ],
         },
       ],
+    };
+  }
+
+  try {
+    const result = await Transaction.findAll({
+      ...filter,
     });
 
     return result;
@@ -232,10 +246,10 @@ export const findTransactionHistory = async values => {
       };
     }
 
-    if (player._id) {
+    if (player.player_id) {
       where = {
         ...where,
-        player: player.player_id,
+        player_id: player.player_id,
       };
     }
 
