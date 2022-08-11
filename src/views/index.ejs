@@ -39,76 +39,349 @@
     </div>
     <div class="content-body">
 
-      <div class="row match-height ">
-        <div class="col-xl-8 col-md-6 col-12">
-          <div class="card card-statistics">
+      <!-- Stats Horizontal Card -->
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Statistics</h4>
-              <div class="d-flex align-items-center">
-                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>
+              <div>
+                <h2 class="fw-bolder mb-0"><%= widgets.transaction %> </h2>
+                <p class="card-text">Transaction</p>
+              </div>
+              <div class="avatar bg-light-primary p-50 m-0">
+                <div class="avatar-content">
+
+                  <i data-feather="trending-up" class="font-medium-5"></i>
+                </div>
               </div>
             </div>
-            <div class="card-body statistics-body">
-              <div class="row">
-                <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                  <div class="d-flex flex-row">
-                    <div class="avatar bg-light-primary me-2">
-                      <div class="avatar-content">
-                        <i data-feather="trending-up" class="avatar-icon"></i>
-                      </div>
-                    </div>
-                    <div class="my-auto">
-                      <h4 class="fw-bolder mb-0">230k</h4>
-                      <p class="card-text font-small-3 mb-0">Sales</p>
-                    </div>
-                  </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="fw-bolder mb-0"><%= widgets.player  %></h2>
+                <p class="card-text">Players</p>
+              </div>
+              <div class="avatar bg-light-success p-50 m-0">
+                <div class="avatar-content">
+                  <i data-feather='users' class="font-medium-5"></i>
                 </div>
-                <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                  <div class="d-flex flex-row">
-                    <div class="avatar bg-light-info me-2">
-                      <div class="avatar-content">
-                        <i data-feather="user" class="avatar-icon"></i>
-                      </div>
-                    </div>
-                    <div class="my-auto">
-                      <h4 class="fw-bolder mb-0">8.549k</h4>
-                      <p class="card-text font-small-3 mb-0">Customers</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                  <div class="d-flex flex-row">
-                    <div class="avatar bg-light-danger me-2">
-                      <div class="avatar-content">
-                        <i data-feather='dribbble' class="avatar-icon"></i>
-                      </div>
-                    </div>
-                    <div class="my-auto">
-                      <h4 class="fw-bolder mb-0">1.423k</h4>
-                      <p class="card-text font-small-3 mb-0">Games</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-12">
-                  <div class="d-flex flex-row">
-                    <div class="avatar bg-light-success me-2">
-                      <div class="avatar-content">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="fw-bolder mb-0"><%= widgets.voucher  %> </h2>
+                <p class="card-text">Vouchers</p>
+              </div>
+              <div class="avatar bg-light-danger p-50 m-0">
+                <div class="avatar-content">
+                  <i data-feather="box" class="font-medium-5"></i>
 
-                        <i data-feather="dollar-sign"></i>
-                      </div>
-                    </div>
-                    <div class="my-auto">
-                      <h4 class="fw-bolder mb-0">$9745</h4>
-                      <p class="card-text font-small-3 mb-0">Revenue</p>
-                    </div>
-                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h4 class="fw-bolder mb-0"><%= widgets.revenue %> </h4>
+                <p class="card-text">Revenue</p>
+              </div>
+              <div class="avatar bg-light-warning p-50 m-0">
+                <div class="avatar-content">
+                  <i data-feather="dollar-sign" class="font-medium-5"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!--/ Stats Horizontal Card -->
 
+
+
+      <div class="row match-height ">
+
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between">
+              <h4 class="card-title">Voucher Topups</h4>
+              <div class=" text-white-50 ">Last Month</div>
+            </div>
+            <div class="card-body">
+              <div id="product-order-chart" data-chart="<%= JSON.stringify(topup?.data) %>"></div>
+              <div class="d-flex justify-content-between mb-1">
+                <div class="d-flex align-items-center">
+                  <i data-feather="circle" class="font-medium-1 text-success"></i>
+                  <span class="fw-bold ms-75">Finished</span>
+                </div>
+                <span><%= topup?.count?.success %> </span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <div class="d-flex align-items-center">
+                  <i data-feather="circle" class="font-medium-1 text-warning"></i>
+                  <span class="fw-bold ms-75">Pending</span>
+                </div>
+                <span><%= topup?.count?.pending %> </span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i data-feather="circle" class="font-medium-1 text-danger"></i>
+                  <span class="fw-bold ms-75">Rejected</span>
+                </div>
+                <span><%= topup?.count?.failed %> </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sessions Card -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center ">
+              <h4 class="my-0">Topup by categories</h4>
+              <div class=" text-white-50">Last Years</div>
+            </div>
+            <div class="card-body">
+              <div id="session-chart" class="my-1" data-chart="<%= JSON.stringify(categoriesTopup?.data) %>"></div>
+
+              <% categoriesTopup.count.map(ctt => { %>
+
+              <div class="d-flex justify-content-between mb-1">
+                <div class="d-flex align-items-center">
+                  <% if(ctt.name === "Mobile") { %>
+                  <i data-feather="tablet" class="font-medium-2 text-warning"></i>
+
+
+                  <% } else if (ctt.name === "Desktop") { %>
+                  <i data-feather="monitor" class="font-medium-2 text-primary"></i>
+                  <% } else { %>
+                  <i data-feather="monitor" class="font-medium-2 text-danger"></i>
+                  <% } %>
+
+                  <span class="fw-bold ms-75 me-25"><%= ctt?.name %> </span>
+                  <span>- <%= ctt?.percentage %> </span>
+                </div>
+                <div>
+                  <span><%= ctt?.count  %></span>
+                  <!-- <span>2%</span>
+                  <i data-feather="arrow-up" class="text-success"></i> -->
+                </div>
+              </div>
+
+              <% }) %>
+
+
+            </div>
+          </div>
+        </div>
+        <!--/ Sessions Card -->
+        <!-- Transaction Card -->
+        <div class="col-md-4 col-12">
+          <div class="card card-transaction">
+            <div class="card-header">
+              <h4 class="card-title">Best Selling Vouchers</h4>
+              <div class="dropdown chart-dropdown">
+                <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" href="#">Last 28 Days</a>
+                  <a class="dropdown-item" href="#">Last Month</a>
+                  <a class="dropdown-item" href="#">Last Year</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="transaction-item">
+                <div class="d-flex">
+                  <div class="avatar bg-light-primary rounded float-start">
+                    <div class="avatar-content">
+                      <i data-feather="pocket" class="avatar-icon font-medium-3"></i>
+                    </div>
+                  </div>
+                  <div class="transaction-percentage">
+                    <h6 class="transaction-title">Wallet</h6>
+                    <small>Starbucks</small>
+                  </div>
+                </div>
+                <div class="fw-bolder text-danger">- $74</div>
+              </div>
+              <div class="transaction-item">
+                <div class="d-flex">
+                  <div class="avatar bg-light-success rounded float-start">
+                    <div class="avatar-content">
+                      <i data-feather="check" class="avatar-icon font-medium-3"></i>
+                    </div>
+                  </div>
+                  <div class="transaction-percentage">
+                    <h6 class="transaction-title">Bank Transfer</h6>
+                    <small>Add Money</small>
+                  </div>
+                </div>
+                <div class="fw-bolder text-success">+ $480</div>
+              </div>
+              <div class="transaction-item">
+                <div class="d-flex">
+                  <div class="avatar bg-light-danger rounded float-start">
+                    <div class="avatar-content">
+                      <i data-feather="dollar-sign" class="avatar-icon font-medium-3"></i>
+                    </div>
+                  </div>
+                  <div class="transaction-percentage">
+                    <h6 class="transaction-title">Paypal</h6>
+                    <small>Add Money</small>
+                  </div>
+                </div>
+                <div class="fw-bolder text-success">+ $590</div>
+              </div>
+              <div class="transaction-item">
+                <div class="d-flex">
+                  <div class="avatar bg-light-warning rounded float-start">
+                    <div class="avatar-content">
+                      <i data-feather="credit-card" class="avatar-icon font-medium-3"></i>
+                    </div>
+                  </div>
+                  <div class="transaction-percentage">
+                    <h6 class="transaction-title">Mastercard</h6>
+                    <small>Ordered Food</small>
+                  </div>
+                </div>
+                <div class="fw-bolder text-danger">- $23</div>
+              </div>
+              <div class="transaction-item">
+                <div class="d-flex">
+                  <div class="avatar bg-light-info rounded float-start">
+                    <div class="avatar-content">
+                      <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>
+                    </div>
+                  </div>
+                  <div class="transaction-percentage">
+                    <h6 class="transaction-title">Transfer</h6>
+                    <small>Refund</small>
+                  </div>
+                </div>
+                <div class="fw-bolder text-success">+ $98</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Transaction Card -->
+      </div>
+
+
+
+      <div class="row match-height">
+
+        <div class="col-12 col-md-12 ">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">5 newest transaction</h6>
+
+              <!-- <form action="/transaction" method="post">
+                <button type="submit" class="btn btn-primary">
+                  <i data-feather="plus"></i> Buat Transaksi
+                </button>
+              </form> -->
+
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="transaction-datatable" class="table ">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th class=" text-nowrap ">Player</th>
+                      <th>Game & Item</th>
+                      <th>Date</th>
+                      <th>Total harga</th>
+                      <th>Status</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% let no = 1 %>
+                    <% transactions && transactions.forEach(ts => { %>
+                    <% const totalPrice = ts.value.toLocaleString("id", {
+                        style: "currency",
+                        currency: "IDR",
+                      }); %>
+                    <tr>
+                      <td><span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
+                      <td>
+                        <!-- <div class=" h-100 text-capitalize text-white ">
+                          <span></span>
+                          <small class=" text-white-50 text-nowrap  "></small>
+                          <small>Game ID: <%= ts.account_game  %></small>
+                        </div> -->
+                        <div class="d-flex justify-content-left align-items-center">
+                          <div class="avatar-wrapper">
+                            <div class="avatar me-50"><img src="<%= ts?.player?.user?.avatar %>" alt="Avatar" width="32"
+                                height="32"></div>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <h6 class="user-name text-truncate mb-0"><%= ts.name  %></h6><small
+                              class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %></small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex ">
+                          <img height="80" src="<%= ts?.history?.history_voucher?.thumbnail %>"
+                            alt="Thumbnail <%= ts?.history?.history_voucher?.game_name %>">
+                          <div class="px-1 d-flex flex-column align-items-start  ">
+                            <div class="text-primary text-nowrap ">
+                              <%= ts?.history?.history_voucher?.game_name %>
+                            </div>
+                            <div style="margin-top: 5px;">
+                              <%= ts?.history?.history_voucher?.coin_quantity %>
+                              <%= ts?.history?.history_voucher?.coin_name %>
+                            </div>
+                            <div> <span class="badge badge-light-secondary " style="margin-top: 7px;">
+                                <%= ts?.history?.history_voucher?.category %>
+                              </span>
+                            </div>
+
+
+                          </div>
+                        </div>
+
+                      </td>
+
+                      <td class=" text-nowrap ">
+                        <%= ts.created_at  %>
+                      <td> <%= totalPrice %></td>
+                      <td>
+                        <% if(ts.status === 'pending' ) { %>
+                        <span class="badge badge-light-warning">
+                          <%= ts.status %>
+                        </span>
+                        <% } else if(ts.status === 'success' ) { %>
+                        <span class="badge badge-light-success">
+                          <%= ts.status %>
+                        </span>
+                        <% } else { %>
+                        <span class="badge badge-light-danger">
+                          <%= ts.status %>
+                        </span>
+                        <% } %>
+                      </td>
+
+                    </tr>
+                    <%  }); %>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -116,4 +389,9 @@
 <!-- END: Content-->
 
 <%- include('layouts/footer.ejs') %>
+
+<!-- <script src="/js/components/card-statistics.js"></script> -->
+
+<script src="/js/pages/dashboard.js"></script>
+
 <%- include('layouts/end.ejs') %>

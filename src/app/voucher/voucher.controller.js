@@ -197,11 +197,7 @@ export const deleteVoucher = async (req, res, next) => {
 
     const message = `Anda telah menghapus Voucher <strong class=" text-warning" >${voucher.game_name}</strong> `;
 
-    const result = await deleteVoucherById(ID);
-
-    if (result) {
-      UnlinkFile(".dev" + voucher.thumbnail);
-    }
+    await deleteVoucherById(ID);
 
     req.flash("flashdata", {
       type: "warning",

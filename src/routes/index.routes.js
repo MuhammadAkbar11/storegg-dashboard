@@ -1,6 +1,7 @@
 import APIsRoutes from "../app/api/api.routes.js";
 import BankRoutes from "../app/bank/bank.routes.js";
 import CategoryRoutes from "../app/category/category.routes.js";
+import { dashboard } from "../app/dashboard/dashboard.controller.js";
 import NominalRoutes from "../app/nominal/nominal.routes.js";
 import PaymentRoutes from "../app/payment/payment.routes.js";
 import TransactionRoutes from "../app/transaction/transaction.routes.js";
@@ -9,12 +10,7 @@ import VoucherRoutes from "../app/voucher/voucher.routes.js";
 import { ensureAuth } from "../middleware/auth.js";
 
 function MainRoutes(app) {
-  app.get("/", ensureAuth, (req, res) => {
-    res.render("index", {
-      title: "Welcome",
-      path: "/",
-    });
-  });
+  app.get("/", ensureAuth, dashboard);
 
   UserRoutes(app);
   VoucherRoutes(app);

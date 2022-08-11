@@ -16,7 +16,25 @@ export const findAllPlayer = async (
   }
 ) => {
   try {
-    const result = await Player.findAll({ ...filter });
+    const result = await Player.findAll({
+      ...filter,
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["created_at", "updated_at", "password"],
+          },
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
+      ],
+    });
     return result;
   } catch (error) {
     Logger.error(error, "[EXCEPTION] findAllPlayer");
