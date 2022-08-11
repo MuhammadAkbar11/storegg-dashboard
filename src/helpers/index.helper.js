@@ -38,3 +38,10 @@ export function RenameFile(originalname, prefix = "GG", name = "Name") {
   const ext = filenameToArr[filenameToArr.length - 1];
   return `${prefix}_${resultFileName}_${DayjsUTC().valueOf()}.${ext}`;
 }
+
+export function Rupiah(values) {
+  return values.toLocaleString("id", {
+    style: "currency",
+    currency: "IDR",
+  });
+}
