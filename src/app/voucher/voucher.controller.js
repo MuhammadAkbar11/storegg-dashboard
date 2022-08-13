@@ -12,6 +12,7 @@ import {
   createVoucher,
   deleteVoucherById,
   findListVoucher,
+  findOneVoucher,
   findVoucherById,
   updateVoucher,
   updateVoucherStatusById,
@@ -43,7 +44,11 @@ export const viewPutVoucher = async (req, res, next) => {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
 
-    const voucher = await findVoucherById(req.params.id);
+    const voucher = await findOneVoucher({
+      where: {
+        voucher_id: req.params.id,
+      },
+    });
 
     if (!voucher) {
       throw new BaseError("NOT_FOUND", 404, "Voucher is not found!", true, {

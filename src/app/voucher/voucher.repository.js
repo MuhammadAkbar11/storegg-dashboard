@@ -70,7 +70,6 @@ export const findOneVoucher = async (filter = { attributes }) => {
   try {
     const result = await Voucher.findOne({
       ...filter,
-
       include: [
         {
           model: Category,
