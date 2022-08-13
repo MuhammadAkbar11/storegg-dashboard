@@ -17,11 +17,11 @@
           <table id="transaction-datatable" class="datatables-basic table table-responsive">
             <thead>
               <tr>
-                <th>No.</th>
-                <th class=" text-nowrap ">Nama player</th>
+                <th>#</th>
+                <th class=" text-nowrap ">Player</th>
                 <th>Game</th>
                 <th class=" text-nowrap ">ID Game</th>
-                <th>Item</th>
+                <th>Date</th>
                 <th>Total harga</th>
                 <th>Status</th>
                 <th></th>
@@ -37,33 +37,44 @@
               <tr>
                 <td><span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
                 <td>
-                  <div class=" h-100 text-capitalize ">
-                    <%= ts.name  %>
+                  <div class="d-flex justify-content-left align-items-center">
+                    <div class="avatar-wrapper">
+                      <div class="avatar me-50"><img src="<%= ts?.player?.user?.avatar %>" alt="Avatar" width="32"
+                          height="32"></div>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <h6 class="user-name text-truncate mb-0"><%= ts.name  %></h6><small
+                        class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %></small>
+                    </div>
                   </div>
                 </td>
                 <td>
                   <div class="d-flex ">
                     <img height="80" src="<%= ts?.history?.history_voucher?.thumbnail %>"
                       alt="Thumbnail <%= ts?.history?.history_voucher?.game_name %>">
-                    <div class="px-1">
-                      <span class="text-primary text-nowrap ">
+                    <div class="px-1 d-flex flex-column align-items-start  ">
+                      <a class="text-white text-nowrap ">
                         <%= ts?.history?.history_voucher?.game_name %>
-                      </span>
-                      <br>
-                      <span class="badge badge-light-secondary " style="margin-top: 7px;">
-                        <%= ts?.history?.history_voucher?.category %>
-                      </span>
+                      </a>
+                      <div class=" text-primary " style="margin-top: 5px;">
+                        Item : <%= ts?.history?.history_voucher?.coin_quantity %>
+                        <%= ts?.history?.history_voucher?.coin_name %>
+                      </div>
+                      <div> <span class="badge badge-light-secondary " style="margin-top: 7px;">
+                          <%= ts?.history?.history_voucher?.category %>
+                        </span>
+                      </div>
+
+
                     </div>
                   </div>
-
                 </td>
                 <td>
                   <%= ts.account_game  %>
 
                 </td>
                 <td class=" text-nowrap ">
-                  <%= ts?.history?.history_voucher?.coin_quantity %>
-                  <%= ts?.history?.history_voucher?.coin_name %></td>
+                  <%= ts.created_at  %>
                 <td> <%= totalPrice %></td>
                 <td>
                   <% if(ts.status === 'pending' ) { %>

@@ -2,6 +2,7 @@ import APIsRoutes from "../app/api/api.routes.js";
 import BankRoutes from "../app/bank/bank.routes.js";
 import CategoryRoutes from "../app/category/category.routes.js";
 import { dashboard } from "../app/dashboard/dashboard.controller.js";
+import GenerateRoutes from "../app/generate/generate.routes.js";
 import NominalRoutes from "../app/nominal/nominal.routes.js";
 import PaymentRoutes from "../app/payment/payment.routes.js";
 import TransactionRoutes from "../app/transaction/transaction.routes.js";
@@ -21,6 +22,8 @@ function MainRoutes(app) {
   TransactionRoutes(app);
 
   APIsRoutes(app);
+
+  GenerateRoutes(app);
 }
 
 export default MainRoutes;
