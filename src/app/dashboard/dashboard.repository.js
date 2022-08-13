@@ -52,30 +52,40 @@ export const findVoucherTopupDashboard = async () => {
       group: ["status"],
     });
 
+    if (result.length !== 0) {
+      return {
+        count: result?.reduce((acc, curr) => {
+          acc[curr["status"]] = curr.count;
+          return acc;
+        }, {}),
+        data: {
+          labels: result?.map(lb => {
+            let status = lb.status;
+
+            if (status.includes("success")) {
+              status = "finished";
+            }
+
+            if (status.includes("failed")) {
+              status = "Rejected";
+            }
+
+            return `${status.charAt(0).toUpperCase() + status.slice(1)}`;
+          }),
+          series: result?.map(s => s.count),
+        },
+      };
+    }
+
     return {
-      count: result.reduce((acc, curr) => {
-        acc[curr["status"]] = curr.count;
-        return acc;
-      }, {}),
+      count: null,
       data: {
-        labels: result.map(lb => {
-          let status = lb.status;
-
-          if (status.includes("success")) {
-            status = "finished";
-          }
-
-          if (status.includes("failed")) {
-            status = "Rejected";
-          }
-
-          return `${status.charAt(0).toUpperCase() + status.slice(1)}`;
-        }),
-        series: result.map(s => s.count),
+        labels: ["Empty", "Empty"],
+        series: [0, 0, 0],
       },
     };
   } catch (error) {
-    Logger.error(error, "[EXCEPTION] findProductOrdersDashboard");
+    Logger.error(error, "[EXCEPTION] findVoucherTopupDashboard");
     throw new TransfromError(error);
   }
 };
@@ -90,28 +100,39 @@ export const findCategoriesTopupDashboard = async () => {
       group: ["category_id"],
     });
 
-    const category = await findAllCategories({ where: {} });
+    if (result.length !== 0) {
+      const category = await findAllCategories({ where: {} });
 
-    category.forEach(element => {
-      result.forEach(data => {
-        if (data.category_id === element.category_id) {
-          data.name = element.name;
-        }
+      category.forEach(element => {
+        result.forEach(data => {
+          if (data.category_id === element.category_id) {
+            data.name = element.name;
+          }
+        });
       });
-    });
 
-    const series = result.map(s => s.count);
-    const total = series.reduce((accumulator, curr) => accumulator + curr);
+      const series = result?.map(s => s.count);
+      const total = series?.reduce((accumulator, curr) => accumulator + curr);
+      return {
+        count: result.map(item => {
+          item.percentage = parseInt((item.count / total) * 100) + "%";
+          return { ...item };
+        }),
+
+        data: {
+          labels: result.map(ct => ct.name),
+          series: series.map(s => parseInt((s / total) * 100)),
+          total: total,
+        },
+      };
+    }
+
     return {
-      count: result.map(item => {
-        item.percentage = parseInt((item.count / total) * 100) + "%";
-        return { ...item };
-      }),
-
+      count: [],
       data: {
-        labels: result.map(ct => ct.name),
-        series: series.map(s => parseInt((s / total) * 100)),
-        total: total,
+        labels: ["Empty", "Empty", "Empty"],
+        series: [0, 0, 0],
+        total: 0,
       },
     };
   } catch (error) {

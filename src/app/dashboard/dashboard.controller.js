@@ -36,10 +36,12 @@ export const dashboard = async (req, res, next) => {
 
     transactions = ToPlainObject(transactions);
 
-    transactions.map(tr => {
-      tr.created_at = dayjs(tr.created_at).format("DD MMM YYYY");
-      return { ...tr };
-    });
+    if (transactions.length !== 0) {
+      transactions.map(tr => {
+        tr.created_at = dayjs(tr.created_at).format("DD MMM YYYY");
+        return { ...tr };
+      });
+    }
 
     res.render("index", {
       title: "Welcome",
@@ -52,6 +54,7 @@ export const dashboard = async (req, res, next) => {
       widgets,
     });
   } catch (error) {
+    console.log(error);
     const baseError = new TransfromError(error);
     next(baseError);
   }
