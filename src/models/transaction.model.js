@@ -41,6 +41,11 @@ Transaction.init(
       type: DataTypes.STRING(25),
       field: "history_id",
     },
+    voucher_id: {
+      allowNull: false,
+      type: DataTypes.STRING(25),
+      field: "voucher_id",
+    },
     category_id: {
       allowNull: false,
       type: DataTypes.STRING(15),

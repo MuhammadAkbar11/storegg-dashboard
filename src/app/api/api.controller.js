@@ -216,6 +216,7 @@ export const apiPostCheckout = async (req, res, next) => {
       account_game: accountGame,
       tax: tax,
       value: value,
+      voucher_id: resVoucher.dataValues.voucher_id,
       player_id: player.player_id,
       category_id: resVoucher.dataValues.category_id,
       payment_method_id: resPayment.dataValues.payment_method_id,

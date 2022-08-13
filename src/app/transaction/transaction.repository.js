@@ -9,6 +9,8 @@ import HistoryPlayer from "../../models/historyPlayer.model.js";
 import HistoryVoucherTopup from "../../models/historyVoucherTopup.model.js";
 import Player from "../../models/player.model.js";
 import Transaction from "../../models/transaction.model.js";
+import User from "../../models/user.model.js";
+import Voucher from "../../models/voucher.model.js";
 
 const Op = Sequelize.Op;
 
@@ -17,6 +19,13 @@ export const findAllTransaction = async (filter = {}, associate = true) => {
     filter = {
       ...filter,
       include: [
+        {
+          model: Voucher,
+          as: "voucher",
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        },
         {
           model: Category,
           as: "category",
@@ -30,6 +39,15 @@ export const findAllTransaction = async (filter = {}, associate = true) => {
           attributes: {
             exclude: ["created_at", "updated_at"],
           },
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: {
+                exclude: ["created_at", "updated_at"],
+              },
+            },
+          ],
         },
         {
           model: History,

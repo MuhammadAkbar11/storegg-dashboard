@@ -1,5 +1,7 @@
 // import { validationResult } from "express-validator";
+import dayjs from "dayjs";
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
+import { ToPlainObject } from "../../helpers/index.helper.js";
 import {
   // createTransaction,
   // deleteTransactionById,
@@ -13,9 +15,16 @@ export const index = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    const transactions = await findAllTransaction({
+    let transactions = await findAllTransaction({
       where: {},
       order: [["transaction_id", "desc"]],
+    });
+
+    transactions = ToPlainObject(transactions);
+
+    transactions.map(tr => {
+      tr.created_at = dayjs(tr.created_at).format("DD MMM YYYY");
+      return { ...tr };
     });
 
     res.render("transaction/v_transaction", {

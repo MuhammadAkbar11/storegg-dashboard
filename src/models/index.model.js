@@ -115,6 +115,17 @@ export default function BoostrapingModels() {
     constraints: true,
   });
 
+  Voucher.hasMany(Transaction, {
+    foreignKey: "voucher_id",
+    as: "transactions",
+  });
+
+  Transaction.belongsTo(Voucher, {
+    foreignKey: "voucher_id",
+    as: "voucher",
+    constraints: true,
+  });
+
   Category.hasMany(Transaction, {
     foreignKey: "category_id",
     as: "transactions",
