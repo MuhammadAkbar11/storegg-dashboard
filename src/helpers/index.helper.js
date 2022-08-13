@@ -45,3 +45,12 @@ export function Rupiah(values) {
     currency: "IDR",
   });
 }
+
+export function ToPlainObject(data) {
+  let rows = data;
+
+  rows = JSON.stringify(rows);
+  rows = JSON.parse(rows);
+
+  return rows;
+}
