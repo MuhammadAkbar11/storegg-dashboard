@@ -144,11 +144,8 @@ export const findCategoriesTopupDashboard = async () => {
 export const findBestSellingVouchersDashboard = async () => {
   try {
     const result = await Transaction.count({
-      attributes: [
-        "category_id",
-        // [Sequelize.fn("MONTH", Sequelize.col("created_at")), "month"],
-      ],
-      group: ["category_id"],
+      // attributes:
+      group: ["voucher_id"],
     });
 
     return result;

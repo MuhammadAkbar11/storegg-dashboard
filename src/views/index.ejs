@@ -187,87 +187,32 @@
         <div class="col-md-4 col-12">
           <div class="card card-transaction">
             <div class="card-header">
-              <h4 class="card-title">Best Selling Vouchers</h4>
-              <div class="dropdown chart-dropdown">
-                <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
-                <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">Last 28 Days</a>
-                  <a class="dropdown-item" href="#">Last Month</a>
-                  <a class="dropdown-item" href="#">Last Year</a>
-                </div>
-              </div>
+              <h4 class="card-title">Most Topup Vouchers</h4>
+
             </div>
-            <div class="card-body">
+            <div class="card-body " style="height: 410px; overflow-y: scroll;">
+
+              <% sellingVouchers.map(sv => {  %>
               <div class="transaction-item">
                 <div class="d-flex">
-                  <div class="avatar bg-light-primary rounded float-start">
-                    <div class="avatar-content">
-                      <i data-feather="pocket" class="avatar-icon font-medium-3"></i>
-                    </div>
-                  </div>
-                  <div class="transaction-percentage">
-                    <h6 class="transaction-title">Wallet</h6>
-                    <small>Starbucks</small>
-                  </div>
-                </div>
-                <div class="fw-bolder text-danger">- $74</div>
-              </div>
-              <div class="transaction-item">
-                <div class="d-flex">
-                  <div class="avatar bg-light-success rounded float-start">
-                    <div class="avatar-content">
-                      <i data-feather="check" class="avatar-icon font-medium-3"></i>
-                    </div>
-                  </div>
-                  <div class="transaction-percentage">
-                    <h6 class="transaction-title">Bank Transfer</h6>
-                    <small>Add Money</small>
-                  </div>
-                </div>
-                <div class="fw-bolder text-success">+ $480</div>
-              </div>
-              <div class="transaction-item">
-                <div class="d-flex">
-                  <div class="avatar bg-light-danger rounded float-start">
+                  <!-- <div class="avatar bg-light-danger rounded float-start">
                     <div class="avatar-content">
                       <i data-feather="dollar-sign" class="avatar-icon font-medium-3"></i>
                     </div>
+                  </div> -->
+                  <div class="avatar-wrapper">
+                    <div class="avatar me-50"><img src="<%= sv?.thumbnail %>" alt="Avatar" width="40" height="40"></div>
                   </div>
                   <div class="transaction-percentage">
-                    <h6 class="transaction-title">Paypal</h6>
-                    <small>Add Money</small>
+                    <h6 class="transaction-title"><%= sv?.game_name %> </h6>
+                    <small><%= sv?.category %> </small>
                   </div>
                 </div>
-                <div class="fw-bolder text-success">+ $590</div>
+                <div class="fw-bolder text-success"> <%= sv.count  %> </div>
               </div>
-              <div class="transaction-item">
-                <div class="d-flex">
-                  <div class="avatar bg-light-warning rounded float-start">
-                    <div class="avatar-content">
-                      <i data-feather="credit-card" class="avatar-icon font-medium-3"></i>
-                    </div>
-                  </div>
-                  <div class="transaction-percentage">
-                    <h6 class="transaction-title">Mastercard</h6>
-                    <small>Ordered Food</small>
-                  </div>
-                </div>
-                <div class="fw-bolder text-danger">- $23</div>
-              </div>
-              <div class="transaction-item">
-                <div class="d-flex">
-                  <div class="avatar bg-light-info rounded float-start">
-                    <div class="avatar-content">
-                      <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>
-                    </div>
-                  </div>
-                  <div class="transaction-percentage">
-                    <h6 class="transaction-title">Transfer</h6>
-                    <small>Refund</small>
-                  </div>
-                </div>
-                <div class="fw-bolder text-success">+ $98</div>
-              </div>
+              <% }) %>
+
+
             </div>
           </div>
         </div>

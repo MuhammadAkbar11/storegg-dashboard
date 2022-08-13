@@ -3,8 +3,10 @@ import dayjs from "dayjs";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import { ToPlainObject } from "../../helpers/index.helper.js";
 import { findAllTransaction } from "../transaction/transaction.repository.js";
+import { findListVoucher } from "../voucher/voucher.repository.js";
 
 import {
+  findBestSellingVouchersDashboard,
   findCategoriesTopupDashboard,
   findDashboardWidgets,
   findVoucherTopupDashboard,
@@ -23,16 +25,30 @@ export const dashboard = async (req, res, next) => {
     //   ],
     //   group: ["month"],
     // });
+    let vouchers = await findListVoucher({ where: {} });
+    vouchers = ToPlainObject(vouchers);
 
-    const topup = await findVoucherTopupDashboard();
+    let topup = await findVoucherTopupDashboard();
     let transactions = await findAllTransaction({
       where: {},
       limit: 5,
-      order: [["transaction_id", "desc"]],
+      order: [["created_at", "desc"]],
     });
-    const widgets = await findDashboardWidgets();
+    let widgets = await findDashboardWidgets();
+    let categoriesTopup = await findCategoriesTopupDashboard();
+    let sellingVouchers = await findBestSellingVouchersDashboard();
 
-    const categoriesTopup = await findCategoriesTopupDashboard();
+    vouchers.forEach(element => {
+      sellingVouchers.forEach(data => {
+        if (data.voucher_id === element.voucher_id) {
+          data.game_name = element.game_name;
+          data.category = element.category.name;
+          data.thumbnail = element.thumbnail;
+        }
+      });
+    });
+
+    sellingVouchers.sort((a, b) => parseFloat(b.count) - parseFloat(a.count));
 
     transactions = ToPlainObject(transactions);
 
@@ -52,6 +68,7 @@ export const dashboard = async (req, res, next) => {
       topup,
       categoriesTopup,
       widgets,
+      sellingVouchers,
     });
   } catch (error) {
     console.log(error);
