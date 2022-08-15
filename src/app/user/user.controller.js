@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
 import { httpStatusCodes } from "../../constants/index.constants.js";
 import { ComparePassword } from "../../helpers/authentication.helper.js";
@@ -5,8 +7,11 @@ import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
+import { ToPlainObject } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
-import { findOneUser } from "./user.repository.js";
+import { findAllUsers, findCountUser, findOneUser } from "./user.repository.js";
+
+const Op = Sequelize.Op;
 
 export const getUserSignin = async (req, res, next) => {
   try {
@@ -170,3 +175,45 @@ export const postLogout = (req, res) => {
 };
 
 //
+
+export const getListUsers = async (req, res) => {
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+    let users = await findAllUsers();
+    let countUsers = users.length;
+    let countPlayers = await findCountUser({
+      where: {
+        role: {
+          [Op.like]: `%PLAYER%`,
+        },
+      },
+    });
+
+    users = ToPlainObject(users);
+
+    users.length !== 0 &&
+      users.map(u => {
+        u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+
+        return { ...u };
+      });
+
+    res.render("user/list_user/v_list_user", {
+      title: "Users",
+      path: "/users",
+      flashdata: flashdata,
+      errors: errors,
+      countPlayers,
+      countActive: countUsers,
+      countPending: 0,
+      users,
+      countUsers,
+      isEdit: false,
+      values: null,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};

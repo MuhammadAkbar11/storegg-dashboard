@@ -1,0 +1,55 @@
+<%- include('../../layouts/head.ejs') %>
+
+<%- include("../../layouts/header.ejs") %>
+<%- include("../../layouts/sidebar.ejs") %>
+
+<%- include("../../includes/toast.ejs") %>
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= title %></h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active"><%= title %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <%- include("./tb_list_user.ejs") %>
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+
+
+<%- include('../../layouts/footer.ejs') %>
+<script>
+  var dt_user_table = $('#user-datatable')
+
+  if (dt_user_table.length) {
+    dt_user_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
+  }
+</script>
+
+
+
+<%- include('../../layouts/end.ejs') %>
