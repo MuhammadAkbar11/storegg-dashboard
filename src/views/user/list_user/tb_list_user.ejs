@@ -117,7 +117,7 @@
                   <% } else if(usr.role.trim() == "ADMIN") {  %>
                   <span class="text-truncate align-middle">
                     <i data-feather="slack" class=" font-medium-3 text-info me-50">
-                    </i>Basic admin</span>
+                    </i>Admin</span>
                   <% } else if(usr.role.trim() == "PLAYER") {  %>
                   <span class="text-truncate align-middle">
                     <i data-feather="user" class=" font-medium-3 text-primary me-50">
@@ -161,13 +161,14 @@
                     </div>
                     <% if(userAuth.user_id !== usr.user_id ) { %>
 
+                    <% if(usr.role.trim() == "PLAYER") { %>
                     <form action="/user/<%= usr.user_id %>" method="post">
-
                       <input type="hidden" name="_method" value="DELETE">
                       <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
                         <i data-feather="trash"></i>
                       </button>
                     </form>
+                    <% } %>
                     <% } %>
 
                   </div>
