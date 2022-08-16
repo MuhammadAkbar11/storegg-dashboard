@@ -28,6 +28,12 @@ Nominal.init(
       field: "price",
       defaultValue: 0,
     },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: "description",
+      default: "Nominal Description",
+    },
   },
   {
     hooks: {

@@ -62,7 +62,17 @@
                       <small class=" text-danger "> <%= errors?.validation?.price?.message[0] %></small>
                       <% } %>
                     </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="description">Deskripsi</label>
+                      <textarea class="form-control" id="description" name="description" rows="3"
+                        placeholder="Textarea"><%= errors && errors?.renderData?.values?.description || "" %></textarea>
+                      <% if(errors && errors?.validation?.description) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.description?.message[0] %></small>
+                      <% } %>
+                    </div>
                   </div>
+
+
 
                   <div class="col-12">
                     <a href="/nominal" class=" btn btn-link text-secondary  me-5px">Batal</a>

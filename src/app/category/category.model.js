@@ -17,7 +17,6 @@ Category.init(
       field: "name",
     },
     description: {
-      unique: true,
       type: DataTypes.STRING,
       allowNull: false,
       field: "description",

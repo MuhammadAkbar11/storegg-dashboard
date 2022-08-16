@@ -47,11 +47,13 @@
         let coinNameValue = nominal.coin_name
         let coinQuantityValue = nominal.coin_quantity
         let priceValue = nominal.price
+        let descriptionValue = nominal.description
 
         if(errors && errors?.renderData?.values) {
           coinNameValues = errors?.renderData?.values?.coinName
           coinQuantityValue = errors?.renderData?.values?.coinQuantity
           priceValue = errors?.renderData?.values?.price
+          descriptionValue = errors?.renderData?.values?.description
         }
 
         %>
@@ -85,6 +87,14 @@
                         value="<%= priceValue %>" />
                       <% if(errors && errors?.validation?.price) {  %>
                       <small class=" text-danger "> <%= errors?.validation?.price?.message[0] %></small>
+                      <% } %>
+                    </div>
+                    <div class="mb-1">
+                      <label class="form-label" for="description">Deskripsi</label>
+                      <textarea class="form-control" id="description" name="description" rows="3"
+                        placeholder="Textarea"><%= descriptionValue %></textarea>
+                      <% if(errors && errors?.validation?.description) {  %>
+                      <small class=" text-danger "> <%= errors?.validation?.description?.message[0] %></small>
                       <% } %>
                     </div>
                   </div>

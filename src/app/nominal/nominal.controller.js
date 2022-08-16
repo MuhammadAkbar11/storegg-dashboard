@@ -74,7 +74,7 @@ export const postNominal = async (req, res, next) => {
   const redirect = req.query.redirect || `/nominal-create`;
   const validate = validationResult(req);
 
-  const { coinQuantity, coinName, price } = req.body;
+  const { coinQuantity, coinName, price, description } = req.body;
 
   if (!validate.isEmpty()) {
     const errValidate = new ValidationError(validate.array(), "", {
@@ -90,6 +90,7 @@ export const postNominal = async (req, res, next) => {
       coin_quantity: coinQuantity,
       coin_name: coinName,
       price,
+      description,
     });
 
     req.flash("flashdata", {
@@ -111,7 +112,7 @@ export const postNominal = async (req, res, next) => {
 
 export const putNominal = async (req, res, next) => {
   const id = req.params.id;
-  const { coinQuantity, coinName, price } = req.body;
+  const { coinQuantity, coinName, price, description } = req.body;
 
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
@@ -128,6 +129,7 @@ export const putNominal = async (req, res, next) => {
       coin_quantity: coinQuantity,
       coin_name: coinName,
       price,
+      description,
     });
 
     req.flash("flashdata", {

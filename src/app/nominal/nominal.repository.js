@@ -45,7 +45,7 @@ export const createNominal = async data => {
 
 export const updateNominal = async (
   id,
-  { coin_name, coin_quantity, price }
+  { coin_name, coin_quantity, price, description }
 ) => {
   try {
     const result = await Nominal.findByPk(id);
@@ -53,6 +53,7 @@ export const updateNominal = async (
     result.coin_name = coin_name;
     result.coin_quantity = coin_quantity;
     result.price = price;
+    result.description = description;
 
     return await result.save();
   } catch (error) {

@@ -19,6 +19,12 @@ const nominalValidation = checkSchema({
       errorMessage: "Harga tidak boleh kosong",
     },
   },
+  description: {
+    trim: true,
+    notEmpty: {
+      errorMessage: "Description tidak boleh kosong",
+    },
+  },
 });
 
 export default nominalValidation;
