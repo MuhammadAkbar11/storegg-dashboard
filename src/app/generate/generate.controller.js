@@ -150,11 +150,10 @@ export const generateChekcout = async (req, res, next) => {
       const accountGame = resPlayer.user.username;
       const status = fakerGetRandom(["pending", "success"]);
       const times = getTime();
-      console.log(times);
       const created_at = DayjsUTC(`2022-${month}-${day} ${times}`);
 
       let tax = (10 / 100) * resNominal.price;
-      let value = resNominal.price - tax;
+      let value = resNominal.price + tax;
 
       const historyVoucherTopup = {
         game_name: resVoucher.game_name,

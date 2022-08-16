@@ -14,10 +14,10 @@ const time =
 
 const streams = [
   // { stream: process.stdout },
-  {
-    stream:
-      argv.mode === "development" ? pino.destination(".dev/logging.log") : null,
-  },
+  // {
+  //   stream:
+  //     argv.mode === "development" ? pino.destination(".dev/logging.log") : null,
+  // },
   {
     stream: pinoPretty({
       colorize: true,

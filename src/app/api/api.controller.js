@@ -184,7 +184,7 @@ export const apiPostCheckout = async (req, res, next) => {
     // console.log();
 
     let tax = (10 / 100) * resNominal.dataValues.price;
-    let value = resNominal.dataValues.price - tax;
+    let value = resNominal.dataValues.price + tax;
 
     const historyVoucherTopup = {
       game_name: resVoucher.dataValues.game_name,
