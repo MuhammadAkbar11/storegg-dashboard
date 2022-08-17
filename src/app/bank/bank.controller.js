@@ -58,7 +58,7 @@ export const viewPutBank = async (req, res, next) => {
 export const postBank = async (req, res, next) => {
   try {
     const result = await createBank({
-      account_name: faker.fake("{{name.firstName}} {{name.lastName}}"),
+      account_name: "PT. Store GG Indonesia",
       bank_name: GetRandom(["Mandiri", "BRI", "BNI", "BCA"]),
       no_rekening: faker.finance.account(10),
     });
