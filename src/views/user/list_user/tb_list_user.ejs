@@ -128,12 +128,13 @@
                   <%= usr.created_at  %>
                 </td>
                 <td>
-                  <span class="badge badge-light-success text-uppercase ">Aktif</span>
-                  <!-- <% if(usr?.status == "Y")  { %> -->
-
-                  <!-- <% } else { %> -->
-                  <!-- <span class="badge badge-light-danger text-uppercase ">Nonaktif</span> -->
-                  <!-- <% } %> -->
+                  <% if(usr?.status == "ACTIVE")  { %>
+                  <span class="badge badge-light-success text-capitalize">Active </span>
+                  <% } else if (usr?.status === "PENDING") { %>
+                  <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                  <% } else { %>
+                  <span class="badge badge-light-secondary text-capitalize">Inactive</span>
+                  <% } %>
                 </td>
                 <td data-order="false">
                   <div class="d-flex">
