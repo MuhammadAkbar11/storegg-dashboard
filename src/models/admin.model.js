@@ -16,6 +16,11 @@ Administrator.init(
       type: DataTypes.STRING(25),
       field: "user_id",
     },
+    address: {
+      type: DataTypes.TEXT("long"),
+      allowNull: true,
+      field: "address",
+    },
   },
   {
     hooks: {
