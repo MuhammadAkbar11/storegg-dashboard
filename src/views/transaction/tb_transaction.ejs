@@ -114,15 +114,6 @@
                   <div class="d-flex col-actions align-items-center ">
 
                     <% if(ts.status === 'pending') { %>
-                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
-                      style="display: inline-block;">
-                      <input type="hidden" name="status" value="failed">
-                      <input type="hidden" name="_method" value="PUT">
-                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Batalkan Transaksi">
-                        <i data-feather='x-circle'></i>
-                      </button>
-                    </form>
                     <% if(ts.is_paid) { %>
                     <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
                       style="display: inline-block;">
@@ -131,6 +122,16 @@
                       <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Terima Transaksi">
                         <i data-feather='check-circle'></i>
+                      </button>
+                    </form>
+                    <% } else { %>
+                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
+                      style="display: inline-block;">
+                      <input type="hidden" name="status" value="failed">
+                      <input type="hidden" name="_method" value="PUT">
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Batalkan Transaksi">
+                        <i data-feather='x-circle'></i>
                       </button>
                     </form>
                     <% } %>

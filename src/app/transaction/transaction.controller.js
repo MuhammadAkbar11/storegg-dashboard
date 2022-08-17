@@ -18,7 +18,11 @@ export const index = async (req, res, next) => {
     const errors = req.flash("errors")[0];
     let transactions = await findAllTransaction({
       where: {},
-      order: [["transaction_id", "desc"]],
+      order: [
+        ["transaction_id", "desc"],
+        ["is_paid", "desc"],
+        ["status", "desc"],
+      ],
     });
 
     transactions = ToPlainObject(transactions);
@@ -211,6 +215,16 @@ export const updateTransactionStatus = async (req, res, next) => {
       return;
     }
 
+    // if(transaction)
+    if (status.includes("failed") && transaction.is_paid) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Opps!",
+        message: `Gagal ${statusTypes[status]} Transaksi, dikarenakan Transaksi <strong>#${ID}</strong> telah dibayar dan tidak dapat dibatalkan!`,
+      });
+      return res.redirect(`/transaction?action_error=true`);
+    }
+
     const message = `Berhasil ${statusTypes[status]} Transaksi`;
 
     await updateTransactionStatusById(ID, status);
@@ -222,7 +236,6 @@ export const updateTransactionStatus = async (req, res, next) => {
     });
     res.redirect("/transaction");
   } catch (error) {
-    console.log(error);
     req.flash("flashdata", {
       type: "error",
       title: "Oppps!",
