@@ -101,6 +101,7 @@ export const generateUsers = async (req, res, next) => {
           avatar: faker.image.avatar(),
           phone_number: faker.phone.number("+62###-####-####"),
           favorite: GetRandom(categories).category_id,
+          status: "ACTIVE",
         };
 
         // const createdUser = await createU;
@@ -155,6 +156,19 @@ export const generateChekcout = async (req, res, next) => {
       let tax = (10 / 100) * resNominal.price;
       let value = resNominal.price + tax;
 
+      let payer = null;
+      let is_paid = fakerGetRandom([true, false]);
+      if (status === "success") {
+        payer = JSON.stringify({
+          pay_date: DayjsUTC(),
+          bank_account_name: name,
+          bank_name: fakerGetRandom(["BRI", "BNI", "BCA", "Mandiri"]),
+          no_bank_account: faker.finance.account(10),
+          value: value,
+        });
+        is_paid = true;
+      }
+
       const historyVoucherTopup = {
         game_name: resVoucher.game_name,
         category: resVoucher.category ? resVoucher.category.name : "",
@@ -165,7 +179,8 @@ export const generateChekcout = async (req, res, next) => {
       };
 
       const historyPayment = {
-        account_name: resBank.account_name,
+        payer,
+        bank_account_name: resBank.account_name,
         type: resPayment.type,
         bank_name: resBank.bank_name,
         no_rekening: resBank.no_rekening,
@@ -185,6 +200,7 @@ export const generateChekcout = async (req, res, next) => {
         account_game: accountGame,
         tax: tax,
         value: value,
+        is_paid,
         voucher_id: resVoucher.voucher_id,
         player_id: resPlayer.player_id,
         category_id: resVoucher.category_id,
@@ -199,106 +215,6 @@ export const generateChekcout = async (req, res, next) => {
       data.push(ToPlainObject(result));
       // data.push(payload);
     }
-
-    // const resVoucher = await findOneVoucher({
-    //   where: {
-    //     voucher_id: voucher,
-    //   },
-    //   attributes: {
-    //     exclude: ["created_at", "updated_at", "admin_id"],
-    //   },
-    // });
-
-    // if (!resVoucher) {
-    //   throw new BaseError(
-    //     "NOT_FOUND",
-    //     httpStatusCodes.NOT_FOUND,
-    //     "Voucher game tidak ditemukan.",
-    //     true
-    //   );
-    // }
-
-    // const resNominal = await findNominalById(nominal);
-
-    // if (!resNominal) {
-    //   throw new BaseError(
-    //     "NOT_FOUND",
-    //     httpStatusCodes.NOT_FOUND,
-    //     "Nominal tidak ditemukan.",
-    //     true
-    //   );
-    // }
-
-    // const resPayment = await findPaymentById(payment);
-
-    // if (!resPayment) {
-    //   throw new BaseError(
-    //     "NOT_FOUND",
-    //     httpStatusCodes.NOT_FOUND,
-    //     "Metode pembayaran tidak ditemukan.",
-    //     true
-    //   );
-    // }
-
-    // const resBank = resPayment.banks.find(bnk => bnk.bank_id === bank);
-
-    // if (!resBank) {
-    //   throw new BaseError(
-    //     "NOT_FOUND",
-    //     httpStatusCodes.NOT_FOUND,
-    //     "Bank tidak ditemukan.",
-    //     true
-    //   );
-    // }
-
-    // const player = await findOnePlayer({
-    //   where: {
-    //     user_id: req.player.user_id,
-    //   },
-    // });
-    // // console.log();
-
-    // let tax = (10 / 100) * resNominal.dataValues.price;
-    // let value = resNominal.dataValues.price - tax;
-
-    // const historyVoucherTopup = {
-    //   game_name: resVoucher.dataValues.game_name,
-    //   category: resVoucher.dataValues.category ? resVoucher.category.name : "",
-    //   thumbnail: resVoucher.dataValues.thumbnail,
-    //   coin_name: resNominal.dataValues.coin_name,
-    //   coin_quantity: resNominal.dataValues.coin_quantity,
-    //   price: +resNominal.dataValues.price,
-    // };
-
-    // const historyPayment = {
-    //   account_name: resBank.dataValues.account_name,
-    //   type: resPayment.dataValues.type,
-    //   bank_name: resBank.dataValues.bank_name,
-    //   no_rekening: resBank.dataValues.no_rekening,
-    // };
-    // const historyPlayer = {
-    //   name: player?.user.name,
-    //   email: player?.user.email,
-    //   phone_number: player?.user.phone_number,
-    // };
-
-    // const payload = {
-    //   historyVoucherTopup,
-    //   historyPayment,
-    //   historyPlayer,
-    //   name,
-    //   name: name,
-    //   account_game: accountGame,
-    //   tax: tax,
-    //   value: value,
-    //   voucher_id: resVoucher.dataValues.voucher_id,
-    //   player_id: player.player_id,
-    //   category_id: resVoucher.dataValues.category_id,
-    //   payment_method_id: resPayment.dataValues.payment_method_id,
-    //   status: "pending",
-    // };
-
-    // const result = await createTransaction(payload);
 
     res.status(200).json({
       message: "Generate checkout berhasil",

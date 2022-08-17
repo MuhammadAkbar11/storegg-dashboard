@@ -36,6 +36,9 @@ Transaction.init(
       type: DataTypes.ENUM("pending", "success", "failed"),
       field: "status",
     },
+    is_paid: {
+      type: DataTypes.BOOLEAN,
+    },
     history_id: {
       allowNull: false,
       type: DataTypes.STRING(25),

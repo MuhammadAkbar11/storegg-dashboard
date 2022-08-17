@@ -54,7 +54,14 @@ export const viewGetInvoice = async (req, res, next) => {
         "NOT_FOUND",
         httpStatusCodes.NOT_FOUND,
         "invoice tidak ditemukan",
-        true
+        true,
+        {
+          errorView: "errors/404",
+          renderData: {
+            title: "Page Not Found",
+          },
+          responseType: "page",
+        }
       );
     }
 
@@ -63,9 +70,21 @@ export const viewGetInvoice = async (req, res, next) => {
       .add(3, "day")
       .format("DD/MM/YYYY");
     invoice.created_at = dayjs(invoice.created_at).format("DD/MM/YYYY");
+    invoice.value_num = invoice.value;
+    invoice.subtotal = Rupiah(invoice.value - invoice.tax);
     invoice.value = Rupiah(invoice.value);
     invoice.tax = Rupiah(invoice.tax);
-    console.log(invoice);
+    invoice.history.history_voucher.price = Rupiah(
+      invoice?.history?.history_voucher?.price
+    );
+
+    if (invoice.history.history_payment.payer) {
+      const payer = JSON.parse(invoice.history.history_payment.payer);
+      invoice.history.history_payment.payer = payer;
+      invoice.history.history_payment.payer.pay_date = dayjs(
+        payer.pay_date
+      ).format("DD/MM/YYYY");
+    }
 
     res.render("transaction/v_invoice", {
       title: "Invoice " + invoice.transaction_id,

@@ -19,7 +19,7 @@
               <tr>
                 <th>#</th>
                 <th class=" text-nowrap ">Player</th>
-                <th>Game</th>
+                <th>Voucher</th>
                 <th class=" text-nowrap ">ID Game</th>
                 <th>Date</th>
                 <th>Total harga</th>
@@ -35,7 +35,9 @@
                   currency: "IDR",
                 }); %>
               <tr>
-                <td><span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
+                <td>
+                  <a href="/invoice/<%= ts.transaction_id %>"
+                    class=" text-primary fw-bold ">#<%= ts.transaction_id  %></a></td>
                 <td>
                   <div class="d-flex justify-content-left align-items-center">
                     <div class="avatar-wrapper">
@@ -64,35 +66,52 @@
                           <%= ts?.history?.history_voucher?.category %>
                         </span>
                       </div>
-
-
                     </div>
                   </div>
                 </td>
                 <td>
                   <%= ts.account_game  %>
-
                 </td>
                 <td class=" text-nowrap ">
                   <%= ts.created_at  %>
                 <td> <%= totalPrice %></td>
                 <td>
-                  <% if(ts.status === 'pending' ) { %>
-                  <span class="badge badge-light-warning">
-                    <%= ts.status %>
-                  </span>
-                  <% } else if(ts.status === 'success' ) { %>
-                  <span class="badge badge-light-success">
-                    <%= ts.status %>
-                  </span>
-                  <% } else { %>
-                  <span class="badge badge-light-danger">
-                    <%= ts.status %>
-                  </span>
-                  <% } %>
+                  <div class="d-flex">
+                    <% if(ts.status === 'pending' ) { %>
+                    <span class="badge badge-light-warning">
+                      <i data-feather='activity'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% if(ts.is_paid) { %>
+                    <span class="badge badge-light-success" style="margin-left: 5px;">
+                      <i data-feather='check'></i>
+                      paid
+                    </span>
+                    <% } else { %>
+                    <span class="badge badge-light-secondary" style="margin-left: 5px;">
+                      <i data-feather='alert-circle'></i>
+                      not paid
+                    </span>
+                    <%  } %>
+                    <% } else if(ts.status === 'success' ) { %>
+                    <span class="badge badge-light-success">
+                      <i data-feather='check-circle'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% } else { %>
+                    <span class="badge badge-light-danger">
+                      <i data-feather='x-circle'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% } %>
+
+                  </div>
+
+
+
                 </td>
                 <td data-order="false">
-                  <div class="d-flex gap-1 align-items-center ">
+                  <div class="d-flex col-actions align-items-center ">
 
                     <% if(ts.status === 'pending') { %>
                     <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
@@ -100,10 +119,11 @@
                       <input type="hidden" name="status" value="failed">
                       <input type="hidden" name="_method" value="PUT">
                       <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Tolak Transaksi">
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Batalkan Transaksi">
                         <i data-feather='x-circle'></i>
                       </button>
                     </form>
+                    <% if(ts.is_paid) { %>
                     <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
                       style="display: inline-block;">
                       <input type="hidden" name="status" value="success">
@@ -113,6 +133,8 @@
                         <i data-feather='check-circle'></i>
                       </button>
                     </form>
+                    <% } %>
+
                     <%  } %>
 
 
@@ -132,8 +154,7 @@
                       <button type="button"
                         class="btn btn-icon rounded-circle btn-flat-primary waves-effect dropdown-toggle hide-arrow "
                         data-bs-toggle="dropdown">
-
-                        <i data-feather='grid'></i>
+                        <i data-feather='more-vertical'></i>
                       </button>
                       <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="/invoice/<%= ts.transaction_id %>">

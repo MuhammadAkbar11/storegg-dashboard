@@ -196,7 +196,7 @@ export const apiPostCheckout = async (req, res, next) => {
     };
 
     const historyPayment = {
-      account_name: resBank.dataValues.account_name,
+      bank_account_name: resBank.dataValues.account_name,
       type: resPayment.dataValues.type,
       bank_name: resBank.dataValues.bank_name,
       no_rekening: resBank.dataValues.no_rekening,

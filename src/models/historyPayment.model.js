@@ -13,15 +13,20 @@ HistoryPayment.init(
       type: DataTypes.STRING(25),
       field: "history_payment_id",
     },
-    account_name: {
-      type: DataTypes.STRING(25),
-      allowNull: false,
-      field: "account_name",
+    payer: {
+      allowNull: true,
+      type: DataTypes.TEXT("long"),
+      field: "payer",
     },
     type: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(20),
       allowNull: false,
       field: "type",
+    },
+    bank_account_name: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      field: "account_name",
     },
     bank_name: {
       type: DataTypes.STRING(25),

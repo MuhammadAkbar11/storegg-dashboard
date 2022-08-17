@@ -46,7 +46,7 @@
             <div class="card-header">
               <div>
                 <h2 class="fw-bolder mb-0"><%= widgets.transaction %> </h2>
-                <p class="card-text">Transaction</p>
+                <p class="card-text">Transactions</p>
               </div>
               <div class="avatar bg-light-primary p-50 m-0">
                 <div class="avatar-content">
@@ -92,7 +92,7 @@
           <div class="card">
             <div class="card-header">
               <div>
-                <h4 class="fw-bolder mb-0"><%= widgets.revenue %> </h4>
+                <h4 class="fw-bolder " style="margin-bottom: 5px;"><%= widgets.revenue %> </h4>
                 <p class="card-text">Revenue</p>
               </div>
               <div class="avatar bg-light-warning p-50 m-0">
@@ -304,14 +304,17 @@
                       <td>
                         <% if(ts.status === 'pending' ) { %>
                         <span class="badge badge-light-warning">
+                          <i data-feather='activity'></i>
                           <%= ts.status %>
                         </span>
                         <% } else if(ts.status === 'success' ) { %>
                         <span class="badge badge-light-success">
+                          <i data-feather='check-circle'></i>
                           <%= ts.status %>
                         </span>
                         <% } else { %>
                         <span class="badge badge-light-danger">
+                          <i data-feather='x-circle'></i>
                           <%= ts.status %>
                         </span>
                         <% } %>
