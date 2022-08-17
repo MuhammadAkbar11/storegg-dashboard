@@ -38,6 +38,12 @@ User.init(
       allowNull: false,
       field: "role",
     },
+    status: {
+      type: DataTypes.ENUM("PENDING", "ACTIVE", "INACTIVE"),
+      allowNull: false,
+      defaultValue: "PENDING",
+      field: "status",
+    },
     avatar: {
       type: DataTypes.STRING,
       allowNull: false,

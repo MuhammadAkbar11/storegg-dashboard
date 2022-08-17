@@ -182,6 +182,20 @@ export const getListUsers = async (req, res) => {
     const errors = req.flash("errors")[0];
     let users = await findAllUsers();
     let countUsers = users.length;
+    let countPending = await findCountUser({
+      where: {
+        status: {
+          [Op.like]: `%PENDING%`,
+        },
+      },
+    });
+    let countActive = await findCountUser({
+      where: {
+        status: {
+          [Op.like]: `%ACTIVE%`,
+        },
+      },
+    });
     let countPlayers = await findCountUser({
       where: {
         role: {
@@ -205,8 +219,8 @@ export const getListUsers = async (req, res) => {
       flashdata: flashdata,
       errors: errors,
       countPlayers,
-      countActive: countUsers,
-      countPending: 0,
+      countActive: countActive,
+      countPending: countPending,
       users,
       countUsers,
       isEdit: false,
