@@ -101,6 +101,16 @@ export const viewListVoucherNominals = async (req, res, next) => {
 
     const voucher = await findVoucherById(ID);
 
+    if (!voucher) {
+      throw new BaseError("NOT_FOUND", 404, "Voucher is not found!", true, {
+        errorView: "errors/404",
+        renderData: {
+          title: "Page Not Found",
+        },
+        responseType: "page",
+      });
+    }
+
     res.render("voucher/v_info_voucher", {
       title: "Detail Voucher",
       path: "/voucher",

@@ -112,10 +112,11 @@
                         <input class="custom-option-item-check" type="checkbox" name="nominals"
                           id="nominal_<%= nm.nominal_id %>" value="<%= nm.nominal_id %>" <%= nm.checked %> />
                         <label class="custom-option-item p-1" for="nominal_<%= nm.nominal_id %>">
-                          <span class="d-flex mb-50">
+                          <span class="d-flex">
                             <span class="fw-bolder "><%= nm.coin_quantity %></span>
                             <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
                           </span>
+                          <small class="mb-50"><%= nm.description  %> </small>
                           <small class="d-block"><%= nm.price.toLocaleString("id", {
                                     style: "currency",
                                     currency: "IDR",
@@ -132,12 +133,13 @@
                         <input class="custom-option-item-check" type="checkbox" name="nominals"
                           id="nominal_<%= nm.nominal_id %>" value="<%= nm.nominal_id %>" />
                         <label class="custom-option-item p-1" for="nominal_<%= nm.nominal_id %>">
-                          <span class="d-flex mb-50">
+                          <span class="d-flex">
                             <span class="fw-bolder "><%= nm.coin_quantity %></span>
                             <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %>
                             </span>
 
                           </span>
+                          <small class="mb-50"><%= nm.description  %> </small>
                           <small class="d-block"><%= nm.price.toLocaleString("id", {
                             style: "currency",
                             currency: "IDR",

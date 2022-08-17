@@ -72,10 +72,11 @@
                     <% for (let nm of voucher.nominals) { %>
                     <div class="card  border-primary ">
                       <div class="card-body p-1 text-primary">
-                        <span class="d-flex mb-50">
+                        <span class="d-flex ">
                           <span class="fw-bolder "><%= nm.coin_quantity %></span>
                           <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
                         </span>
+                        <small class="mb-50"><%= nm.description  %> </small>
                         <small class="d-block"><%= nm.price.toLocaleString("id", {
                                 style: "currency",
                                 currency: "IDR",
