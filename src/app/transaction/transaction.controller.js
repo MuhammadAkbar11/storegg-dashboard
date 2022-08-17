@@ -1,7 +1,8 @@
 // import { validationResult } from "express-validator";
 import dayjs from "dayjs";
+import { httpStatusCodes } from "../../constants/index.constants.js";
 import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
-import { ToPlainObject } from "../../helpers/index.helper.js";
+import { Rupiah, ToPlainObject } from "../../helpers/index.helper.js";
 import {
   // createTransaction,
   // deleteTransactionById,
@@ -32,6 +33,45 @@ export const index = async (req, res, next) => {
       path: "/transaction",
       flashdata: flashdata,
       transactions: transactions,
+      errors: errors,
+      values: null,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const viewGetInvoice = async (req, res, next) => {
+  const invoiceId = req.params.id;
+  try {
+    let invoice = await findTransactionById(invoiceId);
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+
+    if (!invoice) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "invoice tidak ditemukan",
+        true
+      );
+    }
+
+    invoice = ToPlainObject(invoice);
+    invoice.due_date = dayjs(invoice.created_at)
+      .add(3, "day")
+      .format("DD/MM/YYYY");
+    invoice.created_at = dayjs(invoice.created_at).format("DD/MM/YYYY");
+    invoice.value = Rupiah(invoice.value);
+    invoice.tax = Rupiah(invoice.tax);
+    console.log(invoice);
+
+    res.render("transaction/v_invoice", {
+      title: "Invoice " + invoice.transaction_id,
+      path: "/transaction",
+      flashdata: flashdata,
+      invoice: invoice,
       errors: errors,
       values: null,
     });
