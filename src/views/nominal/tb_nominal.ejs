@@ -14,7 +14,7 @@
           <table id="nominal-datatable" class="datatables-basic table table-responsive-sm">
             <thead>
               <tr>
-                <th>No</th>
+                <th>#</th>
                 <th>Nominal</th>
                 <th>Nama Koin</th>
                 <th>Harga</th>
@@ -31,7 +31,7 @@
                 currency: "IDR",
               }); %>
               <tr>
-                <td><%= no++  %></td>
+                <td><%= nm.nominal_id  %></td>
                 <td><%= nm.coin_quantity  %></td>
                 <td><%= nm.coin_name  %></td>
                 <td><%= price  %></td>

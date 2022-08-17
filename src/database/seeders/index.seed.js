@@ -17,12 +17,12 @@ const argv = yargs(hideBin(process.argv)).argv;
 async function importSeeds() {
   try {
     await seedImportUsers();
-    await seedImportNominals();
-    const createdCategries = await seedImportCategories();
+    // await seedImportNominals();
+    await seedImportCategories();
 
-    if (createdCategries) {
-      await seedImportVouchers();
-    }
+    // if (createdCategries) {
+    //   await seedImportVouchers();
+    // }
     Logger.info("[seed] success import data");
     process.exit();
   } catch (error) {
