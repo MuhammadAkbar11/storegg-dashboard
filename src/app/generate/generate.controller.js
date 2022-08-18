@@ -158,6 +158,7 @@ export const generateChekcout = async (req, res, next) => {
 
       let payer = null;
       let is_paid = fakerGetRandom([true, false]);
+
       if (status === "success") {
         payer = JSON.stringify({
           pay_date: DayjsUTC(),
@@ -167,6 +168,16 @@ export const generateChekcout = async (req, res, next) => {
           value: value,
         });
         is_paid = true;
+      }
+
+      if (is_paid) {
+        payer = JSON.stringify({
+          pay_date: DayjsUTC(),
+          bank_account_name: name,
+          bank_name: fakerGetRandom(["BRI", "BNI", "BCA", "Mandiri"]),
+          no_bank_account: faker.finance.account(10),
+          value: value,
+        });
       }
 
       const historyVoucherTopup = {
