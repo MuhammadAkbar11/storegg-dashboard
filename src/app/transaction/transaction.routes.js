@@ -1,6 +1,7 @@
 import { ensureAuth } from "../../middleware/auth.js";
 import {
   index,
+  updateTransactionPayment,
   // postTransaction,
   // putTransaction,
   updateTransactionStatus,
@@ -8,9 +9,12 @@ import {
   // deleteTransaction,
 } from "./transaction.controller.js";
 
-import transactionValidation from "./transaction.validator.js";
+// import transactionValidation from "./transaction.validator.js";
 
 function TransactionRoutes(app) {
+  app
+    .route("/transaction/confirm-payment")
+    .post(ensureAuth, updateTransactionPayment);
   app.route("/transaction/status/:id").put(ensureAuth, updateTransactionStatus);
   app.route("/invoice/:id").get(ensureAuth, viewGetInvoice);
   // app

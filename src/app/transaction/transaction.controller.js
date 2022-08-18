@@ -8,6 +8,7 @@ import {
   // deleteTransactionById,
   findAllTransaction,
   findTransactionById,
+  updateTransactionHistoryPayment,
   // updateTransaction,
   updateTransactionStatusById,
 } from "./transaction.repository.js";
@@ -33,7 +34,7 @@ export const index = async (req, res, next) => {
     });
 
     res.render("transaction/v_transaction", {
-      title: "Transaction",
+      title: "Transaksi",
       path: "/transaction",
       flashdata: flashdata,
       transactions: transactions,
@@ -242,6 +243,78 @@ export const updateTransactionStatus = async (req, res, next) => {
       message: `Gagal ${statusTypes[status]} Transaksi `,
     });
     res.redirect(`/transaction?action_error=true`);
+  }
+};
+
+export const updateTransactionPayment = async (req, res, next) => {
+  // const ID = req.body.transaction_id;
+  const {
+    value,
+    pay_date,
+    payment_method,
+    bank_account_name,
+    bank_name,
+    no_bank_account,
+    payment_note,
+    transaction_id: ID,
+  } = req.body;
+
+  const redirect = "invoice/" + ID;
+
+  try {
+    let transaction = await findTransactionById(ID);
+
+    if (!transaction) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal mengupdate pembayaran, karena Transaksi dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      return res.redirect(`/${redirect}?action_error=true`);
+    }
+
+    transaction = ToPlainObject(transaction);
+
+    const { history_payment: historyPayment } = transaction.history;
+
+    const transactionPaymentMethod = historyPayment.type;
+    const transactionHistoryPayID = historyPayment.history_payment_id;
+    if (!payment_method.includes(transactionPaymentMethod)) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal mengupdate pembayaran, metode pembayaran berbeda!`,
+      });
+      return res.redirect(`/${redirect}?action_error=true`);
+    }
+
+    const message = `Konfirmasi pembayaran berhasil!`;
+    console.log(historyPayment);
+    // await updateTransactionStatusById(ID, status);
+
+    await updateTransactionHistoryPayment(ID, transactionHistoryPayID, {
+      value: value,
+      pay_date: pay_date,
+      bank_account_name: bank_account_name,
+      bank_name: bank_name ?? "-",
+      no_bank_account: no_bank_account ?? "-",
+      payment_note: payment_note ?? "-",
+    });
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Berhasil!",
+      message: message,
+    });
+
+    res.redirect("/" + redirect);
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "error",
+      title: "Oppps!",
+      message: `Gagal mengupdate pembayaran `,
+    });
+    res.redirect(`/${redirect}?action_error=true`);
   }
 };
 

@@ -3,6 +3,8 @@
 <%- include("../layouts/header.ejs") %>
 <%- include("../layouts/sidebar.ejs") %>
 
+<%- include("../includes/toast.ejs") %>
+
 <div class="app-content content ">
   <div class="content-overlay"></div>
   <div class="header-navbar-shadow"></div>
@@ -42,11 +44,12 @@
       </div>
     </div>
     <div class="content-body">
+
       <section class="invoice-preview-wrapper">
         <div class="row invoice-preview">
           <!-- Invoice -->
           <div class="col-xl-9 col-md-8 col-12">
-            <div class="card invoice-preview-card">
+            <div class="card invoice-preview-card overflow-hidden ">
               <div class="card-body invoice-padding pb-0">
                 <!-- Header starts -->
                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
@@ -76,6 +79,9 @@
                       <p class="invoice-date-title">Due Date:</p>
                       <p class="invoice-date"><%= invoice.due_date  %> </p>
                     </div>
+                    <% if(invoice.status === "failed") { %>
+                    <div class=" p-1 text-white rounded-0 invoice-canceled ">Canceled</div>
+                    <% } %>
                   </div>
                 </div>
                 <!-- Header ends -->
@@ -107,7 +113,7 @@
                           <td> Paid </td>
                         </tr>
                         <tr>
-                          <td class="pe-1">Payed By :</td>
+                          <td class="pe-1">Pay By :</td>
                           <td><%= invoice?.history?.history_payment?.payer?.bank_account_name  %> </td>
                         </tr>
                         <tr>
@@ -261,11 +267,14 @@
                 <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-print.html" target="_blank"> Print
                 </a>
                 <!-- <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-edit.html"> Edit </a> -->
+                <% if(invoice.status !== "failed") { %>
                 <% if(!invoice.is_paid) { %>
                 <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
                   Confirm Payment
                 </button>
                 <% } %>
+                <% } %>
+
 
               </div>
             </div>
@@ -341,7 +350,9 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
               </h5>
             </div>
             <div class="modal-body flex-grow-1">
-              <form>
+              <form action="/transaction/confirm-payment" method="post">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="transaction_id" value="<%= invoice.transaction_id  %>">
                 <div class="mb-1">
                   <input id="balance" class="form-control" type="text" value="Invoice Balance: <%= invoice.value  %>"
                     disabled />
@@ -358,7 +369,7 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="payment-method">Payment Method</label>
-                  <select class="form-select" id="payment-method">
+                  <select class="form-select" id="payment-method" name="payment_method">
                     <option value="" disabled>Select payment method</option>
                     <!-- <option value="Cash">Cash</option> -->
                     <option value="Bank Transfer" selected>Bank Transfer</option>
@@ -368,16 +379,19 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
                   </select>
                 </div>
                 <div class="mb-1">
-                  <label class="form-label" for="bank_account_name">Name*</label>
-                  <input id="bank_account_name" class="form-control" type="text" placeholder="Payer Name" />
+                  <label class="form-label" for="bank_account_name">Pay By*</label>
+                  <input id="bank_account_name" name="bank_account_name" class="form-control" type="text"
+                    placeholder="Payer name or Payer bank account name"
+                    value="<%= invoice?.history?.history_player?.name  %>" />
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="bank_name">Bank Name (optional)</label>
-                  <input id="bank_name" class="form-control" type="text" placeholder="Bank Name" />
+                  <input id="bank_name" name="bank_name" class="form-control" type="text" placeholder="Bank Name" />
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="no_bank_account">No Account (optional)</label>
-                  <input id="no_bank_account" class="form-control" type="text" placeholder="No account" />
+                  <input id="no_bank_account" name="no_bank_account" class="form-control" type="text"
+                    placeholder="No account" />
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="payment_note">Internal Payment Note</label>
@@ -385,7 +399,7 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
                     placeholder="Internal Payment Note"></textarea>
                 </div>
                 <div class="d-flex flex-wrap mb-0">
-                  <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                  <button type="submit" class="btn btn-primary me-1">Send</button>
                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
               </form>

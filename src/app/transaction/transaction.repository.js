@@ -330,3 +330,43 @@ export const findTransactionHistory = async values => {
     throw new TransfromError(error);
   }
 };
+
+export const updateTransactionHistoryPayment = async (
+  id,
+  h_payment_id,
+  data
+) => {
+  const t = await sequelizeConnection.transaction();
+
+  try {
+    await Transaction.update(
+      {
+        is_paid: true,
+      },
+      {
+        where: {
+          transaction_id: id,
+        },
+        transaction: t,
+      }
+    );
+
+    const result = await HistoryPayment.update(
+      { payer: JSON.stringify(data) },
+      {
+        where: {
+          history_payment_id: h_payment_id,
+        },
+        transaction: t,
+      }
+    );
+    await t.commit();
+
+    return result;
+  } catch (error) {
+    await t.rollback();
+
+    Logger.error(error, "[EXCEPTION] updateTransactionHistoryPayment");
+    throw new TransfromError(error);
+  }
+};
