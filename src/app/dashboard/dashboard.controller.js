@@ -1,6 +1,7 @@
 // import Sequelize from "sequelize";
 import dayjs from "dayjs";
 import { TransfromError } from "../../helpers/baseError.helper.js";
+import DayjsUTC from "../../helpers/date.helper.js";
 import { ToPlainObject } from "../../helpers/index.helper.js";
 import { findAllTransaction } from "../transaction/transaction.repository.js";
 import { findListVoucher } from "../voucher/voucher.repository.js";
@@ -60,7 +61,7 @@ export const dashboard = async (req, res, next) => {
     }
 
     res.render("index", {
-      title: "Welcome",
+      title: "Dashboard",
       path: "/",
       flashdata: flashdata,
       errors: errors,
@@ -69,6 +70,7 @@ export const dashboard = async (req, res, next) => {
       categoriesTopup,
       widgets,
       sellingVouchers,
+      year: DayjsUTC().format("YYYY"),
     });
   } catch (error) {
     console.log(error);

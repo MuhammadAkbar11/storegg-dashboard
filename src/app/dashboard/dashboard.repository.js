@@ -6,6 +6,7 @@ import Transaction from "../../models/transaction.model.js";
 import Voucher from "../../models/voucher.model.js";
 import Player from "../../models/player.model.js";
 import { findAllCategories } from "../category/category.repository.js";
+import DayjsUTC from "../../helpers/date.helper.js";
 
 const Op = Sequelize.Op;
 
@@ -44,7 +45,14 @@ export const findDashboardWidgets = async () => {
 
 export const findVoucherTopupDashboard = async () => {
   try {
+    const month = DayjsUTC().month() + 1;
     const result = await Transaction.count({
+      where: {
+        created_at: Sequelize.where(
+          Sequelize.fn("MONTH", Sequelize.col("created_at")),
+          month
+        ),
+      },
       attributes: [
         "status",
         // [Sequelize.fn("MONTH", Sequelize.col("created_at")), "month"],
@@ -63,11 +71,14 @@ export const findVoucherTopupDashboard = async () => {
             let status = lb.status;
 
             if (status.includes("success")) {
-              status = "finished";
+              status = "Selesai";
             }
 
             if (status.includes("failed")) {
-              status = "Rejected";
+              status = "Gagal";
+            }
+            if (status.includes("pending")) {
+              status = "Tertunda";
             }
 
             return `${status.charAt(0).toUpperCase() + status.slice(1)}`;
@@ -92,7 +103,15 @@ export const findVoucherTopupDashboard = async () => {
 
 export const findCategoriesTopupDashboard = async () => {
   try {
+    const year = DayjsUTC().year();
+
     const result = await Transaction.count({
+      where: {
+        created_at: Sequelize.where(
+          Sequelize.fn("YEAR", Sequelize.col("created_at")),
+          year
+        ),
+      },
       attributes: [
         "category_id",
         // [Sequelize.fn("MONTH", Sequelize.col("created_at")), "month"],

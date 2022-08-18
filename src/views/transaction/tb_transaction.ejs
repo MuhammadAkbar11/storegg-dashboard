@@ -18,12 +18,12 @@
             <thead>
               <tr>
                 <th>#</th>
+                <th>Status</th>
                 <th class=" text-nowrap ">Player</th>
                 <th>Voucher</th>
                 <th class=" text-nowrap ">ID Game</th>
-                <th>Date</th>
+                <th>Tgl</th>
                 <th>Total harga</th>
-                <th>Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -37,7 +37,40 @@
               <tr>
                 <td>
                   <a href="/invoice/<%= ts.transaction_id %>"
-                    class=" text-primary fw-bold ">#<%= ts.transaction_id  %></a></td>
+                    class=" text-primary fw-bold ">#<%= ts.transaction_id  %></a>
+                </td>
+                <td>
+                  <div class="d-flex flex-column justify-content-start align-items-start gap-1 ">
+                    <% if(ts.status === 'pending' ) { %>
+                    <span class="badge badge-light-warning">
+                      <i data-feather='activity'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% if(ts.is_paid) { %>
+                    <span class="badge badge-light-success">
+                      <i data-feather='check'></i>
+                      paid
+                    </span>
+                    <% } else { %>
+                    <span class="badge badge-light-secondary">
+                      <i data-feather='alert-circle'></i>
+                      not paid
+                    </span>
+                    <%  } %>
+                    <% } else if(ts.status === 'success' ) { %>
+                    <span class="badge badge-light-success">
+                      <i data-feather='check-circle'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% } else { %>
+                    <span class="badge badge-light-danger">
+                      <i data-feather='x-circle'></i>
+                      <%= ts.status %>
+                    </span>
+                    <% } %>
+
+                  </div>
+                </td>
                 <td>
                   <div class="d-flex justify-content-left align-items-center">
                     <div class="avatar-wrapper">
@@ -75,41 +108,7 @@
                 <td class=" text-nowrap ">
                   <%= ts.created_at  %>
                 <td> <%= totalPrice %></td>
-                <td>
-                  <div class="d-flex">
-                    <% if(ts.status === 'pending' ) { %>
-                    <span class="badge badge-light-warning">
-                      <i data-feather='activity'></i>
-                      <%= ts.status %>
-                    </span>
-                    <% if(ts.is_paid) { %>
-                    <span class="badge badge-light-success" style="margin-left: 5px;">
-                      <i data-feather='check'></i>
-                      paid
-                    </span>
-                    <% } else { %>
-                    <span class="badge badge-light-secondary" style="margin-left: 5px;">
-                      <i data-feather='alert-circle'></i>
-                      not paid
-                    </span>
-                    <%  } %>
-                    <% } else if(ts.status === 'success' ) { %>
-                    <span class="badge badge-light-success">
-                      <i data-feather='check-circle'></i>
-                      <%= ts.status %>
-                    </span>
-                    <% } else { %>
-                    <span class="badge badge-light-danger">
-                      <i data-feather='x-circle'></i>
-                      <%= ts.status %>
-                    </span>
-                    <% } %>
 
-                  </div>
-
-
-
-                </td>
                 <td data-order="false">
                   <div class="d-flex col-actions align-items-center ">
 

@@ -46,7 +46,7 @@
             <div class="card-header">
               <div>
                 <h2 class="fw-bolder mb-0"><%= widgets.transaction %> </h2>
-                <p class="card-text">Transactions</p>
+                <p class="card-text">Transaksi</p>
               </div>
               <div class="avatar bg-light-primary p-50 m-0">
                 <div class="avatar-content">
@@ -62,7 +62,7 @@
             <div class="card-header">
               <div>
                 <h2 class="fw-bolder mb-0"><%= widgets.player  %></h2>
-                <p class="card-text">Players</p>
+                <p class="card-text">Player</p>
               </div>
               <div class="avatar bg-light-success p-50 m-0">
                 <div class="avatar-content">
@@ -77,7 +77,7 @@
             <div class="card-header">
               <div>
                 <h2 class="fw-bolder mb-0"><%= widgets.voucher  %> </h2>
-                <p class="card-text">Vouchers</p>
+                <p class="card-text">Voucher</p>
               </div>
               <div class="avatar bg-light-danger p-50 m-0">
                 <div class="avatar-content">
@@ -93,7 +93,7 @@
             <div class="card-header">
               <div>
                 <h4 class="fw-bolder " style="margin-bottom: 5px;"><%= widgets.revenue %> </h4>
-                <p class="card-text">Revenue</p>
+                <p class="card-text">Pendapatan</p>
               </div>
               <div class="avatar bg-light-warning p-50 m-0">
                 <div class="avatar-content">
@@ -113,29 +113,29 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex justify-content-between">
-              <h4 class="card-title">Voucher Topups</h4>
-              <div class=" text-white-50 ">Last Month</div>
+              <h4 class="card-title">Status Transaksi</h4>
+              <div class=" text-white-50 ">Bulan ini</div>
             </div>
             <div class="card-body">
               <div id="product-order-chart" data-chart="<%= JSON.stringify(topup?.data) %>"></div>
               <div class="d-flex justify-content-between mb-1">
                 <div class="d-flex align-items-center">
                   <i data-feather="circle" class="font-medium-1 text-success"></i>
-                  <span class="fw-bold ms-75">Finished</span>
+                  <span class="fw-bold ms-75">Selesai</span>
                 </div>
                 <span><%= topup?.count?.success %> </span>
               </div>
               <div class="d-flex justify-content-between mb-1">
                 <div class="d-flex align-items-center">
                   <i data-feather="circle" class="font-medium-1 text-warning"></i>
-                  <span class="fw-bold ms-75">Pending</span>
+                  <span class="fw-bold ms-75">Tertunda</span>
                 </div>
                 <span><%= topup?.count?.pending %> </span>
               </div>
               <div class="d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                   <i data-feather="circle" class="font-medium-1 text-danger"></i>
-                  <span class="fw-bold ms-75">Rejected</span>
+                  <span class="fw-bold ms-75">Gagal</span>
                 </div>
                 <span><%= topup?.count?.failed %> </span>
               </div>
@@ -146,8 +146,8 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ">
-              <h4 class="my-0">Topup by categories</h4>
-              <div class=" text-white-50">Last Years</div>
+              <h4 class="my-0">Kategori di Top Up</h4>
+              <div class=" text-white-50">Tahun <%= year %></div>
             </div>
             <div class="card-body">
               <div id="session-chart" class="my-1" data-chart="<%= JSON.stringify(categoriesTopup?.data) %>"></div>
@@ -187,7 +187,7 @@
         <div class="col-md-4 col-12">
           <div class="card card-transaction">
             <div class="card-header">
-              <h4 class="card-title">Most Topup Vouchers</h4>
+              <h4 class="card-title">Sering di Top Up</h4>
 
             </div>
             <div class="card-body " style="height: 410px; overflow-y: scroll;">
@@ -226,7 +226,7 @@
         <div class="col-12 col-md-12 ">
           <div class="card">
             <div class="card-header">
-              <h6 class="mb-0">5 newest transaction</h6>
+              <h6 class="mb-0">Transaksi terbaru</h6>
 
               <!-- <form action="/transaction" method="post">
                 <button type="submit" class="btn btn-primary">
@@ -240,13 +240,13 @@
                 <table id="transaction-datatable" class="table ">
                   <thead>
                     <tr>
+                      <th>Status</th>
                       <th>#</th>
                       <th class=" text-nowrap ">Player</th>
                       <th>Game & Item</th>
                       <th>Date</th>
                       <th>Total harga</th>
-                      <th>Status</th>
-
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -257,7 +257,26 @@
                         currency: "IDR",
                       }); %>
                     <tr>
-                      <td><span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
+                      <td>
+                        <span class=" text-primary fw-bold "><%= ts.transaction_id  %></span></td>
+                      <td>
+                        <% if(ts.status === 'pending' ) { %>
+                        <span class="badge badge-light-warning">
+                          <i data-feather='activity'></i>
+                          <%= ts.status %>
+                        </span>
+                        <% } else if(ts.status === 'success' ) { %>
+                        <span class="badge badge-light-success">
+                          <i data-feather='check-circle'></i>
+                          <%= ts.status %>
+                        </span>
+                        <% } else { %>
+                        <span class="badge badge-light-danger">
+                          <i data-feather='x-circle'></i>
+                          <%= ts.status %>
+                        </span>
+                        <% } %>
+                      </td>
                       <td>
                         <!-- <div class=" h-100 text-capitalize text-white ">
                           <span></span>
@@ -301,25 +320,15 @@
                       <td class=" text-nowrap ">
                         <%= ts.created_at  %>
                       <td> <%= totalPrice %></td>
-                      <td>
-                        <% if(ts.status === 'pending' ) { %>
-                        <span class="badge badge-light-warning">
-                          <i data-feather='activity'></i>
-                          <%= ts.status %>
-                        </span>
-                        <% } else if(ts.status === 'success' ) { %>
-                        <span class="badge badge-light-success">
-                          <i data-feather='check-circle'></i>
-                          <%= ts.status %>
-                        </span>
-                        <% } else { %>
-                        <span class="badge badge-light-danger">
-                          <i data-feather='x-circle'></i>
-                          <%= ts.status %>
-                        </span>
-                        <% } %>
-                      </td>
 
+                      <td>
+                        <div class=" d-flex justify-content-center w-100 ">
+                          <a class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Lihat Invoice" href="/invoice/<%= ts.transaction_id %>">
+                            <i data-feather="eye"></i>
+                          </a>
+                        </div>
+                      </td>
                     </tr>
                     <%  }); %>
                   </tbody>
