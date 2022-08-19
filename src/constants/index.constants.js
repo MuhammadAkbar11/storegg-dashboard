@@ -10,6 +10,12 @@ export const httpStatusCodes = {
   INTERNAL_SERVER: 500,
 };
 
+export const roles = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  ADMIN: "ADMIN",
+  PLAYER: "PLAYER",
+};
+
 export const TABLE_AUTO_INCREMENT = {
   users: {
     field: "user_id",

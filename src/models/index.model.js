@@ -36,7 +36,7 @@ export default function BoostrapingModels() {
   });
   Administrator.belongsTo(User, {
     foreignKey: "user_id",
-    as: "users",
+    as: "user",
     constraints: true,
   });
 

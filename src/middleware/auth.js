@@ -82,4 +82,37 @@ async function ensurePlayerAuth(req, res, next) {
   }
 }
 
-export { ensureAuth, ensureGuest, ensurePlayerAuth };
+const ensurePermission =
+  (roles, redirect = false) =>
+  (req, res, next) => {
+    // const method = req.method;
+    const user = req.user;
+
+    const permission = roles.find(r => r === user.role);
+
+    if (!permission) {
+      if (redirect) {
+        req.flash("flashdata", {
+          type: "error",
+          title: "Opps!",
+          message: `Anda tidak memiliki akses ke sumber daya ini!`,
+        });
+        return res.redirect("back");
+      }
+
+      const errors = new TransfromError(
+        new BaseError("FORBIDDEN", 403, "Access Denied", true, {
+          errorView: "errors/blocked",
+          renderData: {
+            title: "Akses ditolak",
+          },
+          responseType: "page",
+        })
+      );
+      return next(errors);
+    }
+
+    next();
+  };
+
+export { ensureAuth, ensureGuest, ensurePlayerAuth, ensurePermission };
