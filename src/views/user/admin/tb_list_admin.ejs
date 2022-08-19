@@ -1,0 +1,137 @@
+<section>
+
+
+  <div class="row">
+
+    <div class="col-12 col-md-12 ">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Data Admin</h6>
+          <% if(userAuth.role === "SUPER_ADMIN") { %>
+          <a href="/user/create-admin" class="btn btn-primary waves-effect">
+            <i data-feather="plus"></i> Tambahkan Admin
+          </a>
+          <% } %>
+
+        </div>
+        <div class="card-body">
+          <table id="user-datatable" class="datatables-basic table table-responsive">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th class="text-nowrap ">Username</th>
+                <th>Role</th>
+                <th class=" text-nowrap ">Date Join</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let no = 1 %>
+              <% users && users.forEach(adm => { %>
+
+              <tr>
+                <td><%= adm.admin_id  %></td>
+                <td>
+                  <div class="d-flex justify-content-left align-items-center">
+                    <div class="avatar-wrapper">
+                      <div class="avatar me-1"><img src="<%= adm.user.avatar %>" alt="Avatar" height="32" width="32">
+                      </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <a href="/users/<%= adm.user.user_id %>" class="user_name text-truncate text-body"><span
+                          class="fw-bolder"><%= adm.user.name %> </span></a><small class="emp_post text-muted">
+                        <%= adm.user.email  %></small></div>
+                  </div>
+
+                </td>
+                <td>
+                  <%= adm.user.username  %>
+                </td>
+                <td>
+
+                  <% if(adm.user.role.trim() == "SUPER_ADMIN") { %>
+                  <span class="text-truncate align-middle">
+                    <i data-feather="settings" class=" font-medium-3 text-danger me-50">
+                    </i>Super Admin</span>
+                  <% } else if(adm.user.role.trim() == "ADMIN") {  %>
+                  <span class="text-truncate align-middle">
+                    <i data-feather="slack" class=" font-medium-3 text-info me-50">
+                    </i>Admin</span>
+                  <% } else if(adm.user.role.trim() == "PLAYER") {  %>
+                  <span class="text-truncate align-middle">
+                    <i data-feather="user" class=" font-medium-3 text-primary me-50">
+                    </i>Player</span>
+                  <% } %>
+                </td>
+                <td class=" text-nowrap ">
+                  <%= adm.created_at  %>
+                </td>
+                <td>
+                  <% if(adm?.user?.status == "ACTIVE")  { %>
+                  <span class="badge badge-light-success text-capitalize">Active </span>
+                  <% } else if (adm?.status === "PENDING") { %>
+                  <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                  <% } else { %>
+                  <span class="badge badge-light-secondary text-capitalize">Inactive</span>
+                  <% } %>
+                </td>
+                <td data-order="false">
+                  <div class="d-flex">
+                    <!-- <form action="/user/status/<%= adm.user.user_id %>" method="POST" style="display: inline-block;">
+                      <input type="hidden" name="status" value="<%= adm?.status  %>">
+                      <input type="hidden" name="_method" value="PUT">
+                      <% if(adm?.status === 'Y') { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Nonaktifkan Voucher">
+                        <i data-feather='minus-square'></i>
+                      </button>
+                      <% } else { %>
+                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Aktifkan Voucher">
+                        <i data-feather='check-square'></i>
+                      </button>
+                      <% } %>
+
+                    </form> -->
+                    <div>
+
+                      <button type="button"
+                        class="btn btn-link-anchor btn-icon rounded-circle btn-flat-info waves-effect"
+                        data-href="/users/info-admin/<%= adm.user.user_id %>">
+                        <i data-feather="info"></i>
+                      </button>
+                    </div>
+
+                    <% if(userAuth.user_id !== adm.user.user_id ) { %>
+
+                    <% if(userAuth.role === "SUPER_ADMIN") { %>
+                    <div>
+                      <button type="button"
+                        class="btn btn-link-anchor btn-icon rounded-circle btn-flat-primary waves-effect"
+                        data-href="/users/edit-admin/<%= adm.user.user_id %>">
+                        <i data-feather="edit"></i>
+                      </button>
+                    </div>
+                    <form action="/user/<%= adm.user.user_id %>" method="post">
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
+                        <i data-feather="trash"></i>
+                      </button>
+                    </form>
+                    <% } %>
+                    <% } %>
+
+                  </div>
+                </td>
+              </tr>
+              <%  }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

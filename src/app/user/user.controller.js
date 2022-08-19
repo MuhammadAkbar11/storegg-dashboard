@@ -10,6 +10,7 @@ import BaseError, {
 import { ToPlainObject } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import { findAllUsers, findCountUser, findOneUser } from "./user.repository.js";
+import { findAllAdmin } from "../admin/admin.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -213,8 +214,8 @@ export const getListUsers = async (req, res) => {
         return { ...u };
       });
 
-    res.render("user/list_user/v_list_user", {
-      title: "Users",
+    res.render("user/all_user/v_list_user", {
+      title: "List Users",
       path: "/users",
       flashdata: flashdata,
       errors: errors,
@@ -222,6 +223,40 @@ export const getListUsers = async (req, res) => {
       countActive: countActive,
       countPending: countPending,
       users,
+      countUsers,
+      isEdit: false,
+      values: null,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const getListAdmin = async (req, res, next) => {
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+    let listAdmin = await findAllAdmin({});
+    let countUsers = listAdmin.length;
+
+    listAdmin = ToPlainObject(listAdmin);
+
+    listAdmin.length !== 0 &&
+      listAdmin.map(u => {
+        u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+
+        return { ...u };
+      });
+
+    console.log(listAdmin);
+    res.render("user/admin/v_list_admin", {
+      title: "List Admin",
+      path: "/users/admin",
+      flashdata: flashdata,
+      errors: errors,
+      // users: [],
+      users: listAdmin,
       countUsers,
       isEdit: false,
       values: null,

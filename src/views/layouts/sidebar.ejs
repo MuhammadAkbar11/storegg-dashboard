@@ -45,17 +45,23 @@
         <a class="d-flex align-items-center" href="#"><i data-feather="users"></i>
           <span class="menu-title text-truncate">User</span></a>
         <ul class="menu-content">
-          <li>
+          <li class="<%= path == "/users" ? "active" : ""%>">
             <a class="d-flex align-items-center" href="/users">
               <i data-feather="circle"></i>
               <span class="menu-item text-truncate">
-                Semua
+                User
               </span>
             </a>
           </li>
-          <li><a class="d-flex align-items-center" href="/players"><i data-feather="circle"></i><span
-                class="menu-item text-truncate">Player</span></a>
+          <li class="<%= path == "/users/admin" ? "active" : ""%>">
+            <a class="d-flex align-items-center" href="/users/admin">
+              <i data-feather="circle"></i>
+              <span class="menu-item text-truncate">
+                Admin
+              </span>
+            </a>
           </li>
+
         </ul>
       </li>
       <li class="nav-item <%= path == "/category" ? "active" : ""%>">

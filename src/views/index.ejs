@@ -114,7 +114,7 @@
           <div class="card">
             <div class="card-header d-flex justify-content-between">
               <h4 class="card-title">Status Transaksi</h4>
-              <div class=" text-white-50 ">Bulan ini</div>
+              <small class=" text-white-50 ">Bulan ini</small>
             </div>
             <div class="card-body">
               <div id="product-order-chart" data-chart="<%= JSON.stringify(topup?.data) %>"></div>
@@ -147,7 +147,7 @@
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ">
               <h4 class="my-0">Kategori di Top Up</h4>
-              <div class=" text-white-50">Tahun <%= year %></div>
+              <small class=" text-white-50">Tahun <%= year %></small>
             </div>
             <div class="card-body">
               <div id="session-chart" class="my-1" data-chart="<%= JSON.stringify(categoriesTopup?.data) %>"></div>
@@ -187,7 +187,7 @@
         <div class="col-md-4 col-12">
           <div class="card card-transaction">
             <div class="card-header">
-              <h4 class="card-title">Sering di Top Up</h4>
+              <h5 class="card-title">Paling Sering di Top Up</h5>
 
             </div>
             <div class="card-body " style="height: 410px; overflow-y: scroll;">
