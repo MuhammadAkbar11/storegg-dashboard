@@ -28,3 +28,15 @@ if (ToastsTemplate.length !== 0) {
     }, idx * 1000);
   });
 }
+
+const BtnLinkAnchor = [...document.querySelectorAll(".btn-link-anchor")];
+
+if (BtnLinkAnchor.length !== 0) {
+  BtnLinkAnchor.forEach(btn => {
+    const href = btn.getAttribute("data-href");
+    btn.addEventListener("click", ev => {
+      ev.preventDefault();
+      window.location.href = href;
+    });
+  });
+}
