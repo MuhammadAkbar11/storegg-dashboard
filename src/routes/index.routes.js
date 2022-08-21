@@ -1,3 +1,4 @@
+import AdminRoutes from "../app/admin/admin.routes.js";
 import APIsRoutes from "../app/api/api.routes.js";
 import BankRoutes from "../app/bank/bank.routes.js";
 import CategoryRoutes from "../app/category/category.routes.js";
@@ -14,6 +15,7 @@ function MainRoutes(app) {
   app.get("/", ensureAuth, dashboard);
 
   UserRoutes(app);
+  AdminRoutes(app);
   VoucherRoutes(app);
   NominalRoutes(app);
   CategoryRoutes(app);
