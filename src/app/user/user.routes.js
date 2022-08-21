@@ -1,4 +1,5 @@
 import {
+  getDetailAdmin,
   getListAdmin,
   getListUsers,
   getLocalAuthCallback,
@@ -29,10 +30,16 @@ function UserRoutes(app) {
 
   app.get("/users", ensureAuth, getListUsers);
   app.get(
-    "/users/admin",
+    "/admin",
     ensureAuth,
     ensurePermission([roles.SUPER_ADMIN]),
     getListAdmin
+  );
+  app.get(
+    "/admin/:id",
+    ensureAuth,
+    ensurePermission([roles.SUPER_ADMIN]),
+    getDetailAdmin
   );
 }
 

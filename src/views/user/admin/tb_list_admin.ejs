@@ -40,9 +40,12 @@
                       </div>
                     </div>
                     <div class="d-flex flex-column">
-                      <a href="/users/<%= adm.user.user_id %>" class="user_name text-truncate text-body"><span
-                          class="fw-bolder"><%= adm.user.name %> </span></a><small class="emp_post text-muted">
-                        <%= adm.user.email  %></small></div>
+                      <a href="/admin/<%= adm.admin_id %>" class="user_name text-truncate text-body">
+                        <span class="fw-bolder"><%= adm.user.name %> </span></a>
+                      <small class="emp_post text-muted">
+                        <%= adm.user.email  %>
+                      </small>
+                    </div>
                   </div>
 
                 </td>
@@ -99,8 +102,8 @@
 
                       <button type="button"
                         class="btn btn-link-anchor btn-icon rounded-circle btn-flat-info waves-effect"
-                        data-href="/users/info-admin/<%= adm.user.user_id %>">
-                        <i data-feather="info"></i>
+                        data-href="/admin/<%= adm.admin_id %>">
+                        <i data-feather="file-text"></i>
                       </button>
                     </div>
 
@@ -108,16 +111,16 @@
 
                     <% if(userAuth.role === "SUPER_ADMIN") { %>
                     <div>
-                      <button type="button"
+                      <button type=" button"
                         class="btn btn-link-anchor btn-icon rounded-circle btn-flat-primary waves-effect"
-                        data-href="/users/edit-admin/<%= adm.user.user_id %>">
+                        data-href="/admin/edit-admin/<%= adm.admin_id %>">
                         <i data-feather="edit"></i>
                       </button>
                     </div>
-                    <form action="/user/<%= adm.user.user_id %>" method="post">
+                    <form action="/admin/<%= adm.admin_id %>" method="post">
                       <input type="hidden" name="_method" value="DELETE">
                       <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
-                        <i data-feather="trash"></i>
+                        <i data-feather="trash-2"></i>
                       </button>
                     </form>
                     <% } %>

@@ -1,0 +1,274 @@
+<%- include('../../layouts/head.ejs') %>
+
+<%- include("../../layouts/header.ejs") %>
+<%- include("../../layouts/sidebar.ejs") %>
+
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= admin.admin_id %> </h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/admin">List Admin</a>
+                </li>
+                <li class="breadcrumb-item active"><%= admin.admin_id %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <section class="app-user-view-account">
+        <div class="row">
+          <!-- User Sidebar -->
+          <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+            <!-- User Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="user-avatar-section">
+                  <div class="d-flex align-items-center flex-column">
+                    <img class="img-fluid rounded-circle mt-3 mb-2" src="<%= admin.user.avatar %>" height="110"
+                      width="110" alt="User avatar" />
+                    <div class="user-info text-center">
+                      <h4 class=" text-capitalize "><%= admin.user.name %></h4>
+                      <!-- <span class="badge bg-light-secondary">Author</span> -->
+                      <% if(admin.user.role.trim() == "SUPER_ADMIN") { %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Super Admin</span>
+                      <% } else if(admin.user.role.trim() == "ADMIN") {  %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Admin</span>
+                      <% } else if(admin.user.role.trim() == "PLAYER") {  %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Player</span>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-around my-2 pt-75">
+                  <div class="d-flex align-items-start me-2">
+                    <span class="badge bg-light-primary p-75 rounded">
+                      <i data-feather="check" class="font-medium-2"></i>
+                    </span>
+                    <div class="ms-75">
+                      <h4 class="mb-0">1.23k</h4>
+                      <small>Transaksi dikonfirmasi</small>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-start">
+                    <span class="badge bg-light-primary p-75 rounded">
+                      <i data-feather="briefcase" class="font-medium-2"></i>
+                    </span>
+                    <div class="ms-75">
+                      <h4 class="mb-0"><%= admin.vouchers.length %></h4>
+                      <small>Voucher</small>
+                    </div>
+                  </div>
+                </div>
+                <h4 class="fw-bolder border-bottom pb-50 mb-1">Details</h4>
+                <div class="info-container">
+                  <ul class="list-unstyled">
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Name pengguna:</span>
+                      <span><%= admin.user.username %> </span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Email:</span>
+                      <span><%= admin.user.email %></span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Status:</span>
+                      <!-- <span class="badge bg-light-success">Active</span> -->
+                      <% if(admin?.user?.status == "ACTIVE")  { %>
+                      <span class="badge badge-light-success text-capitalize">Active </span>
+                      <% } else if (adm?.status === "PENDING") { %>
+                      <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                      <% } else { %>
+                      <span class="badge badge-light-secondary text-capitalize">Inactive</span>
+                      <% } %>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Role:</span>
+                      <% if(admin.user.role.trim() == "SUPER_ADMIN") { %>
+                      <span>
+                        Super Admin</span>
+                      <% } else if(admin.user.role.trim() == "ADMIN") {  %>
+                      <span>
+                        Admin</span>
+                      <% } else if(admin.user.role.trim() == "PLAYER") {  %>
+                      <span>
+                        Player</span>
+                      <% } %>
+                    </li>
+                    <!-- <li class="mb-75">
+                      <span class="fw-bolder me-25">Tax ID:</span>
+                      <span>Tax-8965</span>
+                    </li> -->
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Kontak:</span>
+                      <span><%= admin.user?.phone_number %></span>
+                    </li>
+                    <!-- <li class="mb-75">
+                      <span class="fw-bolder me-25">Language:</span>
+                      <span>English</span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Country:</span>
+                      <span>Wake Island</span>
+                    </li> -->
+                  </ul>
+                  <% if(userAuth.user_id !== admin.user.user_id ) { %>
+                  <div class="d-flex justify-content-center pt-2">
+                    <a href="javascript:;" class="btn btn-primary me-1" data-bs-target="#editUser"
+                      data-bs-toggle="modal">
+                      Edit
+                    </a>
+                    <a href="javascript:;" class="btn btn-outline-danger suspend-user">Suspended</a>
+                  </div>
+                  <% } %>
+
+                </div>
+              </div>
+            </div>
+            <!-- /User Card -->
+
+          </div>
+          <!--/ User Sidebar -->
+
+          <!-- User Content -->
+          <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+            <!-- User Pills -->
+            <ul class="nav nav-pills mb-2">
+              <li class="nav-item">
+                <a class="nav-link active" href="/admin/<%= admin.admin_id %>">
+                  <i data-feather="user" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Account</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/<%= admin.admin_id %>/security">
+                  <i data-feather="lock" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Security</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/<%= admin.admin_id %>/settings">
+                  <i data-feather="settings" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Settings</span>
+                </a>
+              </li>
+
+            </ul>
+            <!--/ User Pills -->
+
+            <!-- Project table -->
+            <div class="card">
+              <h4 class="card-header">Voucher yang dibuat</h4>
+              <div class="table-responsive">
+                <table class="table datatable-project">
+                  <thead>
+                    <tr>
+                      <!-- <th>#</th> -->
+                      <th>Voucher</th>
+                      <th>Total Transaksi</th>
+                      <th>Kategori</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if(admin?.vouchers.length !== 0) { %>
+
+                    <% admin?.vouchers.forEach(v => { %>
+                    <tr>
+                      <td style="width: 200px;">
+                        <div class="d-flex gap-1">
+                          <img height="50" src="<%= v.thumbnail  %>" alt="">
+                          <%= v.game_name  %>
+                        </div>
+                      </td>
+                      <td>
+                        <%= v.count %>
+                      </td>
+                      <td><%= v.category.name  %> </td>
+                      <td><% if(v.status == "Y")  { %>
+
+                        <span class="badge badge-light-success text-uppercase ">Aktif</span>
+                        <% } else { %>
+                        <span class="badge badge-light-danger text-uppercase ">Nonaktif</span>
+
+                        <% } %>
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <% } else { %>
+
+                    <tr>
+                      <td colspan="5">
+
+                        <p class="text-center">Tidak ada voucher</p>
+
+                      </td>
+                    </tr>
+
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /Project table -->
+            <!-- Invoice table -->
+            <!-- <div class="card">
+              <table class="invoice-table table text-nowrap">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>#ID</th>
+                    <th><i data-feather="trending-up"></i></th>
+                    <th>TOTAL Paid</th>
+                    <th class="text-truncate">Issued Date</th>
+                    <th class="cell-fit">Actions</th>
+                  </tr>
+                </thead>
+              </table>
+            </div> -->
+            <!-- /Invoice table -->
+          </div>
+          <!--/ User Content -->
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+
+
+<%- include('../../layouts/footer.ejs') %>
+<!-- <script>
+  var dt_user_table = $('#user-datatable')
+
+  if (dt_user_table.length) {
+    dt_user_table.DataTable({
+      "drawCallback": function (settings) {
+        feather.replace();
+      }
+    });
+  }
+</script> -->
+
+
+
+<%- include('../../layouts/end.ejs') %>
