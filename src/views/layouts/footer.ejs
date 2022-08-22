@@ -15,6 +15,10 @@
 
 <!-- BEGIN: Vendor JS-->
 <script src="/vendors/js/vendors.min.js"></script>
+<% if(script?.vendors) { %>
+<% script?.vendors?.forEach(link => { %>
+<script src="<%= link %>"></script><%}); %>
+<% } %>
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
@@ -27,6 +31,10 @@
 <script src="/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
 <script src="/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 <script src="/vendors/js/extensions/toastr.min.js"></script>
+<% if(script?.vendors) { %>
+<% script?.pages?.forEach(link => { %>
+<script src="<%= link %>"></script><%}); %>
+<% } %>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

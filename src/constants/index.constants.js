@@ -10,10 +10,21 @@ export const httpStatusCodes = {
   INTERNAL_SERVER: 500,
 };
 
-export const roles = {
+export const ROLES = {
   SUPER_ADMIN: "SUPER_ADMIN",
   ADMIN: "ADMIN",
   PLAYER: "PLAYER",
+};
+
+export const LOCALS_STATIC = {
+  stylesheet: {
+    pages: [],
+    vendors: [],
+  },
+  script: {
+    pages: [],
+    vendors: [],
+  },
 };
 
 export const TABLE_AUTO_INCREMENT = {

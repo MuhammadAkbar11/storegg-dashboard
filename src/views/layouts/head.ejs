@@ -15,10 +15,15 @@
 
   <!-- BEGIN: Vendor CSS-->
   <link rel="stylesheet" type="text/css" href="/vendors/css/vendors.min.css">
+  <link rel="stylesheet" type="text/css" href="/vendors/css/animate/animate.min.css">
   <link rel="stylesheet" type="text/css" href="/vendors/css/datatable/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" type="text/css" href="/vendors/css/datatable/responsive.bootstrap5.min.css">
   <link rel="stylesheet" type="text/css" href="/vendors/css/pickers/flatpickr/flatpickr.min.css">
   <link rel="stylesheet" type="text/css" href="/vendors/css/extensions/toastr.min.css">
+  <% if(stylesheet?.vendors) { %>
+  <% stylesheet?.vendors?.forEach(link => { %>
+  <link rel="stylesheet" type="text/css" href="<%= link %>"><%}); %>
+  <% } %>
   <!-- END: Vendor CSS-->
 
 
@@ -36,6 +41,11 @@
   <link rel="stylesheet" type="text/css" href="/css/ext-component-toastr.css">
   <link rel="stylesheet" type="text/css" href="/css/forms/form-flat-pickr.css">
   <link rel="stylesheet" type="text/css" href="/css/pages/app-invoice.css">
+
+  <% if(stylesheet?.pages) { %>
+  <% stylesheet?.pages?.map(link => { %>
+  <link rel="stylesheet" type="text/css" href="<%= link %>"><% }); %>
+  <% } %>
   <!-- END: Page CSS-->
 
   <!-- BEGIN: Custom CSS-->

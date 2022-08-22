@@ -17,6 +17,7 @@ import {
 } from "./src/middleware/errorHandler.js";
 import {
   DEV_STATIC_FOLDER,
+  LOCALS_STATIC,
   STATIC_FOLDER,
 } from "./src/constants/index.constants.js";
 import passportConfig from "./src/config/passport.config.js";
@@ -108,6 +109,13 @@ app.use((req, res, next) => {
     res.locals.userAuth = null;
   }
 
+  next();
+});
+
+// Dymanic static file like css/js
+app.use((_req, res, next) => {
+  res.locals.stylesheet = LOCALS_STATIC.stylesheet;
+  res.locals.script = LOCALS_STATIC.script;
   next();
 });
 
