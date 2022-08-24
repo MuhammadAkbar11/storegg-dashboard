@@ -48,6 +48,10 @@ export function Rupiah(values) {
   });
 }
 
+export function ToCapitalize(value) {
+  return `${value.charAt(0).toUpperCase() + value.slice(1)}`;
+}
+
 export function ToPlainObject(data) {
   let rows = data;
 
