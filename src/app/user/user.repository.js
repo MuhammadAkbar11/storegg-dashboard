@@ -1,4 +1,6 @@
+import { ROLES, USER_STATUS } from "../../constants/index.constants.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
+import { ToCapitalize } from "../../helpers/index.helper.js";
 import User from "../../models/user.model.js";
 
 export const findAllUsers = async filter => {
@@ -43,4 +45,26 @@ export const findUserById = async id => {
     console.error("[EXCEPTION] findUserById", error);
     throw new TransfromError(error);
   }
+};
+
+export const findListUserRoles = selectedRole => {
+  return Object.keys(ROLES)
+    .filter(r => r !== ROLES.PLAYER)
+    .map(rl => {
+      return {
+        value: rl,
+        name: ToCapitalize(rl.split("_").join(" ").toLocaleLowerCase()),
+        selected: rl == selectedRole ? true : false,
+      };
+    });
+};
+
+export const findListUserStatus = selectedStatus => {
+  return Object.keys(USER_STATUS).map(s => {
+    return {
+      value: s,
+      name: ToCapitalize(s.split("_").join(" ").toLocaleLowerCase()),
+      selected: s == selectedStatus ? true : false,
+    };
+  });
 };

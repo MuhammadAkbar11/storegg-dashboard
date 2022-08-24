@@ -19,7 +19,10 @@
                 </li>
                 <li class="breadcrumb-item"><a href="/admin">List Admin</a>
                 </li>
-                <li class="breadcrumb-item active"><%= admin.admin_id %>
+                <li class="breadcrumb-item"><a href="/admin/<%= admin.admin_id %>"><%= admin.admin_id %></a>
+                </li>
+                <li class="breadcrumb-item active">
+                  Pengaturan
                 </li>
               </ol>
             </div>
@@ -238,21 +241,20 @@
                       </div>
 
                       <div class="col-12">
-                        <label for="address" class="form-label">Alamat (Contoh: Jln dan No rumah, RT/RW, Kelurahan,
-                          Kecamatan)</label>
+                        <label for="address" class="form-label">Alamat (Contoh: Jalan,No
+                          Rumah,RT/RW,Kelurahan,Kecamatan)</label>
                         <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
-                          value="Jln Antara,No 666,RT.666/RW.666,Jatimakmur,Pondok Gede" />
-
+                          value="<%= admin?.address || "" %>" />
                       </div>
                       <div class="col-12 col-md-6 ">
                         <label for="address" class="form-label">Provinsi</label>
                         <input type="text" class="form-control" id="regency" name="regency" placeholder="Provinsi"
-                          value="Jawa Barat" />
+                          value="<%= admin?.regency || ""%>" />
                       </div>
                       <div class="col-12 col-md-6 ">
                         <label for="address" class="form-label">Kota</label>
                         <input type="text" class="form-control" id="city" name="city" placeholder="Kota"
-                          value="Bekasi" />
+                          value="<%= admin?.city || "" %>" />
                       </div>
                       <!-- <div class="col-12 col-md-6">
                         <label class="form-label" for="country">Country</label>

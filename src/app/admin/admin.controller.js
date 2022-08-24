@@ -24,6 +24,10 @@ import {
   updateAdmin,
 } from "../admin/admin.repository.js";
 import Transaction from "../../models/transaction.model.js";
+import {
+  findListUserRoles,
+  findListUserStatus,
+} from "../user/user.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -251,26 +255,16 @@ export const viewEditAdmin = async (req, res, next) => {
 
     admin = ToPlainObject(admin);
 
-    const roles = Object.keys(ROLES)
-      .filter(r => r !== ROLES.PLAYER)
-      .map(rl => {
-        return {
-          value: rl,
-          name: ToCapitalize(rl.split("_").join(" ").toLocaleLowerCase()),
-          selected: rl == admin.user.role ? true : false,
-        };
-      });
+    const address = JSON.parse(admin.address);
+    admin.city = address.city;
+    admin.regency = address.regency;
+    admin.address = `${address.street},${address.house},${address.RT_RW},${address.ward},${address.districts}`;
 
-    const status = Object.keys(USER_STATUS).map(s => {
-      return {
-        value: s,
-        name: ToCapitalize(s.split("_").join(" ").toLocaleLowerCase()),
-        selected: s == admin.user.status ? true : false,
-      };
-    });
+    const roles = findListUserRoles(admin.user.role);
+    const status = findListUserStatus(admin.user.status);
 
     res.render("user/admin/v_edit_admin", {
-      title: `Edit ${admin.admin_id}`,
+      title: `Pengaturan ${admin.admin_id}`,
       path: "/admin",
       roles: roles,
       status: status,

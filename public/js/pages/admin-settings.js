@@ -44,6 +44,14 @@ $(function () {
     },
     "Format alamat tidak sesuai (contoh: Jln Antara, No 66, RT.666/RW.666, Jatimakmur, Pondok Gede)"
   );
+
+  $.validator.addMethod(
+    "noSpace",
+    function (value, element) {
+      return value.indexOf(" ") < 0 && value != "";
+    },
+    "Username tidak memperbolehkan spasi dan jangan biarkan kosong"
+  );
   if (form.length) {
     form.each(function () {
       var $this = $(this);
@@ -55,6 +63,7 @@ $(function () {
           },
           username: {
             required: true,
+            noSpace: true,
           },
           email: {
             required: true,
