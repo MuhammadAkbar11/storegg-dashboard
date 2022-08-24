@@ -16,6 +16,7 @@ import {
 } from "../../helpers/index.helper.js";
 import {
   createAdmin,
+  deleteOneAdmin,
   findAllAdmin,
   findOneAdmin,
   updateAdmin,
@@ -231,7 +232,7 @@ export const postAdmin = async (req, res, next) => {
       req.flash("flashdata", {
         type: "error",
         title: "Oppss",
-        message: `Email telah terdaftar!`,
+        message: `Email telah terdaftar, silahkan ganti dengan email yang belum terdaftar!`,
       });
       return res.redirect("back");
     }
@@ -273,6 +274,57 @@ export const postAdmin = async (req, res, next) => {
       type: "error",
       title: "Opps!",
       message: "Gagal menambah data",
+    });
+    res.redirect("back");
+  }
+};
+
+export const deleteAdmin = async (req, res, next) => {
+  const ID = req.params.id;
+
+  try {
+    let admin = await findOneAdmin({
+      where: {
+        admin_id: ID,
+      },
+    });
+
+    if (!admin) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal menghapus data admin, karena admin dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      return res.redirect("back");
+    }
+
+    const email = admin.user.email;
+
+    if (admin.admin_id == req.user.admin_id) {
+      req.flash("flashdata", {
+        type: "warning",
+        title: "Peringatan",
+        message: `Tidak dapat menghapus data anda!`,
+      });
+      return res.redirect("back");
+    }
+
+    await deleteOneAdmin({
+      admin_id: admin.admin_id,
+      user_id: admin.user.user_id,
+    });
+
+    req.flash("flashdata", {
+      type: "warning",
+      title: "Dihapus!",
+      message: `Berhasil menghapus <b>${email}</b> `,
+    });
+    res.redirect("back");
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal menghapus data",
     });
     res.redirect("back");
   }

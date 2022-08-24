@@ -177,3 +177,33 @@ export const createAdmin = async payload => {
     throw new TransfromError(error);
   }
 };
+
+export const deleteOneAdmin = async payload => {
+  const t = await sequelizeConnection.transaction();
+  try {
+    const { admin_id, user_id } = payload;
+
+    await Administrator.destroy(
+      { where: { admin_id: admin_id } },
+      { transaction: t }
+    );
+
+    await User.destroy(
+      {
+        where: {
+          user_id: user_id,
+        },
+      },
+      {
+        transaction: t,
+      }
+    );
+
+    await t.commit();
+    return true;
+  } catch (error) {
+    await t.rollback();
+    console.error("[EXCEPTION] createAdmin", error);
+    throw new TransfromError(error);
+  }
+};

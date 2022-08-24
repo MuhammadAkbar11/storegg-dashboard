@@ -50,6 +50,24 @@
   }
 </script>
 
+<script>
+  const deleteModal = document.getElementById('deleteModal')
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget
+    const form = deleteModal.querySelector("#formDelete");
+
+
+    // Extract info from data-bs-* attributes
+    const data = button.getAttribute('data-bs-admin')
+    const {
+      admin_id: adminId
+    } = JSON.parse(data)
+
+    form.setAttribute("action", "/admin/" + adminId)
+    form.setAttribute("method", "post")
+  })
+</script>
 
 
 <%- include('../../layouts/end.ejs') %>

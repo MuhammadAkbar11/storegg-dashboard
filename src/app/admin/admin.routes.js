@@ -1,4 +1,5 @@
 import {
+  deleteAdmin,
   getDetailAdmin,
   getListAdmin,
   postAdmin,
@@ -18,7 +19,10 @@ function AdminRoutes(app) {
     .get(ensureAuth, permission, viewEditAdmin)
     .post(uploadSingleImage("/users"), ensureAuth, permission, putAdmin);
   app.route("/admin/create-admin").get(ensureAuth, permission, viewCreateAdmin);
-  app.route("/admin/:id").get(ensureAuth, permission, getDetailAdmin);
+  app
+    .route("/admin/:id")
+    .get(ensureAuth, permission, getDetailAdmin)
+    .delete(ensureAuth, permission, deleteAdmin);
 
   app
     .route("/admin")

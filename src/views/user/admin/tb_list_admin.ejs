@@ -82,22 +82,7 @@
                 </td>
                 <td data-order="false">
                   <div class="d-flex justify-content-center">
-                    <!-- <form action="/user/status/<%= adm.user.user_id %>" method="POST" style="display: inline-block;">
-                      <input type="hidden" name="status" value="<%= adm?.status  %>">
-                      <input type="hidden" name="_method" value="PUT">
-                      <% if(adm?.status === 'Y') { %>
-                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Nonaktifkan Voucher">
-                        <i data-feather='minus-square'></i>
-                      </button>
-                      <% } else { %>
-                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Aktifkan Voucher">
-                        <i data-feather='check-square'></i>
-                      </button>
-                      <% } %>
 
-                    </form> -->
                     <% if(userAuth.user_id !== adm.user.user_id ) { %>
                     <% if(userAuth.role === "SUPER_ADMIN") { %>
                     <div>
@@ -114,12 +99,16 @@
                         <i data-feather="edit"></i>
                       </button>
                     </div>
-                    <form action="/admin/<%= adm.admin_id %>" method="post">
+                    <!-- <form action="/admin/<%= adm.admin_id %>" method="post">
                       <input type="hidden" name="_method" value="DELETE">
                       <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
                         <i data-feather="trash-2"></i>
                       </button>
-                    </form>
+                    </form> -->
+                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
+                      data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-admin="<%= JSON.stringify(adm)  %>">
+                      <i data-feather="trash-2"></i>
+                    </button>
                     <% } %>
                     <% } %>
 
@@ -133,5 +122,34 @@
       </div>
     </div>
   </div>
-
 </section>
+
+
+
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="deleteModal" tabindex="-1"
+  aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class="  mb-1">Anda yakin?</h3>
+          <p class=" mb-2">Apakah anda ingin menghapusnya?</p>
+          <form action="/admin" id="formDelete">
+
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-danger">Ya, hapus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
