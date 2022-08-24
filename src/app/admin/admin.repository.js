@@ -3,6 +3,7 @@ import sharp from "sharp";
 import sequelizeConnection from "../../config/db.config.js";
 import { MODE } from "../../config/env.config.js";
 import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
+import { GeneratePassword } from "../../helpers/authentication.helper.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
@@ -135,6 +136,44 @@ export const updateAdmin = async payload => {
   } catch (error) {
     await t.rollback();
     console.error("[EXCEPTION] updateAdmin", error);
+    throw new TransfromError(error);
+  }
+};
+
+export const createAdmin = async payload => {
+  const t = await sequelizeConnection.transaction();
+  try {
+    const { username, phone_number, name, email, status, role, address } =
+      payload;
+
+    const avatar = DEFAULT_USER_PP;
+    const password = await GeneratePassword("123456");
+    const user = await User.create(
+      {
+        email,
+        username,
+        phone_number,
+        name,
+        avatar,
+        status,
+        role,
+        password,
+      },
+      {
+        transaction: t,
+      }
+    );
+
+    await Administrator.create(
+      { address, user_id: user.user_id },
+      { transaction: t }
+    );
+
+    await t.commit();
+    return true;
+  } catch (error) {
+    await t.rollback();
+    console.error("[EXCEPTION] createAdmin", error);
     throw new TransfromError(error);
   }
 };

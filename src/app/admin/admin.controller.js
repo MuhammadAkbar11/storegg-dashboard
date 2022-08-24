@@ -1,12 +1,9 @@
 import dayjs from "dayjs";
+import { faker } from "@faker-js/faker";
 import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
-import {
-  httpStatusCodes,
-  ROLES,
-  USER_STATUS,
-} from "../../constants/index.constants.js";
-import { ComparePassword } from "../../helpers/authentication.helper.js";
+import { ROLES, USER_STATUS } from "../../constants/index.constants.js";
+// import { ComparePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
@@ -14,11 +11,11 @@ import BaseError, {
 import {
   HTMLScript,
   HTMLStylesheet,
-  ToCapitalize,
   ToPlainObject,
   UnlinkFile,
 } from "../../helpers/index.helper.js";
 import {
+  createAdmin,
   findAllAdmin,
   findOneAdmin,
   updateAdmin,
@@ -27,6 +24,7 @@ import Transaction from "../../models/transaction.model.js";
 import {
   findListUserRoles,
   findListUserStatus,
+  findOneUser,
 } from "../user/user.repository.js";
 
 const Op = Sequelize.Op;
@@ -207,6 +205,79 @@ export const putAdmin = async (req, res, next) => {
   }
 };
 
+export const postAdmin = async (req, res, next) => {
+  const {
+    name,
+    username,
+    email,
+    status,
+    phone_number,
+    role,
+    address,
+    regency,
+    city,
+  } = req.body;
+
+  try {
+    let user = await findOneUser({
+      where: {
+        email,
+      },
+    });
+
+    req.flash("values", { ...req.body });
+
+    if (user) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Email telah terdaftar!`,
+      });
+      return res.redirect("back");
+    }
+
+    const splitReqAddress = address.split(",");
+    let joinAddress = {
+      country: "Indonesia",
+      regency: regency,
+      city: city,
+      districts: splitReqAddress[splitReqAddress.length - 1],
+      ward: splitReqAddress[3],
+      RT_RW: splitReqAddress[2],
+      house: splitReqAddress[1],
+      street: splitReqAddress[0],
+    };
+
+    joinAddress = JSON.stringify(joinAddress);
+
+    const payload = {
+      name,
+      username,
+      email,
+      status,
+      phone_number,
+      role,
+      address: joinAddress,
+    };
+
+    await createAdmin(payload);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Ditambahkan!",
+      message: "Berhasil menambah data admin",
+    });
+    res.redirect("/admin");
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal menambah data",
+    });
+    res.redirect("back");
+  }
+};
+
 export const viewEditAdmin = async (req, res, next) => {
   const ID = req.params.id;
 
@@ -271,6 +342,77 @@ export const viewEditAdmin = async (req, res, next) => {
       flashdata: flashdata,
       errors: errors,
       admin: admin,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const viewCreateAdmin = async (req, res, next) => {
+  HTMLStylesheet(
+    [
+      ["/vendors/css/forms/select/select2.min.css", "vendors"],
+      ["/css/forms/form-validation.css", "pages"],
+    ],
+    res
+  );
+
+  HTMLScript(
+    [
+      ["/vendors/js/forms/select/select2.full.min.js", "pages"],
+      ["/vendors/js/forms/validation/jquery.validate.min.js", "pages"],
+      ["/vendors/js/forms/cleave/cleave.min.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.id.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.us.js", "pages"],
+    ],
+    res
+  );
+
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+    const reqValues = req.flash("values")[0];
+
+    const roles = findListUserRoles(ROLES.ADMIN);
+    const status = findListUserStatus(USER_STATUS.ACTIVE);
+
+    const name = faker.name.findName();
+    const username = name.split(" ").join("_").toLowerCase();
+    const phone_number = faker.phone.number("+628##-####-####");
+    const city = faker.address.city();
+    const regency = faker.address.county();
+    const splitUsername = username.split("_");
+    const email = faker.internet.email(
+      splitUsername[0],
+      splitUsername[1],
+      "gmail.com"
+    );
+
+    const address = `${faker.address.streetAddress()},No ${faker.address.buildingNumber()},RT.000/RT.000,Kel.${faker.random.word()},Kec.${faker.random.word()}`;
+
+    let values = {
+      name: name,
+      username: username,
+      email: email,
+      phone_number: phone_number,
+      address: address,
+      city: city,
+      regency: regency,
+    };
+
+    if (reqValues) {
+      values = reqValues;
+    }
+
+    res.render("user/admin/v_create_admin", {
+      title: `Tambah admin`,
+      path: "/admin",
+      roles: roles,
+      status: status,
+      flashdata: flashdata,
+      errors: errors,
+      values: values,
     });
   } catch (error) {
     const baseError = new TransfromError(error);

@@ -2,7 +2,7 @@ $(function () {
   ("use strict");
 
   // variables
-  var form = $("#form-edit-admin"),
+  var form = $("#form-action-admin"),
     accountUploadImg = $("#account-upload-img"),
     accountUploadBtn = $("#account-upload"),
     accountUserImage = $(".uploadedAvatar"),
@@ -42,7 +42,7 @@ $(function () {
       // const rex = //
       return this.optional(element) || rgx.test(value);
     },
-    "Format alamat tidak sesuai (contoh: Jln Antara, No 66, RT.666/RW.666, Jatimakmur, Pondok Gede)"
+    "Format alamat tidak sesuai (contoh: Jln Antara,No 66,RT.666/RW.666,Jatimakmur,Pondok Gede)"
   );
 
   $.validator.addMethod(
@@ -69,6 +69,9 @@ $(function () {
             required: true,
           },
           status: {
+            required: true,
+          },
+          role: {
             required: true,
           },
           phone_number: {
@@ -98,12 +101,15 @@ $(function () {
           status: {
             required: "Pilih status!",
           },
+          status: {
+            required: "Pilih role!",
+          },
           phone_number: {
             required: "Masukan no hp!",
           },
           address: {
             required:
-              "Masukan alamat (contoh: Jln dan No rumah, RT/RW, Kelurahan, Kecamatan)!",
+              "Masukan alamat (contoh: Jln,No Rumah,RT/RW,Kelurahan,Kecamatan)!",
           },
           regency: {
             required: "Masukan provinsi!",

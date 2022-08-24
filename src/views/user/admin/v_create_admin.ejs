@@ -1,0 +1,144 @@
+<%- include('../../layouts/head.ejs') %>
+
+<%- include("../../layouts/header.ejs") %>
+<%- include("../../layouts/sidebar.ejs") %>
+
+<%- include("../../includes/toast.ejs") %>
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= title %></h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/admin">List Admin</a>
+                </li>
+                <li class="breadcrumb-item active"><%= title %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <div class="col-12">
+          <!-- profile -->
+          <div class="card">
+            <div class="card-header border-bottom">
+              <h4 class="card-title"><%= title  %></h4>
+            </div>
+            <div class="card-body py-2 my-25">
+              <!-- header section -->
+
+              <!--/ header section -->
+
+              <form id="form-action-admin" class=" row gy-1 pt-75" action="/admin?_method=POST" method="post">
+                <!-- <input type="hidden" name="_method" value="PUT"> -->
+                <!-- <div class="d-flex col-md-12">
+                  <a href="#" class="me-25">
+                    <img src="" id="account-upload-img" class="uploadedAvatar rounded me-50 object-fit-cover"
+                      alt="profile image" height="100" width="100" />
+                  </a>
+                  <div class="d-flex align-items-end mt-75 ms-1">
+                    <div>
+                      <label for="account-upload" class="btn btn-sm btn-primary mb-75 me-75">Upload</label>
+                      <input type="file" id="account-upload" hidden accept="image/*" name="image" />
+                      <button type="button" id="account-reset"
+                        class="btn btn-sm btn-outline-secondary mb-75">Reset</button>
+                      <p class="mb-0">Allowed file types: png, jpg, jpeg.</p>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="name">Nama lengkap</label>
+                  <input type="text" id="name" name="name" class="form-control" placeholder="Admin name"
+                    value="<%= values?.name || "" %>" data-msg="Masukan nama lengkap" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="username">Username</label>
+                  <input type="text" id="username" name="username" class="form-control"
+                    value="<%= values?.username || ""  %>" placeholder="Username" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="email">Email</label>
+                  <input type="text" id="email" name="email" class="form-control" value="<%= values?.email || "" %>"
+                    placeholder="example@storegg.com" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="status">Status</label>
+                  <select id="status" name="status" class="select2 form-select">
+                    <option selected value="">Status</option>
+                    <% status.forEach(s => {  %>
+                    <option class=" text-capitalize " value="<%= s.value %>" <%= s.selected ? "selected" : null %>>
+                      <%= s.name %>
+                    </option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label" for="phone_number">Phone Number</label>
+                  <input type="text" class="form-control account-number-mask" id="phone_number" name="phone_number"
+                    placeholder="Phone Number" value="<%= values?.phone_number || "" %>" />
+                </div>
+                <div class="col-12 col-sm-6 ">
+                  <label for="role" class="form-label">Role</label>
+                  <select id="role" name="role" class="select2 form-select">
+                    <option value="">Select Role</option>
+                    <% roles.forEach(rl => {  %>
+                    <option class=" text-capitalize " value="<%= rl.value %>" <%= rl.selected ? "selected" : null %>>
+                      <%= rl.name %>
+                    </option>
+                    <% }) %>
+
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label for="address" class="form-label">Alamat (Contoh: Jalan,No
+                    Rumah,RT/RW,Kelurahan,Kecamatan)</label>
+                  <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
+                    value="<%= values?.address || "" %>" />
+                </div>
+                <div class="col-12 col-md-6 ">
+                  <label for="address" class="form-label">Provinsi</label>
+                  <input type="text" class="form-control" id="regency" name="regency" placeholder="Provinsi"
+                    value="<%= values?.regency || ""%>" />
+                </div>
+                <div class="col-12 col-md-6 ">
+                  <label for="address" class="form-label">Kota</label>
+                  <input type="text" class="form-control" id="city" name="city" placeholder="Kota"
+                    value="<%= values?.city || "" %>" />
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary mt-1 me-1">Save changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+          <!--/ profile -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+
+
+
+<%- include('../../layouts/footer.ejs') %>
+<script src="/js/pages/admin-settings.js"></script>
+<%- include('../../layouts/end.ejs') %>

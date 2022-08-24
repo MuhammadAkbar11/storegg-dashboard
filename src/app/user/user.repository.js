@@ -47,23 +47,29 @@ export const findUserById = async id => {
   }
 };
 
-export const findListUserRoles = selectedRole => {
+export const findListUserRoles = (selectedRole = "") => {
   return Object.keys(ROLES)
     .filter(r => r !== ROLES.PLAYER)
     .map(rl => {
       return {
         value: rl,
-        name: ToCapitalize(rl.split("_").join(" ").toLocaleLowerCase()),
+        name: rl
+          .split("_")
+          .map(t => ToCapitalize(t.toLocaleLowerCase()))
+          .join(" "),
         selected: rl == selectedRole ? true : false,
       };
     });
 };
 
-export const findListUserStatus = selectedStatus => {
+export const findListUserStatus = (selectedStatus = "") => {
   return Object.keys(USER_STATUS).map(s => {
     return {
       value: s,
-      name: ToCapitalize(s.split("_").join(" ").toLocaleLowerCase()),
+      name: s
+        .split("_")
+        .map(t => ToCapitalize(t.toLocaleLowerCase()))
+        .join(" "),
       selected: s == selectedStatus ? true : false,
     };
   });
