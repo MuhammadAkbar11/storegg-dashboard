@@ -16,6 +16,13 @@ export const ROLES = {
   PLAYER: "PLAYER",
 };
 
+export const USER_STATUS = {
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+  SUSPENDED: "SUSPENDED",
+};
+
 export const LOCALS_STATIC = {
   stylesheet: {
     pages: [],

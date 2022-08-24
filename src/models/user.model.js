@@ -39,7 +39,7 @@ User.init(
       field: "role",
     },
     status: {
-      type: DataTypes.ENUM("PENDING", "ACTIVE", "INACTIVE"),
+      type: DataTypes.ENUM("PENDING", "ACTIVE", "INACTIVE", "SUSPENDED"),
       allowNull: false,
       defaultValue: "PENDING",
       field: "status",
