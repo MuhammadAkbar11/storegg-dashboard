@@ -81,7 +81,7 @@
                   <% } %>
                 </td>
                 <td data-order="false">
-                  <div class="d-flex">
+                  <div class="d-flex justify-content-center">
                     <!-- <form action="/user/status/<%= adm.user.user_id %>" method="POST" style="display: inline-block;">
                       <input type="hidden" name="status" value="<%= adm?.status  %>">
                       <input type="hidden" name="_method" value="PUT">
@@ -98,22 +98,19 @@
                       <% } %>
 
                     </form> -->
+                    <% if(userAuth.user_id !== adm.user.user_id ) { %>
+                    <% if(userAuth.role === "SUPER_ADMIN") { %>
                     <div>
-
                       <button type="button"
                         class="btn btn-link-anchor btn-icon rounded-circle btn-flat-info waves-effect"
                         data-href="/admin/<%= adm.admin_id %>">
                         <i data-feather="file-text"></i>
                       </button>
                     </div>
-
-                    <% if(userAuth.user_id !== adm.user.user_id ) { %>
-
-                    <% if(userAuth.role === "SUPER_ADMIN") { %>
                     <div>
                       <button type=" button"
                         class="btn btn-link-anchor btn-icon rounded-circle btn-flat-primary waves-effect"
-                        data-href="/admin/edit-admin/<%= adm.admin_id %>">
+                        data-href="/admin/<%= adm.admin_id %>/settings">
                         <i data-feather="edit"></i>
                       </button>
                     </div>

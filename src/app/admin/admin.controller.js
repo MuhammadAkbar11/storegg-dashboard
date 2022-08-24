@@ -1,14 +1,28 @@
 import dayjs from "dayjs";
 import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
-import { httpStatusCodes } from "../../constants/index.constants.js";
+import {
+  httpStatusCodes,
+  ROLES,
+  USER_STATUS,
+} from "../../constants/index.constants.js";
 import { ComparePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import { ToPlainObject } from "../../helpers/index.helper.js";
-import { findAllAdmin, findOneAdmin } from "../admin/admin.repository.js";
+import {
+  HTMLScript,
+  HTMLStylesheet,
+  ToCapitalize,
+  ToPlainObject,
+  UnlinkFile,
+} from "../../helpers/index.helper.js";
+import {
+  findAllAdmin,
+  findOneAdmin,
+  updateAdmin,
+} from "../admin/admin.repository.js";
 import Transaction from "../../models/transaction.model.js";
 
 const Op = Sequelize.Op;
@@ -65,8 +79,14 @@ export const getDetailAdmin = async (req, res, next) => {
         responseType: "page",
       });
     }
+
     admin = ToPlainObject(admin);
 
+    if (admin.admin_id == req.user.admin_id) {
+      return res.redirect("/profile");
+    }
+
+    console.log(req.user);
     const adminVouchers = await Promise.all(
       admin.vouchers.map(async vcr => {
         const countTr = await Transaction.count({
@@ -80,13 +100,182 @@ export const getDetailAdmin = async (req, res, next) => {
     );
 
     admin.vouchers = adminVouchers;
-    // const adminVouchers = await fi
-    console.log(admin);
+
     res.render("user/admin/v_detail", {
       title: admin.admin_id,
       path: "/admin",
       // flashdata: flashdata,
       // errors: errors,
+      admin: admin,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const putAdmin = async (req, res, next) => {
+  const ID = req.params.id;
+  const {
+    name,
+    username,
+    email,
+    status,
+    phone_number,
+    role,
+    address,
+    regency,
+    city,
+  } = req.body;
+  const fileimg = req.fileimg;
+  const isUpload = fileimg.data ? true : false;
+  try {
+    let admin = await findOneAdmin({
+      where: {
+        admin_id: ID,
+      },
+    });
+
+    if (!admin) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal mengubah data admin, karena admin dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      return res.redirect("back");
+    }
+
+    if (admin.admin_id == req.user.admin_id) {
+      req.flash("flashdata", {
+        type: "warning",
+        title: "Peringatan",
+        message: `Data yang diubah merupakan data sesi user saat ini`,
+      });
+      return res.redirect("/profile");
+    }
+
+    const splitReqAddress = address.split(",");
+    let joinAddress = {
+      country: "Indonesia",
+      regency: regency,
+      city: city,
+      districts: splitReqAddress[splitReqAddress.length - 1],
+      ward: splitReqAddress[3],
+      RT_RW: splitReqAddress[2],
+      house: splitReqAddress[1],
+      street: splitReqAddress[0],
+    };
+
+    joinAddress = JSON.stringify(joinAddress);
+
+    const payload = {
+      admin_id: admin.admin_id,
+      user_id: admin.user.user_id,
+      name,
+      username,
+      email,
+      status,
+      phone_number,
+      role,
+      address: joinAddress,
+      fileimg,
+      oldAvatar: admin.user.avatar,
+    };
+
+    await updateAdmin(payload);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Diubah!",
+      message: "Berhasil mengubah data admin",
+    });
+    res.redirect("back");
+  } catch (error) {
+    if (isUpload) {
+      UnlinkFile(fileimg.data.path);
+    }
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal mengubah data",
+    });
+    res.redirect("back");
+  }
+};
+
+export const viewEditAdmin = async (req, res, next) => {
+  const ID = req.params.id;
+
+  HTMLStylesheet(
+    [
+      ["/vendors/css/forms/select/select2.min.css", "vendors"],
+      ["/css/forms/form-validation.css", "pages"],
+    ],
+    res
+  );
+
+  HTMLScript(
+    [
+      ["/vendors/js/forms/select/select2.full.min.js", "pages"],
+      ["/vendors/js/forms/validation/jquery.validate.min.js", "pages"],
+      ["/vendors/js/forms/cleave/cleave.min.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.id.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.us.js", "pages"],
+    ],
+    res
+  );
+
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+
+    let admin = await findOneAdmin({
+      where: {
+        admin_id: ID,
+      },
+    });
+
+    if (!admin) {
+      throw new BaseError("NOT_FOUND", 404, "Admin is not found!", true, {
+        errorView: "errors/404",
+        renderData: {
+          title: "Page Not Found",
+        },
+        responseType: "page",
+      });
+    }
+
+    if (admin.admin_id == req.user.admin_id) {
+      return res.redirect("/profile");
+    }
+
+    admin = ToPlainObject(admin);
+
+    const roles = Object.keys(ROLES)
+      .filter(r => r !== ROLES.PLAYER)
+      .map(rl => {
+        return {
+          value: rl,
+          name: ToCapitalize(rl.split("_").join(" ").toLocaleLowerCase()),
+          selected: rl == admin.user.role ? true : false,
+        };
+      });
+
+    const status = Object.keys(USER_STATUS).map(s => {
+      return {
+        value: s,
+        name: ToCapitalize(s.split("_").join(" ").toLocaleLowerCase()),
+        selected: s == admin.user.status ? true : false,
+      };
+    });
+
+    res.render("user/admin/v_edit_admin", {
+      title: `Edit ${admin.admin_id}`,
+      path: "/admin",
+      roles: roles,
+      status: status,
+      flashdata: flashdata,
+      errors: errors,
       admin: admin,
     });
   } catch (error) {

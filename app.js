@@ -62,13 +62,14 @@ app.set("view engine", "ejs");
 app.set("views", "src/views");
 
 // Body Parse
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Cors
 app.use(cors());
 
 // Method override
+
 app.use(
   methodOverride(function (req, res) {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {

@@ -92,8 +92,10 @@
                       <!-- <span class="badge bg-light-success">Active</span> -->
                       <% if(admin?.user?.status == "ACTIVE")  { %>
                       <span class="badge badge-light-success text-capitalize">Active </span>
-                      <% } else if (adm?.status === "PENDING") { %>
+                      <% } else if (admin?.user?.status == "PENDING") { %>
                       <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                      <% } else if (admin?.user?.status == "SUSPENDED") { %>
+                      <span class="badge badge-light-danger text-capitalize ">Suspended</span>
                       <% } else { %>
                       <span class="badge badge-light-secondary text-capitalize">Inactive</span>
                       <% } %>
@@ -150,21 +152,21 @@
           <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
             <!-- User Pills -->
             <ul class="nav nav-pills mb-2">
-              <li class="nav-item">
-                <a class="nav-link active" href="/admin/<%= admin.admin_id %>">
+              <li class="nav-item ">
+                <a class="nav-link active " href="/admin/<%= admin.admin_id %>">
                   <i data-feather="user" class="font-medium-3 me-50"></i>
-                  <span class="fw-bold">Account</span></a>
+                  <span class="fw-bold">Akun</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/admin/<%= admin.admin_id %>/security">
                   <i data-feather="lock" class="font-medium-3 me-50"></i>
-                  <span class="fw-bold">Security</span>
+                  <span class="fw-bold">Pengamanan</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/admin/<%= admin.admin_id %>/settings">
+                <a class="nav-link " href="/admin/<%= admin.admin_id %>/settings">
                   <i data-feather="settings" class="font-medium-3 me-50"></i>
-                  <span class="fw-bold">Settings</span>
+                  <span class="fw-bold">Pengaturan</span>
                 </a>
               </li>
 
