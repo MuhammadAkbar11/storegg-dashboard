@@ -2,6 +2,7 @@
 
 <%- include("../../layouts/header.ejs") %>
 <%- include("../../layouts/sidebar.ejs") %>
+<%- include("../../includes/toast.ejs") %>
 
 
 <div class="app-content content ">
@@ -130,14 +131,23 @@
                       <span>Wake Island</span>
                     </li> -->
                   </ul>
-                  <% if(userAuth.user_id !== admin.user.user_id ) { %>
-                  <div class="d-flex justify-content-center pt-2">
-                    <a href="javascript:;" class="btn btn-primary me-1" data-bs-target="#editUser"
-                      data-bs-toggle="modal">
-                      Edit
-                    </a>
-                    <a href="javascript:;" class="btn btn-outline-danger suspend-user">Suspended</a>
+                  <% if(userAuth.user_id !== admin.user.user_id) { %>
+                  <% if(admin.user.status !== "SUSPENDED") { %>
+                  <div class="d-flex justify-content-start pt-2">
+                    <button type="button" class="btn btn-outline-danger suspend-user" data-bs-toggle="modal"
+                      data-bs-target="#suspendUser" data-bs-user="<%= JSON.stringify(admin.user)  %>">
+                      Suspended
+                    </button>
                   </div>
+                  <% } else if(admin.user.status === "SUSPENDED" ) { %>
+                  <form action="/users/status/<%= admin.user.user_id %>" method="post">
+                    <input type="hidden" name="_method" value="POST">
+                    <button type="submit" class="btn btn-outline-success suspend-user">
+                      Aktifkan
+                    </button>
+                  </form>
+                  <% } %>
+
                   <% } %>
 
                 </div>
@@ -255,21 +265,55 @@
 </div>
 <!-- END: Content-->
 
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="suspendUser" tabindex="-1"
+  aria-labelledby="suspendUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class=" mb-1">Anda yakin?</h3>
+          <p class="mb-2">Apakah anda ingin meng-suspend user ini?</p>
+          <form action="/users/status" id="formSuspendUser">
+
+            <input type="hidden" name="_method" value="POST">
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-danger">Ya, hapus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
 
 <%- include('../../layouts/footer.ejs') %>
-<!-- <script>
-  var dt_user_table = $('#user-datatable')
+<script>
+  const suspendUser = document.getElementById('suspendUser')
+  suspendUser.addEventListener('show.bs.modal', function (event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget
+    const form = suspendUser.querySelector("#formSuspendUser");
 
-  if (dt_user_table.length) {
-    dt_user_table.DataTable({
-      "drawCallback": function (settings) {
-        feather.replace();
-      }
-    });
-  }
-</script> -->
+
+    // Extract info from data-bs-* attributes
+    const data = button.getAttribute('data-bs-user')
+    const {
+      user_id: userId
+    } = JSON.parse(data)
+
+    form.setAttribute("action", "/users/status/" + userId)
+    form.setAttribute("method", "post")
+  })
+</script>
 
 
 

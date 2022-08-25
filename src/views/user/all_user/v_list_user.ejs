@@ -51,5 +51,25 @@
 </script>
 
 
+<script>
+  const suspendUser = document.getElementById('suspendUser')
+  suspendUser.addEventListener('show.bs.modal', function (event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget
+    const form = suspendUser.querySelector("#formSuspendUser");
+
+
+    // Extract info from data-bs-* attributes
+    const data = button.getAttribute('data-bs-user')
+    const {
+      user_id: userId
+    } = JSON.parse(data)
+
+    form.setAttribute("action", "/users/status/" + userId)
+    form.setAttribute("method", "post")
+  })
+</script>
+
+
 
 <%- include('../../layouts/end.ejs') %>

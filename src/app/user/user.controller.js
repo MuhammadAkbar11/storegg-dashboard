@@ -1,15 +1,24 @@
 import dayjs from "dayjs";
 import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
-import { httpStatusCodes } from "../../constants/index.constants.js";
+import {
+  httpStatusCodes,
+  USER_STATUS,
+} from "../../constants/index.constants.js";
 import { ComparePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import { ToPlainObject } from "../../helpers/index.helper.js";
+import { ToCapitalize, ToPlainObject } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
-import { findAllUsers, findCountUser, findOneUser } from "./user.repository.js";
+import {
+  findAllUsers,
+  findCountUser,
+  findOneUser,
+  updateOneUser,
+} from "./user.repository.js";
+import { findOneAdmin } from "../admin/admin.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -205,11 +214,26 @@ export const getListUsers = async (req, res) => {
     users = ToPlainObject(users);
 
     users.length !== 0 &&
-      users.map(u => {
-        u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+      (await Promise.all(
+        users.map(async u => {
+          u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
 
-        return { ...u };
-      });
+          if (u.role.includes("ADMIN")) {
+            const admin = await findOneAdmin(
+              {
+                where: {
+                  user_id: u.user_id,
+                },
+                attributes: ["admin_id"],
+              },
+              { getVoucher: false }
+            );
+            u.admin_id = ToPlainObject(admin)?.admin_id;
+          }
+
+          return { ...u };
+        })
+      ));
 
     res.render("user/all_user/v_list_user", {
       title: "List Users",
@@ -227,5 +251,64 @@ export const getListUsers = async (req, res) => {
   } catch (error) {
     const baseError = new TransfromError(error);
     next(baseError);
+  }
+};
+
+export const updateUserStatus = async (req, res) => {
+  const ID = req.params.id;
+
+  let status = USER_STATUS.SUSPENDED;
+
+  try {
+    let user = await findOneUser({
+      where: {
+        user_id: ID,
+      },
+    });
+
+    if (!user) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal mengupdate status, karena user dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      return res.redirect("back");
+    }
+
+    user = ToPlainObject(user);
+
+    status =
+      user.status === USER_STATUS.SUSPENDED
+        ? USER_STATUS.ACTIVE
+        : USER_STATUS.SUSPENDED;
+
+    let message =
+      status === USER_STATUS.SUSPENDED ? "meng-suspend" : "mengaktifkan";
+
+    await updateOneUser(
+      {
+        where: {
+          user_id: user.user_id,
+        },
+      },
+      {
+        status: status,
+      }
+    );
+
+    req.flash("flashdata", {
+      type: "success",
+      title: ToCapitalize(message),
+      message: `Berhasil ${message} user!`,
+    });
+    res.redirect("back");
+  } catch (error) {
+    console.log(error);
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: `Gagal mengupdate status!`,
+    });
+    res.redirect("back");
   }
 };

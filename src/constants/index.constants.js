@@ -97,6 +97,7 @@ export const TABLE_AUTO_INCREMENT = {
   },
 };
 
+export const SUPERADMIN_EMAIL = "superadmin@storegg.com";
 export const STATIC_FOLDER = path.join(__dirname, "public");
 export const DEV_STATIC_FOLDER = path.join(__dirname, ".dev");
 export const ROOT_FOLDER = __dirname;

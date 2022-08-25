@@ -132,43 +132,49 @@
                   <span class="badge badge-light-success text-capitalize">Active </span>
                   <% } else if (usr?.status === "PENDING") { %>
                   <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                  <% } else if (usr?.status === "SUSPENDED") { %>
+                  <span class="badge badge-light-danger text-capitalize ">Suspended</span>
                   <% } else { %>
                   <span class="badge badge-light-secondary text-capitalize">Inactive</span>
                   <% } %>
                 </td>
                 <td data-order="false">
                   <div class="d-flex">
-                    <!-- <form action="/user/status/<%= usr.user_id %>" method="POST" style="display: inline-block;">
-                      <input type="hidden" name="status" value="<%= usr?.status  %>">
-                      <input type="hidden" name="_method" value="PUT">
-                      <% if(usr?.status === 'Y') { %>
-                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Nonaktifkan Voucher">
-                        <i data-feather='minus-square'></i>
-                      </button>
-                      <% } else { %>
-                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Aktifkan Voucher">
-                        <i data-feather='check-square'></i>
-                      </button>
+                    <div>
+                      <% if(usr.role === "PLAYER") { %>
+                      <a href="/users/<%= usr.user_id %>"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Detail User">
+                        <i data-feather="file-text"></i>
+                      </a>
+                      <% }else if(usr.role.includes("ADMIN")) { %>
+                      <a href="/admin/<%= usr.admin_id %>"
+                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Detail Admin">
+                        <i data-feather="file-text"></i>
+                      </a>
                       <% } %>
 
-                    </form> -->
-                    <div>
-                      <a href="/users/<%= usr.user_id %>"
-                        class="btn btn-icon rounded-circle btn-flat-primary waves-effect">
-                        <i data-feather="info"></i>
-                      </a>
                     </div>
                     <% if(userAuth.user_id !== usr.user_id ) { %>
 
                     <% if(usr.role.trim() == "PLAYER") { %>
-                    <form action="/user/<%= usr.user_id %>" method="post">
-                      <input type="hidden" name="_method" value="DELETE">
-                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
-                        <i data-feather="trash"></i>
+                    <% if(usr.status === "ACTIVE") { %>
+                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
+                      data-bs-toggle="modal" data-bs-target="#suspendUser" data-bs-user="<%= JSON.stringify(usr)  %>"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Suspend user">
+                      <i data-feather="minus-circle"></i>
+                    </button>
+                    <% } else if(usr.status === "SUSPENDED") { %>
+                    <form action="/users/status/<%= usr.user_id %>" method="post">
+                      <input type="hidden" name="_method" value="POST">
+                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-success waves-effect"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Aktifkan user">
+                        <i data-feather="check-circle"></i>
                       </button>
                     </form>
+                    <% } %>
+
                     <% } %>
                     <% } %>
 
@@ -184,3 +190,31 @@
   </div>
 
 </section>
+
+
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="suspendUser" tabindex="-1"
+  aria-labelledby="suspendUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class=" mb-1">Anda yakin?</h3>
+          <p class="mb-2">Apakah anda ingin meng-suspend user ini?</p>
+          <form action="/users/status" id="formSuspendUser">
+
+            <input type="hidden" name="_method" value="POST">
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-danger">Ya, hapus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

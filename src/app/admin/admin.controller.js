@@ -2,7 +2,11 @@ import dayjs from "dayjs";
 import { faker } from "@faker-js/faker";
 import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
-import { ROLES, USER_STATUS } from "../../constants/index.constants.js";
+import {
+  ROLES,
+  SUPERADMIN_EMAIL,
+  USER_STATUS,
+} from "../../constants/index.constants.js";
 // import { ComparePassword } from "../../helpers/authentication.helper.js";
 import BaseError, {
   TransfromError,
@@ -65,7 +69,8 @@ export const getListAdmin = async (req, res, next) => {
 
 export const getDetailAdmin = async (req, res, next) => {
   const ID = req.params.id;
-
+  const flashdata = req.flash("flashdata");
+  const errors = req.flash("errors")[0];
   try {
     let admin = await findOneAdmin({
       where: {
@@ -89,7 +94,6 @@ export const getDetailAdmin = async (req, res, next) => {
       return res.redirect("/profile");
     }
 
-    console.log(req.user);
     const adminVouchers = await Promise.all(
       admin.vouchers.map(async vcr => {
         const countTr = await Transaction.count({
@@ -107,8 +111,8 @@ export const getDetailAdmin = async (req, res, next) => {
     res.render("user/admin/v_detail", {
       title: admin.admin_id,
       path: "/admin",
-      // flashdata: flashdata,
-      // errors: errors,
+      flashdata: flashdata,
+      errors: errors,
       admin: admin,
     });
   } catch (error) {
@@ -148,11 +152,20 @@ export const putAdmin = async (req, res, next) => {
       return res.redirect("back");
     }
 
+    if (admin.user.email === SUPERADMIN_EMAIL) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Aksi ditolak!, karena ${ID} merupakan data yang tidak dapat diubah atau dihapus`,
+      });
+      return res.redirect("back");
+    }
+
     if (admin.admin_id == req.user.admin_id) {
       req.flash("flashdata", {
         type: "warning",
         title: "Peringatan",
-        message: `Data yang diubah merupakan data sesi user saat ini`,
+        message: `Data yang diubah merupakan data anda, silahkan ubah data anda di halaman profile!`,
       });
       return res.redirect("/profile");
     }
@@ -300,11 +313,20 @@ export const deleteAdmin = async (req, res, next) => {
 
     const email = admin.user.email;
 
+    if (email === SUPERADMIN_EMAIL) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Aksi ditolak!, karena ${ID} merupakan data yang tidak dapat diubah atau dihapus`,
+      });
+      return res.redirect("back");
+    }
+
     if (admin.admin_id == req.user.admin_id) {
       req.flash("flashdata", {
         type: "warning",
         title: "Peringatan",
-        message: `Tidak dapat menghapus data anda!`,
+        message: `Tidak dapat menghapus data sendiri!`,
       });
       return res.redirect("back");
     }
@@ -379,9 +401,11 @@ export const viewEditAdmin = async (req, res, next) => {
     admin = ToPlainObject(admin);
 
     const address = JSON.parse(admin.address);
-    admin.city = address.city;
-    admin.regency = address.regency;
-    admin.address = `${address.street},${address.house},${address.RT_RW},${address.ward},${address.districts}`;
+    admin.city = address?.city || "";
+    admin.regency = address?.regency || "";
+    admin.address = address
+      ? `${address.street},${address.house},${address.RT_RW},${address.ward},${address.districts}`
+      : "";
 
     const roles = findListUserRoles(admin.user.role);
     const status = findListUserStatus(admin.user.status);

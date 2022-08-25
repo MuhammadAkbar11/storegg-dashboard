@@ -47,6 +47,21 @@ export const findUserById = async id => {
   }
 };
 
+export const updateOneUser = async (options, payload) => {
+  try {
+    let result = await User.update(
+      { ...payload },
+      {
+        ...options,
+      }
+    );
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] updateOneUser", error);
+    throw new TransfromError(error);
+  }
+};
+
 export const findListUserRoles = (selectedRole = "") => {
   return Object.keys(ROLES)
     .filter(r => r !== ROLES.PLAYER)

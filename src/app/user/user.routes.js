@@ -4,6 +4,7 @@ import {
   getUserSignin,
   postLogout,
   postUserSignin,
+  updateUserStatus,
 } from "./user.controller.js";
 import { ensureAuth, ensureGuest } from "../../middleware/auth.js";
 import userValidation from "./user.validator.js";
@@ -22,6 +23,7 @@ function UserRoutes(app) {
   app.post("/auth/logout", postLogout);
 
   app.get("/users", ensureAuth, getListUsers);
+  app.post("/users/status/:id", ensureAuth, updateUserStatus);
 }
 
 export default UserRoutes;
