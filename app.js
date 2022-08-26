@@ -18,6 +18,7 @@ import {
 import {
   DEV_STATIC_FOLDER,
   LOCALS_STATIC,
+  ROLES_ARR,
   STATIC_FOLDER,
 } from "./src/constants/index.constants.js";
 import passportConfig from "./src/config/passport.config.js";
@@ -105,7 +106,9 @@ app.use(passport.session({}));
 
 app.use((req, res, next) => {
   if (req.user) {
-    res.locals.userAuth = req.user;
+    const userAuth = req.user;
+    userAuth.role_data = ROLES_ARR.find(r => r.value === userAuth?.role);
+    res.locals.userAuth = userAuth;
   } else {
     res.locals.userAuth = null;
   }

@@ -16,6 +16,21 @@ export const ROLES = {
   PLAYER: "PLAYER",
 };
 
+export const ROLES_ARR = [
+  {
+    value: "SUPER_ADMIN",
+    text: "Superadmin",
+  },
+  {
+    value: "SUPER_ADMIN",
+    text: "Admin",
+  },
+  {
+    value: "SUPER_ADMIN",
+    text: "Player",
+  },
+];
+
 export const USER_STATUS = {
   PENDING: "PENDING",
   ACTIVE: "ACTIVE",

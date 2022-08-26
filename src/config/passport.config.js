@@ -5,6 +5,7 @@ import GoogleStrategy from "./strategies/google.strategy.js";
 import LocalStrategy from "./strategies/local.strategy.js";
 import { findOneAdmin } from "../app/admin/admin.repository.js";
 import { httpStatusCodes } from "../constants/index.constants.js";
+import { ToPlainObject } from "../helpers/index.helper.js";
 
 export default function () {
   passport.use(LocalStrategy);
@@ -16,7 +17,7 @@ export default function () {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await findUserById(id);
+      let user = await findUserById(id);
 
       if (!user) {
         throw new BaseError(
@@ -27,7 +28,7 @@ export default function () {
         );
       }
 
-      const admin = await findOneAdmin({
+      let admin = await findOneAdmin({
         where: {
           user_id: user.user_id,
         },
@@ -42,9 +43,12 @@ export default function () {
         );
       }
 
+      admin = ToPlainObject(admin);
+      user = ToPlainObject(user);
+
       const reqUser = {
-        ...admin.dataValues,
-        ...user.dataValues,
+        ...admin,
+        ...user,
       };
       done(null, reqUser);
     } catch (err) {
