@@ -83,7 +83,7 @@
                 <td data-order="false">
                   <div class="d-flex justify-content-center">
 
-                    <% if(userAuth.user_id !== adm.user.user_id ) { %>
+                    <% if(!adm.is_locked ) { %>
                     <% if(userAuth.role === "SUPER_ADMIN") { %>
                     <div>
                       <button type="button"
@@ -99,17 +99,31 @@
                         <i data-feather="edit"></i>
                       </button>
                     </div>
-                    <!-- <form action="/admin/<%= adm.admin_id %>" method="post">
-                      <input type="hidden" name="_method" value="DELETE">
-                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect">
-                        <i data-feather="trash-2"></i>
-                      </button>
-                    </form> -->
                     <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
                       data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-admin="<%= JSON.stringify(adm)  %>">
                       <i data-feather="trash-2"></i>
                     </button>
                     <% } %>
+
+                    <% }else { %>
+                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Terkunci">
+                      <button type="button" disabled
+                        class="btn btn-link-anchor btn-icon rounded-circle btn-flat-secondary waves-effect  ">
+                        <i data-feather="file-text"></i>
+                      </button>
+                    </div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Terkunci">
+                      <button type=" button"
+                        class="btn btn-link-anchor btn-icon rounded-circle btn-flat-secondary waves-effect  " disabled>
+                        <i data-feather="edit"></i>
+                      </button>
+                    </div>
+                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Terkunci"> <button type="button"
+                        class="btn btn-icon btn-icon rounded-circle btn-flat-secondary waves-effect" disabled>
+                        <i data-feather="trash-2"></i>
+                      </button>
+                    </div>
+
                     <% } %>
 
                   </div>

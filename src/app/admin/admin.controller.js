@@ -46,7 +46,10 @@ export const getListAdmin = async (req, res, next) => {
     listAdmin.length !== 0 &&
       listAdmin.map(u => {
         u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
-
+        let is_locked = false;
+        if (u.user.email === SUPERADMIN_EMAIL) is_locked = true;
+        else if (u.user.email === req.user.email) is_locked = true;
+        u.is_locked = is_locked;
         return { ...u };
       });
 
@@ -154,9 +157,9 @@ export const putAdmin = async (req, res, next) => {
 
     if (admin.user.email === SUPERADMIN_EMAIL) {
       req.flash("flashdata", {
-        type: "error",
-        title: "Oppss",
-        message: `Aksi ditolak!, karena ${ID} merupakan data yang tidak dapat diubah atau dihapus`,
+        type: "warning",
+        title: "Peringatan",
+        message: `Tidak ada perubahan, karena <b>${ID}</b> merupakan data yang terkunci!. Jadi tidak dapat dihapus atau diubah`,
       });
       return res.redirect("back");
     }
@@ -165,9 +168,21 @@ export const putAdmin = async (req, res, next) => {
       req.flash("flashdata", {
         type: "warning",
         title: "Peringatan",
-        message: `Data yang diubah merupakan data anda, silahkan ubah data anda di halaman profile!`,
+        message: `Tidak ada perubahan, silahkan ubah data anda di halaman profile!`,
       });
       return res.redirect("/profile");
+    }
+
+    if (admin.user.email !== email) {
+      const existEmail = await findOneUser({ where: { email: email } });
+      if (existEmail) {
+        req.flash("flashdata", {
+          type: "error",
+          title: "Oppss",
+          message: `Email telah terdaftar, silahkan coba lagi dengan email yang belum terdaftar!`,
+        });
+        return res.redirect("back");
+      }
     }
 
     const splitReqAddress = address.split(",");
@@ -245,7 +260,7 @@ export const postAdmin = async (req, res, next) => {
       req.flash("flashdata", {
         type: "error",
         title: "Oppss",
-        message: `Email telah terdaftar, silahkan ganti dengan email yang belum terdaftar!`,
+        message: `Email telah terdaftar, silahkan coba lagi dengan email yang belum terdaftar!`,
       });
       return res.redirect("back");
     }
@@ -313,11 +328,11 @@ export const deleteAdmin = async (req, res, next) => {
 
     const email = admin.user.email;
 
-    if (email === SUPERADMIN_EMAIL) {
+    if (admin.user.email === SUPERADMIN_EMAIL) {
       req.flash("flashdata", {
-        type: "error",
-        title: "Oppss",
-        message: `Aksi ditolak!, karena ${ID} merupakan data yang tidak dapat diubah atau dihapus`,
+        type: "warning",
+        title: "Peringatan",
+        message: `Tidak terhapus, karena <b>${ID}</b> merupakan data yang terkunci!. Jadi tidak dapat dihapus atau diubah`,
       });
       return res.redirect("back");
     }
