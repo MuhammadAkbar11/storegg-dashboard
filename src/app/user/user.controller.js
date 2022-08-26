@@ -18,7 +18,7 @@ import {
   findOneUser,
   updateOneUser,
 } from "./user.repository.js";
-import { findOneAdmin } from "../admin/admin.repository.js";
+import Administrator from "../../models/admin.model.js";
 
 const Op = Sequelize.Op;
 
@@ -183,11 +183,19 @@ export const postLogout = (req, res) => {
   res.redirect("/");
 };
 
-export const getListUsers = async (req, res) => {
+export const getListUsers = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors")[0];
-    let users = await findAllUsers();
+    let users = await findAllUsers({
+      include: [
+        {
+          model: Administrator,
+          as: "admin",
+          attributes: ["admin_id"],
+        },
+      ],
+    });
     let countUsers = users.length;
     let countPending = await findCountUser({
       where: {
@@ -213,27 +221,29 @@ export const getListUsers = async (req, res) => {
 
     users = ToPlainObject(users);
 
-    users.length !== 0 &&
-      (await Promise.all(
-        users.map(async u => {
-          u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+    users =
+      users.length !== 0
+        ? users.map(u => {
+            let actions = null;
 
-          if (u.role.includes("ADMIN")) {
-            const admin = await findOneAdmin(
-              {
-                where: {
-                  user_id: u.user_id,
-                },
-                attributes: ["admin_id"],
-              },
-              { getVoucher: false }
-            );
-            u.admin_id = ToPlainObject(admin)?.admin_id;
-          }
+            if (u.role.includes("ADMIN")) {
+              const admin = u.admin;
+              actions = {
+                detail: admin ? `/admin/${admin?.admin_id}` : null,
+                suspend: null,
+              };
+            } else {
+              actions = {
+                detail: `/users/${u.user_id}`,
+                suspend: `/users/status/${u.user_id}`,
+              };
+            }
 
-          return { ...u };
-        })
-      ));
+            u.actions = actions;
+            u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+            return { ...u };
+          })
+        : [];
 
     res.render("user/all_user/v_list_user", {
       title: "List Users",

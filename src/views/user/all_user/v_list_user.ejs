@@ -60,12 +60,8 @@
 
 
     // Extract info from data-bs-* attributes
-    const data = button.getAttribute('data-bs-user')
-    const {
-      user_id: userId
-    } = JSON.parse(data)
-
-    form.setAttribute("action", "/users/status/" + userId)
+    const url = button.getAttribute("data-bs-url")
+    form.setAttribute("action", url)
     form.setAttribute("method", "post")
   })
 </script>

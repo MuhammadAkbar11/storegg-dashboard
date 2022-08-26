@@ -32,7 +32,7 @@ export default function BoostrapingModels() {
 
   User.hasOne(Administrator, {
     foreignKey: "user_id",
-    as: "administrators",
+    as: "admin",
   });
   Administrator.belongsTo(User, {
     foreignKey: "user_id",

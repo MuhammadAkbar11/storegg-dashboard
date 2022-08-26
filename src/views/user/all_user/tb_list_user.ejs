@@ -96,8 +96,10 @@
                       <div class="avatar me-1"><img src="<%= usr.avatar %>" alt="Avatar" height="32" width="32"></div>
                     </div>
                     <div class="d-flex flex-column">
-                      <a href="/users/<%= usr.user_id %>" class="user_name text-truncate text-body"><span
-                          class="fw-bolder"><%= usr.name %> </span></a><small class="emp_post text-muted">
+                      <a href="<%= usr?.actions?.detail %>" class="user_name text-truncate text-body">
+                        <span class="fw-bolder"><%= usr.name %></span>
+                      </a>
+                      <small class="emp_post text-muted">
                         <%= usr.email  %></small></div>
                   </div>
                   <!-- <div class="d-flex gap-1">
@@ -110,15 +112,15 @@
                 </td>
                 <td>
 
-                  <% if(usr.role.trim() == "SUPER_ADMIN") { %>
+                  <% if(usr.role == "SUPER_ADMIN") { %>
                   <span class="text-truncate align-middle">
                     <i data-feather="settings" class=" font-medium-3 text-danger me-50">
                     </i>Super admin</span>
-                  <% } else if(usr.role.trim() == "ADMIN") {  %>
+                  <% } else if(usr.role == "ADMIN") {  %>
                   <span class="text-truncate align-middle">
                     <i data-feather="slack" class=" font-medium-3 text-info me-50">
                     </i>Admin</span>
-                  <% } else if(usr.role.trim() == "PLAYER") {  %>
+                  <% } else if(usr.role == "PLAYER") {  %>
                   <span class="text-truncate align-middle">
                     <i data-feather="user" class=" font-medium-3 text-primary me-50">
                     </i>Player</span>
@@ -139,26 +141,56 @@
                   <% } %>
                 </td>
                 <td data-order="false">
+
+                  <% if(usr?.actions) { %>
                   <div class="d-flex">
-                    <div>
-                      <% if(usr.role === "PLAYER") { %>
+                    <% if(usr?.actions?.detail) { %>
+                    <a href="<%= usr?.actions?.detail %>"
+                      class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Detail User">
+                      <i data-feather="file-text"></i>
+                    </a>
+                    <% } %>
+                    <!-- Suspend Toggle -->
+                    <% if(usr?.actions?.suspend) { %>
+                    <% if(usr.status === "ACTIVE") { %>
+                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
+                      data-bs-toggle="modal" data-bs-target="#suspendUser" data-bs-url="<%= usr?.actions?.suspend %>"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Suspend user">
+                      <i data-feather="minus-circle"></i>
+                    </button>
+                    <% } else if(usr.status === "SUSPENDED") { %>
+                    <form action="<%= usr?.actions?.suspend %>" method="post">
+                      <input type="hidden" name="_method" value="POST">
+                      <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-success waves-effect"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Aktifkan user">
+                        <i data-feather="check-circle"></i>
+                      </button>
+                    </form>
+                    <% } %>
+                    <% } %>
+                  </div>
+                  <% } %>
+                  <div class="d-flex">
+                    <!-- <div>
+                      <% if(!usr.admin) { %>
                       <a href="/users/<%= usr.user_id %>"
                         class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Detail User">
                         <i data-feather="file-text"></i>
                       </a>
-                      <% }else if(usr.role.includes("ADMIN")) { %>
-                      <a href="/admin/<%= usr.admin_id %>"
+                      <% } else { %>
+                      <a href="/admin/<%= usr.admin?.admin_id %>"
                         class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Detail Admin">
                         <i data-feather="file-text"></i>
                       </a>
                       <% } %>
 
-                    </div>
-                    <% if(userAuth.user_id !== usr.user_id ) { %>
+                    </div> -->
+                    <!-- <% if(userAuth.user_id !== usr.user_id ) { %>
 
-                    <% if(usr.role.trim() == "PLAYER") { %>
+                    <% if(usr.role == "PLAYER") { %>
                     <% if(usr.status === "ACTIVE") { %>
                     <button type="button" class="btn btn-icon btn-icon rounded-circle btn-flat-danger waves-effect"
                       data-bs-toggle="modal" data-bs-target="#suspendUser" data-bs-user="<%= JSON.stringify(usr)  %>"
@@ -176,7 +208,7 @@
                     <% } %>
 
                     <% } %>
-                    <% } %>
+                    <% } %> -->
 
                   </div>
                 </td>
