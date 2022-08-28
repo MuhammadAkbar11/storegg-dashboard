@@ -290,7 +290,8 @@
                           </div>
                           <div class="d-flex flex-column">
                             <h6 class="user-name text-truncate mb-0"><%= ts.name  %></h6><small
-                              class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %></small>
+                              class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %>
+                            </small>
                           </div>
                         </div>
                       </td>
@@ -325,7 +326,7 @@
                         <div class=" d-flex justify-content-center w-100 ">
                           <a class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
                             data-bs-placement="top" title="Lihat Invoice" href="/invoice/<%= ts.transaction_id %>">
-                            <i data-feather="eye"></i>
+                            <i data-feather="file-text"></i>
                           </a>
                         </div>
                       </td>
@@ -346,9 +347,5 @@
 <!-- END: Content-->
 
 <%- include('layouts/footer.ejs') %>
-
-<!-- <script src="/js/components/card-statistics.js"></script> -->
-
 <script src="/js/pages/dashboard.js"></script>
-
 <%- include('layouts/end.ejs') %>

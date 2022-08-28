@@ -111,33 +111,6 @@
 
                 <td data-order="false">
                   <div class="d-flex col-actions align-items-center ">
-
-                    <% if(ts.status === 'pending') { %>
-                    <% if(ts.is_paid) { %>
-                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
-                      style="display: inline-block;">
-                      <input type="hidden" name="status" value="success">
-                      <input type="hidden" name="_method" value="PUT">
-                      <button class="btn btn-icon rounded-circle btn-flat-success waves-effect" data-bs-toggle="tooltip"
-                        data-bs-placement="top" title="Terima Transaksi">
-                        <i data-feather='check-circle'></i>
-                      </button>
-                    </form>
-                    <% } else { %>
-                    <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
-                      style="display: inline-block;">
-                      <input type="hidden" name="status" value="failed">
-                      <input type="hidden" name="_method" value="PUT">
-                      <button class="btn btn-icon rounded-circle btn-flat-danger waves-effect  waves-light"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Batalkan Transaksi">
-                        <i data-feather='x-circle'></i>
-                      </button>
-                    </form>
-                    <% } %>
-
-                    <%  } %>
-
-
                     <!-- <div>
                       <a href="" class="btn btn-icon rounded-circle btn-flat-info waves-effect" data-bs-toggle="tooltip"
                         data-bs-placement="top" title="Detail Transaksi">
@@ -157,8 +130,32 @@
                         <i data-feather='more-vertical'></i>
                       </button>
                       <div class="dropdown-menu dropdown-menu-end">
+                        <% if(ts.status === 'pending') { %>
+                        <% if(ts.is_paid) { %>
+                        <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
+                          style="display: inline-block;">
+                          <input type="hidden" name="status" value="success">
+                          <input type="hidden" name="_method" value="PUT">
+                          <button class="dropdown-item d-flex w-100 align-items-center">
+                            <i data-feather='check-circle' class="me-75"></i>
+                            Terima Transaksi
+                          </button>
+                        </form>
+                        <% } else { %>
+                        <form action="/transaction/status/<%= ts.transaction_id %>" method="POST"
+                          style="display: inline-block;">
+                          <input type="hidden" name="status" value="failed">
+                          <input type="hidden" name="_method" value="PUT">
+                          <button class="dropdown-item d-flex w-100 align-items-center">
+                            <i data-feather='x-circle' class="me-75"></i>
+                            Batalkan Transaksi
+                          </button>
+                        </form>
+                        <% } %>
+
+                        <%  } %>
                         <a class="dropdown-item" href="/invoice/<%= ts.transaction_id %>">
-                          <i data-feather="info" class="me-50"></i>
+                          <i data-feather="file-text" class="me-50"></i>
                           <span>Invoice</span>
                         </a>
                         <a class="dropdown-item" href="/transaction-edit/<%= ts.transaction_id %>">
