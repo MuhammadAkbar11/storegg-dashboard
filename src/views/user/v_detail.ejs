@@ -1,0 +1,315 @@
+<%- include('../layouts/head.ejs') %>
+
+<%- include("../layouts/header.ejs") %>
+<%- include("../layouts/sidebar.ejs") %>
+<%- include("../includes/toast.ejs") %>
+
+
+<div class="app-content content ">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row">
+      <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+          <div class="col-12">
+            <h2 class="content-header-title float-start mb-0"> <%= user.user_id %> </h2>
+            <div class="breadcrumb-wrapper">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/users">List Users</a>
+                </li>
+                <li class="breadcrumb-item active"><%= user.user_id %>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include("../includes/content-header.ejs")  %>
+    </div>
+    <div class="content-body">
+      <section class="app-user-view-account">
+        <div class="row">
+          <!-- User Sidebar -->
+          <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+            <!-- User Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="user-avatar-section">
+                  <div class="d-flex align-items-center flex-column">
+                    <img class="img-fluid rounded-circle mt-3 mb-2" src="<%= user.avatar %>" height="110" width="110"
+                      alt="User avatar" />
+                    <div class="user-info text-center">
+                      <h4 class=" text-capitalize "><%= user.name %></h4>
+                      <!-- <span class="badge bg-light-secondary">Author</span> -->
+                      <% if(user.role.trim() == "SUPER_ADMIN") { %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Super Admin</span>
+                      <% } else if(user.role.trim() == "ADMIN") {  %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Admin</span>
+                      <% } else if(user.role.trim() == "PLAYER") {  %>
+                      <span class="text-truncate badge bg-light-secondary align-middle">
+                        Player</span>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-around my-2 pt-75">
+                  <div class="d-flex align-items-start me-2">
+                    <span class="badge bg-light-primary p-75 rounded">
+                      <i data-feather="check" class="font-medium-2"></i>
+                    </span>
+                    <div class="ms-75 text-nowrap ">
+                      <h4 class="mb-0"><%= user.transactions.length  %> </h4>
+                      <small>Transaksi</small>
+                    </div>
+                  </div>
+                  <!-- <div class="d-flex align-items-start">
+                    <span class="badge bg-light-primary p-75 rounded">
+                      <i data-feather="briefcase" class="font-medium-2"></i>
+                    </span>
+                    <div class="ms-75">
+                      <h4 class="mb-0">0</h4>
+                      <small>???</small>
+                    </div>
+                  </div> -->
+                </div>
+                <h4 class="fw-bolder border-bottom pb-50 mb-1">Details</h4>
+                <div class="info-container">
+                  <ul class="list-unstyled">
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Name pengguna:</span>
+                      <span><%= user.username %> </span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Email:</span>
+                      <span><%= user.email %></span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Status:</span>
+                      <!-- <span class="badge bg-light-success">Active</span> -->
+                      <% if(user?.status == "ACTIVE")  { %>
+                      <span class="badge badge-light-success text-capitalize">Active </span>
+                      <% } else if (user?.status == "PENDING") { %>
+                      <span class="badge badge-light-warning text-capitalize ">Pending</span>
+                      <% } else if (user?.status == "SUSPENDED") { %>
+                      <span class="badge badge-light-danger text-capitalize ">Suspended</span>
+                      <% } else { %>
+                      <span class="badge badge-light-secondary text-capitalize">Inactive</span>
+                      <% } %>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Role:</span>
+                      <% if(user.role.trim() == "SUPER_ADMIN") { %>
+                      <span>
+                        Super Admin</span>
+                      <% } else if(user.role.trim() == "ADMIN") {  %>
+                      <span>
+                        Admin</span>
+                      <% } else if(user.role.trim() == "PLAYER") {  %>
+                      <span>
+                        Player</span>
+                      <% } %>
+                    </li>
+                    <!-- <li class="mb-75">
+                      <span class="fw-bolder me-25">Tax ID:</span>
+                      <span>Tax-8965</span>
+                    </li> -->
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Kontak:</span>
+                      <span><%= user?.phone_number %></span>
+                    </li>
+                    <!-- <li class="mb-75">
+                      <span class="fw-bolder me-25">Language:</span>
+                      <span>English</span>
+                    </li>
+                    <li class="mb-75">
+                      <span class="fw-bolder me-25">Country:</span>
+                      <span>Wake Island</span>
+                    </li> -->
+                  </ul>
+                  <% if(userAuth.user_id !== user.user_id) { %>
+                  <% if(user.status !== "SUSPENDED") { %>
+                  <div class="d-flex justify-content-start pt-2">
+                    <button type="button" class="btn btn-outline-danger suspend-user" data-bs-toggle="modal"
+                      data-bs-target="#suspendUser" data-bs-url="/users/status/<%= user.user_id %>">
+                      Suspended
+                    </button>
+                  </div>
+                  <% } else if(user.status === "SUSPENDED" ) { %>
+                  <form action="/users/status/<%= user.user_id %>" method="post">
+                    <input type="hidden" name="_method" value="POST">
+                    <button type="submit" class="btn btn-outline-success suspend-user">
+                      Aktifkan
+                    </button>
+                  </form>
+                  <% } %>
+
+                  <% } %>
+
+                </div>
+              </div>
+            </div>
+            <!-- /User Card -->
+
+          </div>
+          <!--/ User Sidebar -->
+
+          <!-- User Content -->
+          <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+            <!-- User Pills -->
+            <ul class="nav nav-pills mb-2">
+              <li class="nav-item ">
+                <a class="nav-link active " href="/users/<%= user.user_id %>">
+                  <i data-feather="user" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Akun</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/<%= user.user_id %>/security">
+                  <i data-feather="lock" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Pengamanan</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/users/<%= user.user_id %>/settings">
+                  <i data-feather="settings" class="font-medium-3 me-50"></i>
+                  <span class="fw-bold">Pengaturan</span>
+                </a>
+              </li>
+
+            </ul>
+            <!--/ User Pills -->
+            <!-- Invoice table -->
+            <div class="card ">
+              <h4 class="card-header">Transaksi</h4>
+              <div class="table-responsive">
+                <table class="invoice-table table text-nowrap  ">
+                  <thead>
+                    <tr>
+                      <th>#ID</th>
+                      <th>Status</th>
+                      <th>Total</th>
+                      <th class="text-truncate">Issued Date</th>
+                      <th class="cell-fit">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if(user.transactions.length !== 0) { %>
+                    <% user.transactions.map(ts => { %>
+                    <tr>
+                      <td><%= ts.transaction_id %></td>
+                      <td>
+                        <div class="d-flex flex-column justify-content-start align-items-start gap-1 ">
+                          <% if(ts.status === 'pending' ) { %>
+                          <span class="badge badge-light-warning">
+                            <i data-feather='activity'></i>
+                            <%= ts.status %>
+                          </span>
+                          <% if(ts.is_paid) { %>
+                          <span class="badge badge-light-success">
+                            <i data-feather='check'></i>
+                            paid
+                          </span>
+                          <% } else { %>
+                          <span class="badge badge-light-secondary">
+                            <i data-feather='alert-circle'></i>
+                            not paid
+                          </span>
+                          <%  } %>
+                          <% } else if(ts.status === 'success' ) { %>
+                          <span class="badge badge-light-success">
+                            <i data-feather='check-circle'></i>
+                            <%= ts.status %>
+                          </span>
+                          <% } else { %>
+                          <span class="badge badge-light-danger">
+                            <i data-feather='x-circle'></i>
+                            <%= ts.status %>
+                          </span>
+                          <% } %>
+
+                        </div>
+                      </td>
+                      <td>
+                        <%= ts.total  %>
+                      </td>
+                      <td>
+                        <%= ts.created_at  %>
+                      </td>
+                      <td>
+                        <div class=" d-flex justify-content-center w-100 ">
+                          <a class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Lihat Invoice" href="/invoice/<%= ts.transaction_id %>">
+                            <i data-feather="file-text"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <!-- /Invoice table -->
+          </div>
+          <!--/ User Content -->
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="suspendUser" tabindex="-1"
+  aria-labelledby="suspendUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class=" mb-1">Anda yakin?</h3>
+          <p class="mb-2">Apakah anda ingin meng-suspend user ini?</p>
+          <form action="/users/status" id="formSuspendUser">
+
+            <input type="hidden" name="_method" value="POST">
+            <div class="d-flex gap-1">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-danger">Ya, hapus</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<%- include('../layouts/footer.ejs') %>
+<script>
+  const suspendUser = document.getElementById('suspendUser')
+  suspendUser.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget
+    const form = suspendUser.querySelector("#formSuspendUser");
+    const url = button.getAttribute('data-bs-url')
+
+    form.setAttribute("action", url)
+    form.setAttribute("method", "post")
+  })
+</script>
+
+
+
+<%- include('../layouts/end.ejs') %>

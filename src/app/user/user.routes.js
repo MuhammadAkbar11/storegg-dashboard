@@ -1,4 +1,5 @@
 import {
+  getDetailUser,
   getListUsers,
   getLocalAuthCallback,
   getUserSignin,
@@ -23,6 +24,7 @@ function UserRoutes(app) {
   app.post("/auth/logout", postLogout);
 
   app.get("/users", ensureAuth, getListUsers);
+  app.get("/users/:id", ensureAuth, getDetailUser);
   app.post("/users/status/:id", ensureAuth, updateUserStatus);
 }
 

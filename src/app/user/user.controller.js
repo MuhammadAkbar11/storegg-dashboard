@@ -10,7 +10,11 @@ import BaseError, {
   TransfromError,
   ValidationError,
 } from "../../helpers/baseError.helper.js";
-import { ToCapitalize, ToPlainObject } from "../../helpers/index.helper.js";
+import {
+  Rupiah,
+  ToCapitalize,
+  ToPlainObject,
+} from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import {
   findAllUsers,
@@ -19,6 +23,9 @@ import {
   updateOneUser,
 } from "./user.repository.js";
 import Administrator from "../../models/admin.model.js";
+import Transaction from "../../models/transaction.model.js";
+import Player from "../../models/player.model.js";
+import { findAllTransaction } from "../transaction/transaction.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -245,7 +252,7 @@ export const getListUsers = async (req, res, next) => {
           })
         : [];
 
-    res.render("user/all_user/v_list_user", {
+    res.render("user/v_list_user", {
       title: "List Users",
       path: "/users",
       flashdata: flashdata,
@@ -257,6 +264,73 @@ export const getListUsers = async (req, res, next) => {
       countUsers,
       isEdit: false,
       values: null,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+export const getDetailUser = async (req, res, next) => {
+  const ID = req.params.id;
+  const flashdata = req.flash("flashdata");
+  const errors = req.flash("errors")[0];
+  try {
+    let user = await findOneUser({
+      where: {
+        user_id: ID,
+      },
+      include: [
+        {
+          model: Player,
+          as: "player",
+          attributes: ["player_id"],
+        },
+      ],
+    });
+
+    if (!user) {
+      throw new BaseError("NOT_FOUND", 404, "User tidak ditemukan", true, {
+        errorView: "errors/404",
+        renderData: {
+          title: "Halaman tidak ditemukan!",
+        },
+        responseType: "page",
+      });
+    }
+
+    user = ToPlainObject(user);
+
+    const playerId = user.player.player_id;
+
+    let transactions = await findAllTransaction({
+      where: {
+        player_id: playerId,
+      },
+    });
+    transactions = ToPlainObject(transactions);
+
+    transactions.forEach(t => {
+      t.created_at = dayjs(t.created_at).format("DD MMM YYYY");
+      t.total = Rupiah(t.value);
+      delete t.player;
+      return t;
+    });
+
+    user.transactions = transactions;
+
+    if (user.user_id == req.user.user_id) {
+      return res.redirect("/profile");
+    }
+
+    console.log(user);
+
+    res.render("user/v_detail", {
+      title: user.user_id,
+      path: "/user",
+      flashdata: flashdata,
+      errors: errors,
+      user: user,
     });
   } catch (error) {
     const baseError = new TransfromError(error);
