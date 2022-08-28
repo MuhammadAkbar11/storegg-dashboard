@@ -1,6 +1,18 @@
-import { ROLES, USER_STATUS } from "../../constants/index.constants.js";
+import path from "path";
+import sharp from "sharp";
+import { MODE } from "../../config/env.config.js";
+import {
+  DEFAULT_USER_PP,
+  ROLES,
+  USER_STATUS,
+} from "../../constants/index.constants.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
-import { ToCapitalize } from "../../helpers/index.helper.js";
+import {
+  RenameFile,
+  ToCapitalize,
+  UnlinkFile,
+} from "../../helpers/index.helper.js";
+import Logger from "../../helpers/logger.helper.js";
 import User from "../../models/user.model.js";
 
 export const findAllUsers = async filter => {
@@ -47,14 +59,53 @@ export const findUserById = async id => {
   }
 };
 
-export const updateOneUser = async (options, payload) => {
+export const updateOneUser = async payload => {
   try {
-    let result = await User.update(
-      { ...payload },
+    const {
+      username,
+      phone_number,
+      name,
+      fileimg,
+      status,
+      oldAvatar,
+      user_id,
+    } = payload;
+
+    const fileImgData = fileimg.data;
+    let avatar = oldAvatar;
+    if (fileImgData) {
+      const userImg = RenameFile(fileImgData.filename, "GGPlayer", username);
+      await sharp(fileImgData.path)
+        .resize(200, 200)
+        .jpeg({ quality: 90 })
+        .toFile(path.resolve(fileImgData.destination, userImg));
+
+      UnlinkFile(fileImgData.path);
+      avatar = `/uploads/users/${userImg}`;
+
+      // delete previous avatar
+      if (DEFAULT_USER_PP != oldAvatar) {
+        const oldAvatarPath = MODE == "development" ? ".dev" : "public";
+        const deleteOldAva = UnlinkFile(oldAvatarPath + oldAvatar);
+        Logger.info(deleteOldAva, "Delete old Avatar");
+      }
+    }
+
+    const result = await User.update(
       {
-        ...options,
+        username,
+        phone_number,
+        name,
+        avatar,
+        status,
+      },
+      {
+        where: {
+          user_id: user_id,
+        },
       }
     );
+
     return result;
   } catch (error) {
     console.error("[EXCEPTION] updateOneUser", error);

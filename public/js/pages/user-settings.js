@@ -2,7 +2,7 @@ $(function () {
   ("use strict");
 
   // variables
-  var form = $("#form-action-admin"),
+  var form = $("#form-action-user"),
     accountUploadImg = $("#account-upload-img"),
     accountUploadBtn = $("#account-upload"),
     accountUserImage = $(".uploadedAvatar"),
@@ -35,17 +35,6 @@ $(function () {
   // --------------------------------------------------------------------
 
   $.validator.addMethod(
-    "address",
-    function (value, element) {
-      const rgx =
-        /[0-9\\\/#\s.,a-zA-Z]+[,]+[0-9\\\/#\s.,a-zA-Z]+[,]+[a-zA-Z]+[.]+[0-9]+[/]+[a-zA-Z]+[.]+[0-9]+[,]+[0-9\\\/#\s.,a-zA-Z]+[,][0-9\\\/#\s.,a-zA-Z]/;
-      // const rex = //
-      return this.optional(element) || rgx.test(value);
-    },
-    "Format alamat tidak sesuai (contoh: Jln Antara,No 66,RT.666/RW.666,Jatimakmur,Pondok Gede)"
-  );
-
-  $.validator.addMethod(
     "noSpace",
     function (value, element) {
       return value.indexOf(" ") < 0 && value != "";
@@ -68,20 +57,8 @@ $(function () {
           status: {
             required: true,
           },
-          role: {
-            required: true,
-          },
+
           phone_number: {
-            required: true,
-          },
-          address: {
-            required: true,
-            address: true,
-          },
-          regency: {
-            required: true,
-          },
-          city: {
             required: true,
           },
         },
@@ -95,21 +72,8 @@ $(function () {
           status: {
             required: "Pilih status!",
           },
-          role: {
-            required: "Pilih role!",
-          },
           phone_number: {
             required: "Masukan no hp!",
-          },
-          address: {
-            required:
-              "Masukan alamat (contoh: Jln,No Rumah,RT/RW,Kelurahan,Kecamatan)!",
-          },
-          regency: {
-            required: "Masukan provinsi!",
-          },
-          city: {
-            required: "Masukan kota!",
           },
         },
       });

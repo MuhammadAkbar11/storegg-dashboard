@@ -122,25 +122,6 @@
                       <span>Wake Island</span>
                     </li> -->
                   </ul>
-                  <% if(userAuth.user_id !== user.user_id) { %>
-                  <% if(user.status !== "SUSPENDED") { %>
-                  <div class="d-flex justify-content-start pt-2">
-                    <button type="button" class="btn btn-outline-danger suspend-user" data-bs-toggle="modal"
-                      data-bs-target="#suspendUser" data-bs-url="/users/status/<%= user.user_id %>">
-                      Suspended
-                    </button>
-                  </div>
-                  <% } else if(user.status === "SUSPENDED" ) { %>
-                  <form action="/users/status/<%= user.user_id %>" method="post">
-                    <input type="hidden" name="_method" value="POST">
-                    <button type="submit" class="btn btn-outline-success suspend-user">
-                      Aktifkan
-                    </button>
-                  </form>
-                  <% } %>
-
-                  <% } %>
-
                 </div>
               </div>
             </div>
@@ -154,7 +135,7 @@
             <!-- User Pills -->
             <ul class="nav nav-pills mb-2">
               <li class="nav-item ">
-                <a class="nav-link active " href="/users/<%= user.user_id %>">
+                <a class="nav-link " href="/users/<%= user.user_id %>">
                   <i data-feather="user" class="font-medium-3 me-50"></i>
                   <span class="fw-bold">Akun</span></a>
               </li>
@@ -165,7 +146,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="/users/<%= user.user_id %>/settings">
+                <a class="nav-link active " href="/users/<%= user.user_id %>/settings">
                   <i data-feather="settings" class="font-medium-3 me-50"></i>
                   <span class="fw-bold">Pengaturan</span>
                 </a>
@@ -173,80 +154,76 @@
 
             </ul>
             <!--/ User Pills -->
-            <!-- Invoice table -->
-            <div class="card ">
-              <h4 class="card-header">Transaksi</h4>
-              <div class="table-responsive">
-                <table class="invoice-table table text-nowrap  ">
-                  <thead>
-                    <tr>
-                      <th>#ID</th>
-                      <th>Status</th>
-                      <th>Total</th>
-                      <th class="text-truncate">Issued Date</th>
-                      <th class="cell-fit">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if(user.transactions.length !== 0) { %>
-                    <% user.transactions.map(ts => { %>
-                    <tr>
-                      <td><%= ts.transaction_id %></td>
-                      <td>
-                        <div class="d-flex flex-column justify-content-start align-items-start gap-1 ">
-                          <% if(ts.status === 'pending' ) { %>
-                          <span class="badge badge-light-warning">
-                            <i data-feather='activity'></i>
-                            <%= ts.status %>
-                          </span>
-                          <% if(ts.is_paid) { %>
-                          <span class="badge badge-light-success">
-                            <i data-feather='check'></i>
-                            paid
-                          </span>
-                          <% } else { %>
-                          <span class="badge badge-light-secondary">
-                            <i data-feather='alert-circle'></i>
-                            not paid
-                          </span>
-                          <%  } %>
-                          <% } else if(ts.status === 'success' ) { %>
-                          <span class="badge badge-light-success">
-                            <i data-feather='check-circle'></i>
-                            <%= ts.status %>
-                          </span>
-                          <% } else { %>
-                          <span class="badge badge-light-danger">
-                            <i data-feather='x-circle'></i>
-                            <%= ts.status %>
-                          </span>
-                          <% } %>
 
+            <div class="row">
+              <div class="col-12">
+                <!-- profile -->
+                <div class="card">
+                  <div class="card-header border-bottom">
+                    <h4 class="card-title">Pengaturan Admin</h4>
+                  </div>
+                  <div class="card-body py-2 my-25">
+                    <!-- header section -->
+                    <!--/ header section -->
+
+                    <form id="form-action-user" class=" row gy-1 pt-75"
+                      action="/users/<%= user.user_id %>/settings?_method=POST" method="post"
+                      enctype="multipart/form-data">
+                      <!-- <input type="hidden" name="_method" value="PUT"> -->
+                      <div class="d-flex col-md-12">
+                        <a href="#" class="me-25">
+                          <img src="<%= user.avatar %>" id="account-upload-img"
+                            class="uploadedAvatar rounded me-50 object-fit-cover" alt="profile image" height="100"
+                            width="100" />
+                        </a>
+                        <!-- upload and reset button -->
+                        <div class="d-flex align-items-end mt-75 ms-1">
+                          <div>
+                            <label for="account-upload" class="btn btn-sm btn-primary mb-75 me-75">Upload</label>
+                            <input type="file" id="account-upload" hidden accept="image/*" name="image" />
+                            <button type="button" id="account-reset"
+                              class="btn btn-sm btn-outline-secondary mb-75">Reset</button>
+                            <p class="mb-0">Allowed file types: png, jpg, jpeg.</p>
+                          </div>
                         </div>
-                      </td>
-                      <td>
-                        <%= ts.total  %>
-                      </td>
-                      <td>
-                        <%= ts.created_at  %>
-                      </td>
-                      <td>
-                        <div class=" d-flex justify-content-center w-100 ">
-                          <a class="btn btn-icon rounded-circle btn-flat-primary waves-effect" data-bs-toggle="tooltip"
-                            data-bs-placement="top" title="Lihat Invoice" href="/invoice/<%= ts.transaction_id %>">
-                            <i data-feather="file-text"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <% }) %>
-                    <% } %>
-                  </tbody>
-                </table>
+                        <!--/ upload and reset button -->
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <label class="form-label" for="name">Nama lengkap</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Admin name"
+                          value="<%= user.name %>" data-msg="Masukan nama lengkap" />
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <label class="form-label" for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control"
+                          value="<%= user.username  %>" placeholder="<%= user.username  %>" />
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <label class="form-label" for="phone_number">Phone Number</label>
+                        <input type="text" class="form-control account-number-mask" id="phone_number"
+                          name="phone_number" placeholder="Phone Number" value="<%= user.phone_number %>" />
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <label class="form-label" for="status">Status</label>
+                        <select id="status" name="status" class="select2 form-select">
+                          <option selected value="">Status</option>
+                          <% status.forEach(s => {  %>
+                          <option class=" text-capitalize " value="<%= s.value %>"
+                            <%= s.selected ? "selected" : null %>><%= s.name %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-primary mt-1 me-1">Simpan perubahan</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <!--/ profile -->
               </div>
-
             </div>
-            <!-- /Invoice table -->
+
           </div>
           <!--/ User Content -->
         </div>
@@ -258,49 +235,7 @@
 </div>
 <!-- END: Content-->
 
-<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="suspendUser" tabindex="-1"
-  aria-labelledby="suspendUserLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-transparent ">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
-          <h3 class=" mb-1">Anda yakin?</h3>
-          <p class="mb-2">Apakah anda ingin meng-suspend user ini?</p>
-          <form action="/users/status" id="formSuspendUser">
-
-            <input type="hidden" name="_method" value="POST">
-            <div class="d-flex gap-1">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tidak,
-                batalkan</button>
-              <button type="submit" class="btn btn-danger">Ya, hapus</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-
 
 <%- include('../layouts/footer.ejs') %>
-<script>
-  const suspendUser = document.getElementById('suspendUser')
-  suspendUser.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget
-    const form = suspendUser.querySelector("#formSuspendUser");
-    const url = button.getAttribute('data-bs-url')
-
-    form.setAttribute("action", url)
-    form.setAttribute("method", "post")
-  })
-</script>
-
-
-
+<script src="/js/pages/user-settings.js"></script>
 <%- include('../layouts/end.ejs') %>

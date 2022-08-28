@@ -3,6 +3,8 @@ import Sequelize from "sequelize";
 import { validationResult } from "express-validator";
 import {
   httpStatusCodes,
+  ROLES,
+  SUPERADMIN_EMAIL,
   USER_STATUS,
 } from "../../constants/index.constants.js";
 import { ComparePassword } from "../../helpers/authentication.helper.js";
@@ -11,14 +13,19 @@ import BaseError, {
   ValidationError,
 } from "../../helpers/baseError.helper.js";
 import {
+  HTMLScript,
+  HTMLStylesheet,
   Rupiah,
   ToCapitalize,
   ToPlainObject,
+  UnlinkFile,
 } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import {
   findAllUsers,
   findCountUser,
+  findListUserRoles,
+  findListUserStatus,
   findOneUser,
   updateOneUser,
 } from "./user.repository.js";
@@ -301,6 +308,10 @@ export const getDetailUser = async (req, res, next) => {
 
     user = ToPlainObject(user);
 
+    if (user.role.includes(ROLES.ADMIN)) {
+      return res.redirect("/users");
+    }
+
     const playerId = user.player.player_id;
 
     let transactions = await findAllTransaction({
@@ -318,16 +329,15 @@ export const getDetailUser = async (req, res, next) => {
     });
 
     user.transactions = transactions;
+    user.transactionsCount = transactions.length;
 
     if (user.user_id == req.user.user_id) {
       return res.redirect("/profile");
     }
 
-    console.log(user);
-
     res.render("user/v_detail", {
       title: user.user_id,
-      path: "/user",
+      path: "/users",
       flashdata: flashdata,
       errors: errors,
       user: user,
@@ -387,12 +397,146 @@ export const updateUserStatus = async (req, res) => {
     });
     res.redirect("back");
   } catch (error) {
-    console.log(error);
     req.flash("flashdata", {
       type: "error",
       title: "Opps!",
       message: `Gagal mengupdate status!`,
     });
     res.redirect("back");
+  }
+};
+
+export const putUser = async (req, res, _next) => {
+  const ID = req.params.id;
+  const { name, username, status, phone_number } = req.body;
+  const fileimg = req.fileimg;
+  const isUpload = fileimg.data ? true : false;
+  try {
+    let user = await findOneUser({
+      where: {
+        user_id: ID,
+      },
+    });
+
+    if (!user) {
+      req.flash("flashdata", {
+        type: "error",
+        title: "Oppss",
+        message: `Gagal mengubah data, karena user dengan ID <strong>${ID}</strong> tidak di temukan`,
+      });
+      return res.redirect("back");
+    }
+
+    if (user.role.includes(ROLES.ADMIN)) {
+      req.flash("flashdata", {
+        type: "warning",
+        title: "Oppss",
+        message: `Tidak ada perubahan! karena data yang diubah merupakan data admin!`,
+      });
+      return res.redirect("/users");
+    }
+
+    const payload = {
+      user_id: user.user_id,
+      name,
+      username,
+      status,
+      phone_number,
+      fileimg,
+      oldAvatar: user.avatar,
+    };
+
+    await updateOneUser(payload);
+
+    req.flash("flashdata", {
+      type: "success",
+      title: "Diubah!",
+      message: "Berhasil mengubah data user",
+    });
+    res.redirect("back");
+  } catch (error) {
+    console.log(error);
+    if (isUpload) {
+      UnlinkFile(fileimg.data.path);
+    }
+    req.flash("flashdata", {
+      type: "error",
+      title: "Opps!",
+      message: "Gagal mengubah data",
+    });
+    res.redirect("back");
+  }
+};
+
+export const viewSettingUser = async (req, res, next) => {
+  const ID = req.params.id;
+
+  HTMLStylesheet(
+    [
+      ["/vendors/css/forms/select/select2.min.css", "vendors"],
+      ["/css/forms/form-validation.css", "pages"],
+    ],
+    res
+  );
+
+  HTMLScript(
+    [
+      ["/vendors/js/forms/select/select2.full.min.js", "pages"],
+      ["/vendors/js/forms/validation/jquery.validate.min.js", "pages"],
+      ["/vendors/js/forms/cleave/cleave.min.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.id.js", "pages"],
+      ["/vendors/js/forms/cleave/addons/cleave-phone.us.js", "pages"],
+    ],
+    res
+  );
+
+  try {
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
+
+    let user = await findOneUser({
+      where: {
+        user_id: ID,
+      },
+      include: [
+        {
+          model: Player,
+          as: "player",
+          attributes: ["player_id"],
+        },
+      ],
+    });
+
+    if (!user) {
+      throw new BaseError("NOT_FOUND", 404, "User tidak ditemukan", true, {
+        errorView: "errors/404",
+        renderData: {
+          title: "Halaman tidak ditemukan!",
+        },
+        responseType: "page",
+      });
+    }
+
+    user = ToPlainObject(user);
+    const playerId = user.player.player_id;
+    user.transactionsCount = await Transaction.count({
+      where: {
+        player_id: playerId,
+      },
+    });
+
+    const status = findListUserStatus(user.status);
+
+    res.render("user/v_edit_user", {
+      title: `Pengaturan ${user.user_id}`,
+      path: "/users",
+      status: status,
+      flashdata: flashdata,
+      errors: errors,
+      user: user,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
   }
 };

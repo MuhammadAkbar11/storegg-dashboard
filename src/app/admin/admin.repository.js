@@ -86,7 +86,7 @@ export const updateAdmin = async payload => {
     const fileImgData = fileimg.data;
     let avatar = oldAvatar;
     if (fileImgData) {
-      const playerImg = RenameFile(fileImgData.filename, "GGPlayer", username);
+      const playerImg = RenameFile(fileImgData.filename, "GGAdmin", username);
       await sharp(fileImgData.path)
         .resize(200, 200)
         .jpeg({ quality: 90 })
