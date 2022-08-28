@@ -78,8 +78,10 @@
                           height="32"></div>
                     </div>
                     <div class="d-flex flex-column">
-                      <h6 class="user-name text-truncate mb-0"><%= ts.name  %></h6><small
-                        class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %></small>
+                      <a href="/users/<%= ts?.player?.user?.user_id %>" class="user_name text-truncate text-body">
+                        <span class="fw-bolder"><%= ts?.player?.user.name %></span>
+                      </a>
+                      <small class="text-truncate text-muted"><%= ts?.history?.history_player?.email  %></small>
                     </div>
                   </div>
                 </td>
