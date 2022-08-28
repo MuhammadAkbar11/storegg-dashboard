@@ -65,9 +65,6 @@ $(function () {
             required: true,
             noSpace: true,
           },
-          email: {
-            required: true,
-          },
           status: {
             required: true,
           },
@@ -94,9 +91,6 @@ $(function () {
           },
           username: {
             required: "Masukan nama pengguna!",
-          },
-          email: {
-            required: "Masukan email!",
           },
           status: {
             required: "Pilih status!",

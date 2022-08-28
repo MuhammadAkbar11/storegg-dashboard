@@ -126,17 +126,8 @@ export const getDetailAdmin = async (req, res, next) => {
 
 export const putAdmin = async (req, res, next) => {
   const ID = req.params.id;
-  const {
-    name,
-    username,
-    email,
-    status,
-    phone_number,
-    role,
-    address,
-    regency,
-    city,
-  } = req.body;
+  const { name, username, status, phone_number, role, address, regency, city } =
+    req.body;
   const fileimg = req.fileimg;
   const isUpload = fileimg.data ? true : false;
   try {
@@ -173,18 +164,6 @@ export const putAdmin = async (req, res, next) => {
       return res.redirect("/profile");
     }
 
-    if (admin.user.email !== email) {
-      const existEmail = await findOneUser({ where: { email: email } });
-      if (existEmail) {
-        req.flash("flashdata", {
-          type: "error",
-          title: "Oppss",
-          message: `Email telah terdaftar, silahkan coba lagi dengan email yang belum terdaftar!`,
-        });
-        return res.redirect("back");
-      }
-    }
-
     const splitReqAddress = address.split(",");
     let joinAddress = {
       country: "Indonesia",
@@ -204,7 +183,6 @@ export const putAdmin = async (req, res, next) => {
       user_id: admin.user.user_id,
       name,
       username,
-      email,
       status,
       phone_number,
       role,

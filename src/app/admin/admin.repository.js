@@ -76,7 +76,6 @@ export const updateAdmin = async payload => {
       username,
       phone_number,
       name,
-      email,
       status,
       role,
       fileimg,
@@ -106,7 +105,6 @@ export const updateAdmin = async payload => {
 
     await User.update(
       {
-        email,
         username,
         phone_number,
         name,

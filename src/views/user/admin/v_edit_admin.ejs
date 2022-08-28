@@ -161,7 +161,7 @@
                 <!-- profile -->
                 <div class="card">
                   <div class="card-header border-bottom">
-                    <h4 class="card-title">Pengaturan</h4>
+                    <h4 class="card-title">Pengaturan Admin</h4>
                   </div>
                   <div class="card-body py-2 my-25">
                     <!-- header section -->
@@ -200,10 +200,10 @@
                         <input type="text" id="username" name="username" class="form-control"
                           value="<%= admin.user.username  %>" placeholder="<%= admin.user.username  %>" />
                       </div>
-                      <div class="col-12 col-md-6">
-                        <label class="form-label" for="email">Email</label>
-                        <input type="text" id="email" name="email" class="form-control" value="<%= admin.user.email %>"
-                          placeholder="example@storegg.com" />
+                      <div class="col-12 col-sm-6">
+                        <label class="form-label" for="phone_number">Phone Number</label>
+                        <input type="text" class="form-control account-number-mask" id="phone_number"
+                          name="phone_number" placeholder="Phone Number" value="<%= admin.user.phone_number %>" />
                       </div>
                       <div class="col-12 col-md-6">
                         <label class="form-label" for="status">Status</label>
@@ -216,11 +216,7 @@
                           <% }) %>
                         </select>
                       </div>
-                      <div class="col-12 col-sm-6">
-                        <label class="form-label" for="phone_number">Phone Number</label>
-                        <input type="text" class="form-control account-number-mask" id="phone_number"
-                          name="phone_number" placeholder="Phone Number" value="<%= admin.user.phone_number %>" />
-                      </div>
+
                       <div class="col-12 col-sm-6 ">
                         <label for="role" class="form-label">Role</label>
                         <select id="role" name="role" class="select2 form-select">
