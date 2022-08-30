@@ -8,26 +8,26 @@
   <div class="header-navbar-shadow"></div>
   <div class="content-wrapper container-xxl p-0">
     <div class="content-header row">
-      <div class="content-header-left col-md-9 col-12 mb-2">
+      <div class="content-header-left col-md-10 col-12 mb-2">
         <div class="row breadcrumbs-top">
           <div class="col-12">
             <h2 class="content-header-title float-start mb-0"><%= voucher.game_name %></h2>
             <div class="breadcrumb-wrapper">
-              <ol class="breadcrumb">
+              <ol class="breadcrumb  ">
                 <li class="breadcrumb-item"><a href="/">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item"><a href="/voucher">Voucher</a>
                 </li>
                 <li class="breadcrumb-item active"><%= title %>
                 </li>
-                <li class="breadcrumb-item active"><%= voucher.game_name %>
+                <li class="breadcrumb-item active text-nowrap  "><%= voucher.game_name %>
                 </li>
               </ol>
             </div>
           </div>
         </div>
       </div>
-      <%- include("../includes/content-header.ejs")  %>
+
     </div>
     <div class="content-body">
       <section class="app-ecommerce-details">
@@ -38,11 +38,7 @@
               <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-2 mb-md-0">
                 <div class="d-flex flex-column align-items-start justify-content-center">
                   <img src="<%= voucher.thumbnail  %>" class="img-fluid product-img mb-1" alt="product image" />
-                  <div class=" d-flex mt-auto ">
-                    <a href="/voucher" class=" btn btn-outline-primary ">Kembali</a>
-                  </div>
                 </div>
-
               </div>
               <div class="col-12 col-md-7 ">
                 <div class=" d-flex justify-content-between ">
@@ -53,9 +49,7 @@
                     </a>
                   </div>
                 </div>
-
                 <span class="card-text item-company">Kategori : <%= voucher.category.name %></span>
-
                 <p class="card-text mt-1">
                   Status:
                   <% if(voucher.status == "Y")  { %>
@@ -67,12 +61,12 @@
 
                 <hr />
                 <div class="">
-                  <h6>Voucher Items</h6>
+                  <h6>Nominal</h6>
                   <div class="d-flex flex-row  gap-1">
                     <% for (let nm of voucher.nominals) { %>
-                    <div class="card  border-primary ">
-                      <div class="card-body p-1 text-primary">
-                        <span class="d-flex ">
+                    <div class="card  border shadow ">
+                      <div class="card-body p-1">
+                        <span class="d-flex">
                           <span class="fw-bolder "><%= nm.coin_quantity %></span>
                           <span class="fw-bolder" style="margin-left: 5px;"><%= nm.coin_name %> </span>
                         </span>
@@ -95,12 +89,14 @@
               </div>
             </div>
           </div>
+          <div class="card-footer">
+            <div class=" d-flex mt-auto ">
+              <a href="/voucher" class=" btn btn-outline-primary ">Kembali</a>
+            </div>
+          </div>
           <!-- Product Details ends -->
         </div>
       </section>
-
-
-
     </div>
   </div>
 </div>

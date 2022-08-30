@@ -18,13 +18,12 @@
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Dashboard</a>
                 </li>
-                <li class="breadcrumb-item"><a href="/transaction">Transaction</a>
+                <li class="breadcrumb-item"><a href="/transaction">Transaksi</a>
                 </li>
                 <li class="breadcrumb-item active">Invoice
                 </li>
                 <li class="breadcrumb-item active"><%= invoice.transaction_id %>
                 </li>
-
               </ol>
             </div>
           </div>
@@ -276,7 +275,12 @@
                 </button>
                 <% } %>
                 <% } %>
-
+                <% if(invoice.status === "pending" && invoice.is_paid) { %>
+                <button class="btn btn-success d-flex w-100 align-items-center justify-content-center "
+                  data-bs-toggle="modal" data-bs-target="#confirmTransaction" style="font-size: 12px;">
+                  Selesaikan Transaksi
+                </button>
+                <% } %>
 
               </div>
             </div>
@@ -417,6 +421,35 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
   </div>
 </div>
 <!-- END: Content-->
+
+
+<div class="modal fade modal-danger text-start" data-bs-backdrop="static" id="confirmTransaction" tabindex="-1"
+  aria-labelledby="confirmTransactionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-transparent ">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class=" pt-2 pb-2 px-2 d-flex flex-column align-items-center ">
+          <h3 class=" mb-1">Anda yakin?</h3>
+          <p class="mb-2">Apakah anda ingin menyelesaikan transaksi ini?</p>
+          <form action="/transaction/status/<%= invoice.transaction_id %>" method="POST" style="display: inline-block;"
+            class="w-100">
+            <input type="hidden" name="status" value="success">
+            <input type="hidden" name="_method" value="PUT">
+            <div class=" d-flex justify-content-center ">
+              <button type="button" class="btn btn-outline-secondary me-1" data-bs-dismiss="modal">Tidak,
+                batalkan</button>
+              <button type="submit" class="btn btn-success">Ya, konfirmasi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <%- include('../layouts/footer.ejs') %>
 

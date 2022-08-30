@@ -235,7 +235,7 @@ export const updateTransactionStatus = async (req, res, next) => {
       title: "Berhasil!",
       message: message,
     });
-    res.redirect("/transaction");
+    res.redirect("back");
   } catch (error) {
     req.flash("flashdata", {
       type: "error",
@@ -289,8 +289,6 @@ export const updateTransactionPayment = async (req, res, next) => {
     }
 
     const message = `Konfirmasi pembayaran berhasil!`;
-    console.log(historyPayment);
-    // await updateTransactionStatusById(ID, status);
 
     await updateTransactionHistoryPayment(ID, transactionHistoryPayID, {
       value: value,
