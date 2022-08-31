@@ -69,7 +69,7 @@
                   </div>
                   <div class="mt-md-0 mt-2">
                     <h4 class="invoice-title">
-                      Invoice
+                      INVOICE
                       <span class="invoice-number">#<%= invoice.transaction_id  %> </span>
                     </h4>
                     <div class="invoice-date-wrapper">
@@ -265,7 +265,8 @@
                   Send Invoice
                 </button>
                 <button class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</button>
-                <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-print.html" target="_blank"> Print
+                <a class="btn btn-outline-secondary w-100 mb-75" href="/invoice/<%= invoice.transaction_id %>/print"
+                  target="_blank"> Print
                 </a>
                 <!-- <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-edit.html"> Edit </a> -->
                 <% if(invoice.status !== "failed") { %>

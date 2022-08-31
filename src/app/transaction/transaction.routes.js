@@ -6,6 +6,7 @@ import {
   // putTransaction,
   updateTransactionStatus,
   viewGetInvoice,
+  viewGetPrintInvoice,
   // deleteTransaction,
 } from "./transaction.controller.js";
 
@@ -16,6 +17,7 @@ function TransactionRoutes(app) {
     .route("/transaction/confirm-payment")
     .post(ensureAuth, updateTransactionPayment);
   app.route("/transaction/status/:id").put(ensureAuth, updateTransactionStatus);
+  app.route("/invoice/:id/print").get(ensureAuth, viewGetPrintInvoice);
   app.route("/invoice/:id").get(ensureAuth, viewGetInvoice);
   // app
   //   .route("/transaction/:id")

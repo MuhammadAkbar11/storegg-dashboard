@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="loading dark-layout" lang="en" data-layout="dark-layout" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+
+  <title><%= title  %> | StoreGG Dashboard</title>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
+    rel="stylesheet">
+
+  <!-- BEGIN: Vendor CSS-->
+  <link rel="stylesheet" type="text/css" href="/vendors/css/vendors.min.css">
+  <!-- END: Vendor CSS-->
+
+  <!-- BEGIN: Theme CSS-->
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap-extended.css">
+  <link rel="stylesheet" type="text/css" href="/css/colors.css">
+  <link rel="stylesheet" type="text/css" href="/css/components.css">
+  <link rel="stylesheet" type="text/css" href="/css/themes/dark-layout.css">
+  <link rel="stylesheet" type="text/css" href="/css/themes/bordered-layout.css">
+  <link rel="stylesheet" type="text/css" href="/css/themes/semi-dark-layout.css">
+
+  <!-- BEGIN: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="/css/core/menu/menu-types/vertical-menu.css">
+  <link rel="stylesheet" type="text/css" href="/css/pages/app-invoice-print.css">
+  <!-- END: Page CSS-->
+
+  <!-- BEGIN: Custom CSS-->
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <!-- END: Custom CSS-->
+
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click"
+  data-menu="vertical-menu-modern" data-col="blank-page">
+  <!-- BEGIN: Content-->
+  <div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+      <div class="content-header row">
+      </div>
+      <div class="content-body">
+        <div class="invoice-print p-3">
+          <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
+            <div>
+              <div class="d-flex mb-1">
+                <img height="32" src="/images/logo.png" alt="">
+                <h2 class="text-primary fw-bold ms-1">StoreGG</h2>
+              </div>
+              <p class="card-text mb-25">Pacific Century Place Tower Level 45 SCBD</p>
+              <p class="card-text mb-25">Jl. Jenderal Sudirman No.53, RW.3</p>
+              <p class="card-text mb-25">Senayan, Kec. Kby. Baru, Jakarta,
+                Indonesia </p>
+              <p class="card-text mb-0">+62 (021) 30422800</p>
+            </div>
+            <div class="mt-md-0 mt-2">
+              <h4 class="fw-bold text-end mb-1">INVOICE #<%= invoice.transaction_id  %></h4>
+              <div class="invoice-date-wrapper mb-50">
+                <span class="invoice-date-title">Date Issued:</span>
+                <span class="fw-bold"> <%= invoice.created_at  %></span>
+              </div>
+              <div class="invoice-date-wrapper">
+                <span class="invoice-date-title">Due Date:</span>
+                <span class="fw-bold"><%= invoice.due_date  %></span>
+              </div>
+
+            </div>
+          </div>
+
+          <hr class="my-2" />
+
+          <div class="row pb-2">
+            <div class="col-sm-6">
+              <h6 class="mb-2">Invoice To:</h6>
+              <h6 class="mb-25"><%= invoice?.history?.history_player?.name  %> </h6>
+              <p class="card-text mb-25"><%= invoice?.history?.history_player?.phone_number  %> </p>
+              <p class="card-text mb-0"><%= invoice?.history?.history_player?.email  %> </p>
+            </div>
+            <div class="col-sm-6 mt-sm-0 mt-2">
+              <h6 class="mb-1">Payment Details:</h6>
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="pe-1">Method :</td>
+                    <td><%= invoice?.history?.history_payment?.type  %> </td>
+                  </tr>
+
+                  <% if(invoice.is_paid) { %>
+                  <tr>
+                    <td class="pe-1">Status :</td>
+                    <td> Paid </td>
+                  </tr>
+                  <tr>
+                    <td class="pe-1">Pay By :</td>
+                    <td><%= invoice?.history?.history_payment?.payer?.bank_account_name  %> </td>
+                  </tr>
+                  <tr>
+                    <td class="pe-1">Date :</td>
+                    <td><%= invoice?.history?.history_payment?.payer?.pay_date  %> </td>
+                  </tr>
+                  <!-- <tr>
+                    <td class="pe-1">Payer Bank Name:</td>
+                    <td><%= invoice?.history?.history_payment?.payer?.bank_name  %> </td>
+                  </tr>
+                  <tr>
+                    <td class="pe-1">Payer Account No :</td>
+                    <td><%= invoice?.history?.history_payment?.payer?.no_bank_account  %> </td>
+                  </tr> -->
+                  <% } else { %>
+                  <tr>
+                    <td class="pe-1">Status :</td>
+                    <td> Not Paid </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="table-responsive mt-2">
+            <table class="table m-0">
+              <thead>
+                <tr>
+                  <th class="py-1 ">Voucher description</th>
+                  <th class="py-1">Account game</th>
+                  <th class="py-1">Item</th>
+                  <th class="py-1">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="py-1 ">
+                    <p class="fw-semibold mb-25"><%= invoice?.history?.history_voucher?.game_name  %></p>
+                    <p class="text-muted text-nowrap">
+                      Category: <%= invoice?.history?.history_voucher?.category  %>
+                    </p>
+                  </td>
+                  <td class="py-1">
+                    <span class="fw-bold"><%= invoice.account_game  %> </span>
+                  </td>
+                  <td class="py-1 ">
+                    <span class="fw-bold">
+                      <%= invoice?.history?.history_voucher?.coin_quantity %>
+                    </span>
+                    <span class="fw-bold"> <%= invoice?.history?.history_voucher?.coin_name %></span>
+                  </td>
+                  <td class="py-1 text-wrap ">
+                    <span
+                      class="fw-bold d-flex flex-wrap  text-wrap"><%= invoice?.history?.history_voucher?.price %></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row d-flex invoice-sales-total-wrapper mt-3">
+            <div class="col-md-6  order-2 order-md-1 ">
+              <h6 class="mb-1">Payment Intruction:</h6>
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="pe-1">Make Payable To :</td>
+                  </tr>
+                  <tr>
+                    <td class="  fw-bold"><%= invoice?.history?.history_payment?.bank_account_name  %> </td>
+                  </tr>
+                </tbody>
+              </table>
+              <%  if(invoice?.history?.history_payment?.type === "Transfer") { %>
+              <table class=" mt-1">
+                <tbody>
+                  <tr>
+                    <td class="pe-1">Bank Transfer :</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class=" fw-bold ">(<%= invoice?.history?.history_payment?.bank_name  %>)
+                        <%= invoice?.history?.history_payment?.no_rekening  %></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <% } %>
+
+            </div>
+            <div class=" col-md-6 order-1 order-md-2 mt-md-0 mb-2">
+              <div class="d-md-flex justify-content-md-end ms-auto pe-5 pe-md-1">
+                <div class="invoice-total-wrapper  ms-auto  ">
+                  <div class="invoice-total-item text-wrap">
+                    <p class="invoice-total-title ">Subtotal:</p>
+                    <p class="invoice-total-amount ms-md-1"><%= invoice?.subtotal %> </p>
+                  </div>
+                  <div class="invoice-total-item">
+                    <p class="invoice-total-title">Discount:</p>
+                    <p class="invoice-total-amount ms-md-1">Rp. 0</p>
+                  </div>
+                  <div class="invoice-total-item">
+                    <p class="invoice-total-title">Tax (10%):</p>
+                    <p class="invoice-total-amount"> <%= invoice.tax %> </p>
+                  </div>
+                  <hr class="my-50" />
+                  <div class="invoice-total-item">
+                    <p class="invoice-total-title">Total:</p>
+                    <p class="invoice-total-amount ms-md-1"><%= invoice.value  %> </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-2" />
+
+          <div class="row mt-2">
+            <div class="col-12">
+              <span class="fw-bold">Note:</span>
+              <span>If you have paid please contact the admin via Whatsapp!</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- END: Content-->
+
+
+  <!-- BEGIN: Vendor JS-->
+  <script src="/vendors/js/vendors.min.js"></script>
+  <!-- BEGIN Vendor JS-->
+
+  <!-- BEGIN: Page Vendor JS-->
+  <!-- END: Page Vendor JS-->
+
+  <!-- BEGIN: Theme JS-->
+  <script src="/js/core/app-menu.js"></script>
+  <script src="/js/core/app.js"></script>
+  <!-- END: Theme JS-->
+
+  <script>
+    $(function () {
+      'use strict';
+
+      window.print();
+    });
+  </script>
+
+  <script>
+    $(window).on('load', function () {
+      if (feather) {
+        feather.replace({
+          width: 14,
+          height: 14
+        });
+      }
+    })
+  </script>
+</body>
+<!-- END: Body-->
+
+</html>

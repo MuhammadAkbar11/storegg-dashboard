@@ -105,95 +105,63 @@ export const viewGetInvoice = async (req, res, next) => {
   }
 };
 
-// export const postTransaction = async (req, res, next) => {
-//   const validate = validationResult(req);
-//   if (!validate.isEmpty()) {
-//     const errValidate = new ValidationError(validate.array(), "", {
-//       values: req.body,
-//     });
-//     // Response Validation Error Here
-//     return;
-//   }
+export const viewGetPrintInvoice = async (req, res, next) => {
+  const invoiceId = req.params.id;
+  try {
+    let invoice = await findTransactionById(invoiceId);
+    const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors")[0];
 
-//   try {
-//     const newTransactionData = {
-//       historyVoucherTopup: "HistoryVoucherTopup Data",
-//       historyPayment: "HistoryPayment Data",
-//       name: "Name Data",
-//       accountUser: "AccountUser Data",
-//       tax: "Tax Data",
-//       value: "Value Data",
-//       status: "Status Data",
-//     };
+    if (!invoice) {
+      throw new BaseError(
+        "NOT_FOUND",
+        httpStatusCodes.NOT_FOUND,
+        "invoice tidak ditemukan",
+        true,
+        {
+          errorView: "errors/404",
+          renderData: {
+            title: "Page Not Found",
+          },
+          responseType: "page",
+        }
+      );
+    }
 
-//     await createTransaction(newTransactionData);
+    invoice = ToPlainObject(invoice);
+    invoice.due_date = dayjs(invoice.created_at)
+      .add(3, "day")
+      .format("DD/MM/YYYY");
+    invoice.created_at = dayjs(invoice.created_at).format("DD/MM/YYYY");
+    invoice.value_num = invoice.value;
+    invoice.subtotal = Rupiah(invoice.value - invoice.tax);
+    invoice.value = Rupiah(invoice.value);
+    invoice.tax = Rupiah(invoice.tax);
+    invoice.history.history_voucher.price = Rupiah(
+      invoice?.history?.history_voucher?.price
+    );
 
-//     // Response Success
-//   } catch (error) {
-//     console.log("[controller] postTransaction ");
-//     const trError = new TransfromError(error);
-//     next(trError);
-//     // Redirect Error
-//     // req.flash("flashdata", {
-//     //   type: "error",
-//     //   title: "Oppps",
-//     //   message: "Gagal membuat Transaction",
-//     // });
-//     // res.redirect("/transaction?action_error=true");
-//   }
-// };
+    if (invoice.history.history_payment.payer) {
+      const payer = JSON.parse(invoice.history.history_payment.payer);
+      invoice.history.history_payment.payer = payer;
+      invoice.history.history_payment.payer.pay_date = dayjs(
+        payer.pay_date
+      ).format("DD/MM/YYYY");
+    }
 
-// export const putTransaction = async (req, res, next) => {
-//   const ID = req.params.id;
-//   const {
-//     historyVoucherTopup,
-//     historyPayment,
-//     name,
-//     accountUser,
-//     tax,
-//     value,
-//     status,
-//   } = req.body;
-
-//   const validate = validationResult(req);
-//   if (!validate.isEmpty()) {
-//     const errValidate = new ValidationError(validate.array(), "", {
-//       values: req.body,
-//     });
-//     // response error validation
-//     return;
-//   }
-
-//   try {
-//     const transaction = await findTransactionById(ID);
-
-//     if (!transaction) {
-//       throw new BaseError(
-//         "NOT_FOUND",
-//         404,
-//         "transaction tidak ditemukan",
-//         true
-//       );
-//     }
-
-//     const updatedTransactionData = {
-//       historyVoucherTopup: historyVoucherTopup,
-//       historyPayment: historyPayment,
-//       name: name,
-//       accountUser: accountUser,
-//       tax: tax,
-//       value: value,
-//       status: status,
-//     };
-
-//     await updateTransaction(ID, updatedTransactionData);
-
-//     // Response Success
-//   } catch (error) {
-//     const trError = new TransfromError(error);
-//     next(trError);
-//   }
-// };
+    res.render("transaction/v_invoice_print", {
+      title: "Invoice " + invoice.transaction_id,
+      path: "/transaction",
+      flashdata: flashdata,
+      invoice: invoice,
+      errors: errors,
+      values: null,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
 
 export const updateTransactionStatus = async (req, res, next) => {
   const ID = req.params.id;
@@ -315,23 +283,3 @@ export const updateTransactionPayment = async (req, res, next) => {
     res.redirect(`/${redirect}?action_error=true`);
   }
 };
-
-// export const deleteTransaction = async (req, res, next) => {
-//   const ID = req.params.id;
-
-//   try {
-//     const transaction = await findTransactionById(ID);
-
-//     if (!transaction) {
-//       // response here
-//       return;
-//     }
-
-//     await deleteTransactionById(ID);
-
-//     // Response Success
-//   } catch (error) {
-//     const trError = new TransfromError(error);
-//     next(trError);
-//   }
-// };

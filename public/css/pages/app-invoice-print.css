@@ -3,6 +3,7 @@ body {
   background: #fff !important; }
 
 .invoice-print {
+  position: relative;
   min-width: 768px !important;
   font-size: 15px !important; }
 
@@ -18,8 +19,8 @@ body {
   fill: #6e6b7b !important; }
 
 .invoice-print .invoice-total-wrapper {
-  width: 100%;
-  max-width: 12rem; }
+  position: relative;
+  width: 14rem; }
 
 .invoice-print .invoice-total-wrapper .invoice-total-item {
   display: flex;
@@ -39,6 +40,7 @@ body {
 
 @media print {
   .invoice-print {
+    margin-top: 1rem;
     padding: 0px !important; }
   .invoice-header {
     border-bottom: 1px solid #ebe9f1;
@@ -47,5 +49,13 @@ body {
     padding-right: 5rem; }
   .table-responsive {
     overflow-x: hidden; }
+  .table-responsive thead tr th:first-child {
+    padding-left: 0px;
+  }
+  .table-responsive tbody tr td:first-child {
+    padding-left: 0px;
+    width: 20%;
+
+  }
   hr {
     display: none; } }
