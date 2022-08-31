@@ -1,5 +1,6 @@
 import {
   deleteAdmin,
+  getAdminProfile,
   getDetailAdmin,
   getListAdmin,
   postAdmin,
@@ -28,6 +29,8 @@ function AdminRoutes(app) {
     .route("/admin")
     .post(ensureAuth, permission, postAdmin)
     .get(ensureAuth, permission, getListAdmin);
+
+  app.route("/profile").get(ensureAuth, permission, getAdminProfile);
 }
 
 export default AdminRoutes;

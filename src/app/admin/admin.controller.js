@@ -488,3 +488,50 @@ export const viewCreateAdmin = async (req, res, next) => {
     next(baseError);
   }
 };
+
+export const getAdminProfile = async (req, res, next) => {
+  const flashdata = req.flash("flashdata");
+  const errors = req.flash("errors")[0];
+
+  HTMLStylesheet([["/css/pages/page-profile.css", "pages"]], res);
+
+  try {
+    const user = req.user;
+    user.created_at = dayjs(user.created_at).format("DD MMM YYYY");
+
+    const userVouchers = await Promise.all(
+      user.vouchers.map(async vcr => {
+        const countTr = await Transaction.count({
+          where: {
+            voucher_id: vcr.voucher_id,
+          },
+        });
+        vcr.created_at = dayjs(vcr.created_at).format("DD MMM YYYY");
+        return { ...vcr, count: countTr };
+      })
+    );
+
+    user.vouchers = userVouchers;
+    if (user.address) {
+      const address = JSON.parse(user.address);
+      user.address = address;
+      user.full_address = address
+        ? `${address.street}, ${address.house}, ${address.RT_RW}, ${address.ward}, ${address.districts}, ${address.city}, ${address.regency}`
+        : "";
+    } else {
+      user.address = "-";
+      user.full_address = "-";
+    }
+
+    res.render("user/admin/v_profile", {
+      title: "Profile",
+      path: "/profile",
+      flashdata: flashdata,
+      errors: errors,
+      user: user,
+    });
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};

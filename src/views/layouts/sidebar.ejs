@@ -33,8 +33,10 @@
 
       <li class=" navigation-header"><span>Profile</span><i data-feather="more-horizontal"></i>
       </li>
-      <li class="nav-item"><a class="d-flex align-items-center" href="/profile">
-          <i data-feather="user"></i><span class="menu-title text-truncate">Profile</span></a>
+      <li class="nav-item <%= path == "/profile" ? "active" : ""%>">
+        <a class="d-flex align-items-center " href="/profile">
+          <i data-feather="user"></i><span class="menu-title text-truncate">Profile</span>
+        </a>
       </li>
       <li class="nav-item"><a class="d-flex align-items-center" href="/chat">
           <i data-feather="message-square"></i><span class="menu-title text-truncate">Chat</span></a>
