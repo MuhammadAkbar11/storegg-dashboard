@@ -26,6 +26,19 @@ function getDaysInMonth(year, month) {
   return new Date(year, month, 0).getDate();
 }
 
+function getSelectedMonth() {
+  const month = DayjsUTC().month() + 1;
+
+  let monthsArray = [...Array(month).keys()].map(x => {
+    return String(x + 1).length > 1 ? `${x + 1}` : `0${x + 1}`;
+  });
+  if (monthsArray.length >= 4) {
+    monthsArray = monthsArray.slice(monthsArray.length - 4, monthsArray.length);
+  }
+
+  return monthsArray;
+}
+
 function getDayFromDate(totalDay) {
   let day = 1;
   let days = [];
@@ -142,7 +155,7 @@ export const generateChekcout = async (req, res, next) => {
       const resNominal = fakerGetRandom(resVoucher.nominals);
       const resBank = ToPlainObject(fakerGetRandom(resPayment.banks));
 
-      const month = fakerGetRandom(["05", "06", "07", "08"]);
+      const month = fakerGetRandom(getSelectedMonth());
 
       const totalDay = getDaysInMonth(2022, month);
       const day = getDayFromDate(totalDay);
