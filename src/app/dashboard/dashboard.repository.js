@@ -46,6 +46,17 @@ export const findDashboardWidgets = async () => {
 export const findVoucherTopupDashboard = async () => {
   try {
     const month = DayjsUTC().month() + 1;
+
+    let monthsArray = [...Array(month).keys()].map(x => {
+      return String(x + 1).length > 1 ? `${x + 1}` : `0${x + 1}`;
+    });
+    if (monthsArray.length >= 4) {
+      monthsArray = monthsArray.slice(
+        monthsArray.length - 4,
+        monthsArray.length
+      );
+    }
+
     const result = await Transaction.count({
       where: {
         created_at: Sequelize.where(
@@ -89,9 +100,9 @@ export const findVoucherTopupDashboard = async () => {
     }
 
     return {
-      count: null,
+      count: { pending: 0, success: 0, failed: 0 },
       data: {
-        labels: ["Empty", "Empty"],
+        labels: ["Tertunda", "Selesai", "Gagal"],
         series: [0, 0, 0],
       },
     };
@@ -163,7 +174,15 @@ export const findCategoriesTopupDashboard = async () => {
 export const findBestSellingVouchersDashboard = async () => {
   try {
     const result = await Transaction.count({
-      // attributes:
+      include: [
+        {
+          model: Voucher,
+          as: "voucher",
+        },
+      ],
+      where: {
+        "$voucher.status$": "Y",
+      },
       group: ["voucher_id"],
     });
 
