@@ -19,7 +19,7 @@ import {
   updatePlayer,
 } from "../player/player.repository.js";
 import { httpStatusCodes } from "../../constants/index.constants.js";
-import { UnlinkFile } from "../../helpers/index.helper.js";
+import { ToPlainObject, UnlinkFile } from "../../helpers/index.helper.js";
 // import TransactionModel from "../transaction/transaction.model.js";
 import {
   createTransaction,
@@ -37,6 +37,10 @@ export const apiGetVouchers = async (req, res, next) => {
   const page = +req.query.page || 0;
   const limit = +req.query.limit ?? 10;
   const search = req.query.search;
+  const sortBy = req.query.sortBy || "game_name";
+  const orderBy = req.query.orderBy || "ASC";
+  const featuredVoucher = sortBy === "featured";
+  let order = [[sortBy, orderBy]];
 
   let query = {};
 
@@ -54,13 +58,20 @@ export const apiGetVouchers = async (req, res, next) => {
     };
   }
 
+  if (featuredVoucher) {
+    order = null;
+  }
+
   try {
     const voucher = await Voucher.findAndCountAll({
       ...query,
       where: {
         name: search ? { [Op.like]: `%${search}%` } : { [Op.like]: `%%` },
       },
-      order: [["name", "ASC"]],
+      order: order,
+      attributes: {
+        exclude: ["updated_at", "admin_id"],
+      },
       include: [
         {
           model: Category,
@@ -73,9 +84,23 @@ export const apiGetVouchers = async (req, res, next) => {
     });
 
     const pages = Math.ceil(voucher.count / +limit);
+    let listVouchers = voucher.rows;
+    if (featuredVoucher) {
+      for (const vcr of listVouchers) {
+        vcr.dataValues.totalTransactions = await vcr.countTransactions();
+      }
+
+      listVouchers.sort((a, b) => a.totalTransactions - b.totalTransactions);
+    }
+
     res.status(200).json({
       message: "Berhasil mengambil data voucher",
-      data: { pages, page, total: voucher.count, rows: voucher.rows },
+      data: {
+        pages,
+        page,
+        total: voucher.count,
+        rows: ToPlainObject(listVouchers),
+      },
     });
   } catch (err) {
     next(new TransfromError(err));
