@@ -114,6 +114,9 @@ export const apiGetDetailVoucher = async (req, res, next) => {
       where: {
         voucher_id: ID,
       },
+      attributes: {
+        exclude: ["admin_id", "created_at", "updated_at", "category_id"],
+      },
     });
 
     if (!voucher) {
