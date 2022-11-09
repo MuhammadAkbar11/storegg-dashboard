@@ -113,6 +113,7 @@ export const apiGetDetailVoucher = async (req, res, next) => {
     const voucher = await findOneVoucher({
       where: {
         voucher_id: ID,
+        status: "Y",
       },
       attributes: {
         exclude: ["admin_id", "created_at", "updated_at", "category_id"],
