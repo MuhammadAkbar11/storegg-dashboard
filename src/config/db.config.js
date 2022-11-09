@@ -26,10 +26,9 @@ const sequelizeConnection = new Sequelize(
     host: DB_HOST,
     define,
     logging: (query, timing) => {
-      Logger.info(`[sequelize] ${query} `);
+      // Logger.info(`[SEQUELIZE] ${query} `);
     },
   }
 );
 
 export default sequelizeConnection;
-
