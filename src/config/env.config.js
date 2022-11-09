@@ -33,7 +33,7 @@ if (mode == "development") {
 
 export const PORT = process.env.PORT | 3000;
 export const MODE = mode;
-export const MONGO_URI = process.env.MONGO_URI;
+export const DB_URI = process.env.DB_URI;
 export const DB_DATABASE = process.env.DB_DATABASE;
 export const DB_USERNAME = process.env.DB_USERNAME;
 export const DB_PASSWORD = process.env.DB_PASSWORD;
