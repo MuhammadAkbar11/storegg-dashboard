@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
@@ -89,7 +89,7 @@ Transaction.init(
         record.dataValues.transaction_id = ID;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "Transactions",
     tableName: "gg_transactions",
     deletedAt: false,

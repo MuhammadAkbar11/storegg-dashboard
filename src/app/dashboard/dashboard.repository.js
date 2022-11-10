@@ -16,16 +16,12 @@ export const findDashboardWidgets = async () => {
       where: {},
     });
 
-    const revenue = await Transaction.findAll({
+    const revenue = await Transaction.sum("value", {
       where: {
         status: {
           [Op.like]: `%success%`,
         },
       },
-      attributes: [
-        "value",
-        [Sequelize.fn("SUM", Sequelize.col("value")), "value"],
-      ],
     });
 
     const player = await Player.count({});
@@ -33,12 +29,12 @@ export const findDashboardWidgets = async () => {
 
     return {
       transaction: transaction,
-      revenue: revenue?.length ? Rupiah(+revenue[0].value).slice(0, -3) : 0,
+      revenue: revenue ? Rupiah(+revenue).slice(0, -3) : 0,
       player,
       voucher,
     };
   } catch (error) {
-    Logger.error(error, "[EXCEPTION] findDashboardTransaction");
+    Logger.error(error, "[EXCEPTION] findDashboardWidgets");
     throw new TransfromError(error);
   }
 };

@@ -3,7 +3,7 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
 import * as envConfigs from "../../config/env.config.js";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
 import { seedImportUsers } from "./user.seed.js";
 import { seedImportCategories } from "./categories.seed.js";
@@ -34,9 +34,9 @@ async function importSeeds() {
 
 (async () => {
   // let force = false;
-  const connect = await sequelizeConnection
-    .sync({ force: argv.force })
-    .then(res => res);
+  const connect = await MySQLConnection.sync({ force: argv.force }).then(
+    res => res
+  );
 
   if (argv.import) {
     await importSeeds();

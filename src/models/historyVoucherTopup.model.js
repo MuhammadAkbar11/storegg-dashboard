@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
@@ -63,7 +63,7 @@ HistoryVoucherTopup.init(
         record.dataValues.history_vcrtopup_id = ID;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "HistoryVoucherTopups",
     tableName: "gg_history_vcrtopup",
   }

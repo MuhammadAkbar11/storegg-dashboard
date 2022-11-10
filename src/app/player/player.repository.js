@@ -1,6 +1,6 @@
 import path from "path";
 import sharp from "sharp";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import { MODE } from "../../config/env.config.js";
 import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
@@ -98,7 +98,7 @@ export const findPlayerById = async id => {
 };
 
 export const createPlayer = async data => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
 
   try {
     const createdUser = await User.create(data, { transaction: t });

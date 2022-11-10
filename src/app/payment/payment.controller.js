@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import BaseError, {
   TransfromError,
   ValidationError,

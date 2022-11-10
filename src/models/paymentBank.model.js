@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 
 class PaymentBank extends Model {}
@@ -38,7 +38,7 @@ PaymentBank.init(
         record.dataValues.payment_bank_id = ID;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "PaymentBanks",
     tableName: "gg_payment_banks",
   }

@@ -1,6 +1,6 @@
 import path from "path";
 import sharp from "sharp";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import { MODE } from "../../config/env.config.js";
 import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
 import { GeneratePassword } from "../../helpers/authentication.helper.js";
@@ -68,7 +68,7 @@ export const findAllAdmin = async filter => {
 };
 
 export const updateAdmin = async payload => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const {
       admin_id,
@@ -139,7 +139,7 @@ export const updateAdmin = async payload => {
 };
 
 export const createAdmin = async payload => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const { username, phone_number, name, email, status, role, address } =
       payload;
@@ -177,7 +177,7 @@ export const createAdmin = async payload => {
 };
 
 export const deleteOneAdmin = async payload => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const { admin_id, user_id } = payload;
 

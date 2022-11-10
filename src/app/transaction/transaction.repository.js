@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import Category from "../../models/category.model.js";
@@ -154,7 +154,7 @@ export const findTransactionById = async id => {
 };
 
 export const createTransaction = async payload => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
 
   const { historyVoucherTopup, historyPayment, historyPlayer } = payload;
 
@@ -336,7 +336,7 @@ export const updateTransactionHistoryPayment = async (
   h_payment_id,
   data
 ) => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
 
   try {
     await Transaction.update(

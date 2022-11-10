@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 
 class AutoNumber extends Model {}
 
@@ -35,7 +35,7 @@ AutoNumber.init(
   },
   {
     // Other model options go here
-    sequelize: sequelizeConnection, // We need to pass the connection instance
+    sequelize: MySQLConnection, // We need to pass the connection instance
     modelName: "AutoNumber", // We need to choose the model name
     tableName: "gg_auto_numbers",
   }

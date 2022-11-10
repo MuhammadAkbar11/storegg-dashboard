@@ -6,7 +6,7 @@ import Voucher from "../../models/voucher.model.js";
 import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
 import Category from "../../models/category.model.js";
 import Nominal from "../../models/nominal.model.js";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
 
 const attributes = {
@@ -98,7 +98,7 @@ export const findOneVoucher = async (filter = { attributes }) => {
 };
 
 export const createVoucher = async (voucher, nominals) => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const result = await Voucher.create({ ...voucher }, { transaction: t });
 
@@ -123,7 +123,7 @@ export const createVoucher = async (voucher, nominals) => {
 export const updateVoucher = async (id, data) => {
   const { nominals, name, gameCoinName, category, fileimg } = data;
 
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const voucher = await findVoucherById(id);
 

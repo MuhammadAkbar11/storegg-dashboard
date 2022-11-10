@@ -1,4 +1,4 @@
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import Bank from "../../models/bank.model.js";
@@ -49,7 +49,7 @@ export const findPaymentById = async id => {
 };
 
 export const createPayment = async (data, bank) => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   try {
     const result = await PaymentMethod.create({ ...data }, { transaction: t });
 
@@ -71,7 +71,7 @@ export const createPayment = async (data, bank) => {
 };
 
 export const updatePayment = async (id, data) => {
-  const t = await sequelizeConnection.transaction();
+  const t = await MySQLConnection.transaction();
   const { type, newBanks, oldBanks } = data;
   try {
     const paymentMethod = await findPaymentById(id);

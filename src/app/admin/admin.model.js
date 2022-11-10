@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../../config/db.config.js";
+import MySQLConnection from "../../config/db.config.js";
 
 class Administrator extends Model {}
 
@@ -23,7 +23,7 @@ Administrator.init(
     },
   },
   {
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "Administrators",
     tableName: "gg_administrators",
     deletedAt: false,

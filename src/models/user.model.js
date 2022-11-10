@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import AutoIncrementField from "../helpers/autoNumberField.helper.js";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
 class User extends Model {}
@@ -71,7 +71,7 @@ User.init(
         options.individualHooks = false;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "Users",
     tableName: "gg_users",
     deletedAt: false,

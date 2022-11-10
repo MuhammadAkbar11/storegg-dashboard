@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
@@ -51,7 +51,7 @@ Nominal.init(
         options.individualHooks = false;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "Nominals",
     tableName: "gg_nominals",
   }

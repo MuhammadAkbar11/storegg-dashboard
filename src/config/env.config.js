@@ -32,12 +32,14 @@ if (mode == "development") {
 }
 
 export const PORT = process.env.PORT | 3000;
+/** constant variabel for application. mode development or production */
 export const MODE = mode;
 export const DB_URI = process.env.DB_URI;
-export const DB_DATABASE = process.env.DB_DATABASE;
-export const DB_USERNAME = process.env.DB_USERNAME;
-export const DB_PASSWORD = process.env.DB_PASSWORD;
-export const DB_HOST = process.env.DB_HOST;
+export const MYSQLDATABASE = process.env.MYSQLDATABASE;
+export const MYSQLUSERNAME = process.env.MYSQLUSERNAME;
+export const MYSQLPASSWORD = process.env.MYSQLPASSWORD;
+export const MYSQLHOST = process.env.MYSQLHOST;
+export const MYSQLPORT = process.env.MYSQLPORT;
 export const DB_DRIVER = process.env.DB_DRIVER;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MAIL_USER = process.env.MAIL_USERNAME;

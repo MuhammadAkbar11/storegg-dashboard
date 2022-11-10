@@ -1,4 +1,4 @@
-import { DB_DATABASE } from "../config/env.config.js";
+import { MYSQLDATABASE } from "../config/env.config.js";
 import { TABLE_AUTO_INCREMENT } from "../constants/index.constants.js";
 import Logger from "../helpers/logger.helper.js";
 import Administrator from "./admin.model.js";
@@ -203,30 +203,33 @@ export async function createAutoNumberTable(tables) {
   Logger.info("[SEQUELIZE] Setup AutoNumber table...");
 
   for (const table of tables["0"]) {
-    const tbName = table[`Tables_in_${DB_DATABASE}`];
-    const splitTbName = tbName.split("_");
-    const shortTbName = splitTbName.splice(1, splitTbName.length).join("_");
-    const tbData = {
-      table_name: table[`Tables_in_${DB_DATABASE}`],
-      ...TABLE_AUTO_INCREMENT[shortTbName],
-    };
-    data.push(tbData);
+    const tbName = table[`Tables_in_${MYSQLDATABASE}`];
+    if (tbName) {
+      const splitTbName = tbName?.split("_");
+      const shortTbName = splitTbName.splice(1, splitTbName.length).join("_");
+      const tbData = {
+        table_name: table[`Tables_in_${MYSQLDATABASE}`],
+        ...TABLE_AUTO_INCREMENT[shortTbName],
+      };
 
-    if (tbData.field) {
-      const existTable = await AutoIncrement.findOne({
-        where: {
-          table_name: tbName,
-        },
-      });
+      if (tbData.field) {
+        data.push(tbData);
 
-      if (!existTable) {
-        const result = await AutoIncrement.create(tbData);
-        Logger.info(`[SEQUELIZE] successfully added the "${chalk.bold(
-          result.table_name
-        )}" table to the autonumber table and "${chalk.bold(
-          result.field
-        )}" as auto number field
-        `);
+        const existTable = await AutoIncrement.findOne({
+          where: {
+            table_name: tbName,
+          },
+        });
+
+        if (!existTable) {
+          const result = await AutoIncrement.create(tbData);
+          Logger.info(`[SEQUELIZE] successfully added the "${chalk.bold(
+            result.table_name
+          )}" table to the autonumber table and "${chalk.bold(
+            result.field
+          )}" as auto number field
+          `);
+        }
       }
     }
   }

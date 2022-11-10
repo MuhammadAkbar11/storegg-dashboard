@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
@@ -59,7 +59,7 @@ HistoryPayment.init(
         record.dataValues.history_payment_id = ID;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "HistoryPayments",
     tableName: "gg_history_payments",
     deletedAt: false,

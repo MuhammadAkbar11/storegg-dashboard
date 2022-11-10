@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 import DayjsUTC from "../helpers/date.helper.js";
 
@@ -57,7 +57,7 @@ Voucher.init(
         options.individualHooks = false;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "Vouchers",
     tableName: "gg_vouchers",
   }

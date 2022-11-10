@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelizeConnection from "../config/db.config.js";
+import MySQLConnection from "../config/db.config.js";
 import AutoNumberField from "../helpers/autoNumberField.helper.js";
 
 class PaymentMethod extends Model {}
@@ -36,7 +36,7 @@ PaymentMethod.init(
         record.dataValues.payment_method_id = ID;
       },
     },
-    sequelize: sequelizeConnection,
+    sequelize: MySQLConnection,
     modelName: "PaymentMethods",
     tableName: "gg_payment_methods",
     deletedAt: false,
