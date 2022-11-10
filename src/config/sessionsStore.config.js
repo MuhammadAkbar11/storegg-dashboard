@@ -11,6 +11,4 @@ const sessionStore = new SequelizeStore({
   tableName: "gg_sessions",
 });
 
-sessionStore.sync();
-
 export default sessionStore;
