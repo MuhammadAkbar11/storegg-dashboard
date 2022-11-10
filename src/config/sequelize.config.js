@@ -19,7 +19,7 @@ const define = {
 
 const sequelizeConfig = {
   producion: new Sequelize(MYSQLDATABASE, MYSQLUSERNAME, MYSQLPASSWORD, {
-    dialect: DB_DRIVER,
+    dialect: "mysql",
     host: MYSQLHOST,
     port: MYSQLPORT,
     define,
