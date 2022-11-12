@@ -8,6 +8,7 @@ import Category from "../../models/category.model.js";
 import Nominal from "../../models/nominal.model.js";
 import MySQLConnection from "../../config/db.config.js";
 import Logger from "../../helpers/logger.helper.js";
+import { ENV_STATIC_FOLDER_NAME } from "../../constants/index.constants.js";
 
 const attributes = {
   exclude: ["created_at", "updated_at"],
@@ -146,7 +147,8 @@ export const updateVoucher = async (id, data) => {
       voucher.thumbnail = `/uploads/vouchers/${voucherImg}`;
 
       if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
-        const oldThumbnailPath = MODE == "development" ? ".dev" : "public";
+        const oldThumbnailPath =
+          MODE != "production" ? ENV_STATIC_FOLDER_NAME : "public";
         console.log(
           "/uploads/Default-Thumbnail.png" != oldThumbnail,
 

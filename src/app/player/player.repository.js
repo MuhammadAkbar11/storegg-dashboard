@@ -2,7 +2,10 @@ import path from "path";
 import sharp from "sharp";
 import MySQLConnection from "../../config/db.config.js";
 import { MODE } from "../../config/env.config.js";
-import { DEFAULT_USER_PP } from "../../constants/index.constants.js";
+import {
+  DEFAULT_USER_PP,
+  ENV_STATIC_FOLDER_NAME,
+} from "../../constants/index.constants.js";
 import { TransfromError } from "../../helpers/baseError.helper.js";
 import { RenameFile, UnlinkFile } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
@@ -140,7 +143,8 @@ export const updatePlayer = async (id, payload) => {
 
       // delete previous avatar
       if (DEFAULT_USER_PP != oldAvatar) {
-        const oldAvatarPath = MODE == "development" ? ".dev" : "public";
+        const oldAvatarPath =
+          MODE != "production" ? ENV_STATIC_FOLDER_NAME : "public";
         const deleteOldAva = UnlinkFile(oldAvatarPath + oldAvatar);
         Logger.info(deleteOldAva, "Delete old Avatar");
       }

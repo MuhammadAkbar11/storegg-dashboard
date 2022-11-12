@@ -3,6 +3,7 @@ import sharp from "sharp";
 import { MODE } from "../../config/env.config.js";
 import {
   DEFAULT_USER_PP,
+  ENV_STATIC_FOLDER_NAME,
   ROLES,
   USER_STATUS,
 } from "../../constants/index.constants.js";
@@ -85,7 +86,8 @@ export const updateOneUser = async payload => {
 
       // delete previous avatar
       if (DEFAULT_USER_PP != oldAvatar) {
-        const oldAvatarPath = MODE == "development" ? ".dev" : "public";
+        const oldAvatarPath =
+          MODE != "production" ? ENV_STATIC_FOLDER_NAME : "public";
         const deleteOldAva = UnlinkFile(oldAvatarPath + oldAvatar);
         Logger.info(deleteOldAva, "Delete old Avatar");
       }

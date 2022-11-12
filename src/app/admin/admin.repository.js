@@ -97,7 +97,8 @@ export const updateAdmin = async payload => {
 
       // delete previous avatar
       if (DEFAULT_USER_PP != oldAvatar) {
-        const oldAvatarPath = MODE == "development" ? ".dev" : "public";
+        const oldAvatarPath =
+          MODE != "production" ? ENV_STATIC_FOLDER_NAME : "public";
         const deleteOldAva = UnlinkFile(oldAvatarPath + oldAvatar);
         Logger.info(deleteOldAva, "Delete old Avatar");
       }
