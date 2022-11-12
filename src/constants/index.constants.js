@@ -129,11 +129,15 @@ export const DEFAULT_USER_PP = "/uploads/Default-Avatar-1.jpg";
 const envFolders = {
   testing: ".test",
   development: ".dev",
+  production: "public",
 };
 
 export const ENV_STATIC_FOLDER_NAME = envFolders[MODE];
 
-export const ENV_STATIC_FOLDER_PATH = path.join(__dirname, envFolders[MODE]);
+export const ENV_STATIC_FOLDER_PATH = path.join(
+  __dirname,
+  envFolders[MODE] || envFolders["production"]
+);
 
 let uploadPath = STATIC_FOLDER + "/uploads";
 
