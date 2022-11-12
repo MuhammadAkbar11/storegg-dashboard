@@ -2,19 +2,18 @@
   "name": "storegg-server",
   "version": "2.0.0",
   "description": "StoreGG Server 2",
-  "main": "app.js",
+  "main": "index.js",
   "author": "MuhammadAkbar11",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./app.js --mode development",
-    "start": "nodemon ./app.js --mode production",
-    "test": "nodemon ./app.js --mode testing",
+    "start": "node ./index.js --mode production",
+    "dev": "nodemon ./index.js --mode development",
+    "test": "nodemon ./index.js --mode testing",
     "db:import": "node ./src/database/seeders/index.seed.js --mode development --import",
     "dbprod:import": "node ./src/database/seeders/index.seed.js --mode production --import"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.19"
   },
@@ -22,6 +21,7 @@
     "@babel/core": "^7.18.9",
     "@babel/node": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
+    "@faker-js/faker": "^7.6.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.0.0",
     "colors": "^1.4.0",
