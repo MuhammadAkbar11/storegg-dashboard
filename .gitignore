@@ -105,5 +105,6 @@ dist
 .tern-port
 
 .dev/
+.test/
 client-test/
 test/

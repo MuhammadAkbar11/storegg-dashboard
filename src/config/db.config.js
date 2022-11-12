@@ -10,7 +10,7 @@ try {
     `[SEQUELIZE] Connection has been established successfully on ${MODE}`
   );
 } catch (error) {
-  Logger.error(error, "[SEQUELIZE] Unable to connect to the database:");
+  Logger.error(error, "[SEQUELIZE] Unable to connect to the database ");
 }
 
 export default MySQLConnection;
