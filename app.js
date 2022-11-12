@@ -30,7 +30,7 @@ const app = createServer();
 })();
 
 process.on("unhandledRejection", error => {
-  Logger.error(error);
+  Logger.error(error, `[unhandledRejection] ${error.message}`);
   throw error;
 });
 

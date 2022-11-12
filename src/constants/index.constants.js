@@ -1,4 +1,12 @@
 import path from "path";
+import fs from "fs";
+import Logger from "../helpers/logger.helper.js";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+
+const argv = yargs(hideBin(process.argv)).argv;
+
+const MODE = argv.mode;
 
 const __dirname = path.resolve();
 
@@ -114,7 +122,34 @@ export const TABLE_AUTO_INCREMENT = {
 
 export const SUPERADMIN_EMAIL = "superadmin@storegg.com";
 export const STATIC_FOLDER = path.join(__dirname, "public");
-export const DEV_STATIC_FOLDER = path.join(__dirname, ".dev");
 export const ROOT_FOLDER = __dirname;
 export const DEFAULT_THUMBNAIL = "/uploads/Default-Thumbnail.png";
 export const DEFAULT_USER_PP = "/uploads/Default-Avatar-1.jpg";
+
+const envFolders = {
+  testing: ".test",
+  development: ".dev",
+};
+
+export const ENV_STATIC_FOLDER_NAME = envFolders[MODE];
+
+export const ENV_STATIC_FOLDER_PATH = path.join(__dirname, envFolders[MODE]);
+
+let uploadPath = STATIC_FOLDER + "/uploads";
+
+if (MODE !== "production") {
+  uploadPath = `${ENV_STATIC_FOLDER_NAME}/uploads`;
+  if (!fs.existsSync(path.join(ROOT_FOLDER, uploadPath))) {
+    Logger.warn(`[SERVER] ${MODE} directory not found!`);
+    try {
+      fs.mkdirSync(path.join(ROOT_FOLDER, uploadPath), { recursive: true });
+    } catch (error) {
+      Logger.warn(error, `[SERVER] ${MODE} directory fail to create!`);
+    }
+    Logger.info(`[SERVER] ${MODE} directory created!`);
+  } else {
+    Logger.info(`[SERVER] ${MODE} directory founded!`);
+  }
+}
+
+export const UPLOAD_PATH = uploadPath;

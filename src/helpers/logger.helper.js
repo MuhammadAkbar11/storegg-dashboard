@@ -8,7 +8,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 
 const timeformat = "DD.MM.YYYY HH:mm:ss";
 const time =
-  argv.mode === "development"
+  argv.mode !== "production"
     ? dayjsUTC().tz("Asia/Jakarta").format(timeformat)
     : dayjsUTC().format(timeformat);
 

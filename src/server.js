@@ -8,7 +8,7 @@ import passportConfig from "./config/passport.config.js";
 import * as ENV from "./config/env.config.js";
 import pinoHttpLogger from "./middleware/logging.js";
 import {
-  DEV_STATIC_FOLDER,
+  ENV_STATIC_FOLDER_PATH,
   LOCALS_STATIC,
   ROLES_ARR,
   STATIC_FOLDER,
@@ -96,8 +96,8 @@ function createServer() {
   });
 
   app.use(express.static(STATIC_FOLDER));
-  if (ENV.MODE == "development") {
-    app.use(express.static(DEV_STATIC_FOLDER));
+  if (ENV.MODE !== "production") {
+    app.use(express.static(ENV_STATIC_FOLDER_PATH));
   }
 
   app.use(responseType);

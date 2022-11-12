@@ -3,8 +3,7 @@ import multer from "multer";
 import dayjs from "dayjs";
 import BaseError from "./baseError.helper.js";
 import fs from "fs";
-import { UPLOAD_PATH } from "../config/env.config.js";
-import { ROOT_FOLDER } from "../constants/index.constants.js";
+import { ROOT_FOLDER, UPLOAD_PATH } from "../constants/index.constants.js";
 import Logger from "./logger.helper.js";
 class Upload {
   constructor({

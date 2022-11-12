@@ -1,5 +1,5 @@
 import multer from "multer";
-import { UPLOAD_PATH } from "../config/env.config.js";
+import { UPLOAD_PATH } from "../constants/index.constants.js";
 import Upload from "../helpers/upload.helper.js";
 
 export const uploadSingleImage =

@@ -35,7 +35,7 @@ function returnError(err, req, res, next) {
   const message = err.message;
   const status = err.statusCode || httpStatusCodes.INTERNAL_SERVER;
   const type = req.responseType;
-  const stack = MODE == "development" ? err.stack : null;
+  const stack = MODE != "production" ? err.stack : null;
 
   if (type == "json") {
     return res.status(status).json({
