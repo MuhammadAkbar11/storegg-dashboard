@@ -47,7 +47,7 @@ export const updateBank = async (id, data) => {
         },
       }
     );
-    return await result;
+    return result;
   } catch (error) {
     console.error("[EXCEPTION] updateBank", error);
     throw new TransfromError(error);

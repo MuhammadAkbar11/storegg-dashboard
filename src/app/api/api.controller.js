@@ -8,7 +8,7 @@ import Category from "../../models/category.model.js";
 import Voucher from "../../models/voucher.model.js";
 import { findOneVoucher } from "../voucher/voucher.repository.js";
 
-import { findBankById } from "../bank/bank.repository.js";
+import { findAllBank, findBankById } from "../bank/bank.repository.js";
 // import CategoryModel from "../category/category.model.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findNominalById } from "../nominal/nominal.repository.js";
@@ -129,9 +129,15 @@ export const apiGetDetailVoucher = async (req, res, next) => {
       );
     }
 
+    const banks = await findAllBank({
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+    });
+
     res.status(200).json({
       message: "Berhasil mengambil detail data voucher",
-      data: voucher,
+      data: { voucher, banks },
     });
   } catch (err) {
     next(new TransfromError(err));
