@@ -81,7 +81,7 @@ export const updateOneUser = async payload => {
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileImgData.destination, userImg));
 
-      UnlinkFile(fileImgData.path);
+      UnlinkFile(fileImgData.path, false);
       avatar = `/uploads/users/${userImg}`;
 
       // delete previous avatar

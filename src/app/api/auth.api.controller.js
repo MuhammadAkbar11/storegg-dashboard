@@ -79,7 +79,7 @@ export const apiPlayerSignup = async (req, res, next) => {
     return;
   } catch (error) {
     if (fileimgData) {
-      UnlinkFile(fileimgData.path);
+      UnlinkFile(fileimgData.path, false);
     }
     next(new TransfromError(error));
   }

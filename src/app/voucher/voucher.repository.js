@@ -132,18 +132,22 @@ export const updateVoucher = async (id, data) => {
 
     const oldThumbnail = voucher.thumbnail;
     const fileImgData = fileimg.data;
+    // console.log(fileImgData);
+    Logger.info(
+      "[UPLOAD] Will Delete temp uploaded file = " + fileImgData.path
+    );
     if (fileImgData) {
       const voucherImg = RenameFile(
         fileImgData.filename,
         "GG",
         voucher.voucher_id
       );
-
+      Logger.info("[UPLOAD] Renaming and resave uploaded file...");
       await sharp(fileImgData.path)
         .resize(281, 381)
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileImgData.destination, voucherImg));
-      UnlinkFile(fileImgData.path);
+      UnlinkFile(fileImgData.path, false);
       voucher.thumbnail = `/uploads/vouchers/${voucherImg}`;
 
       if ("/uploads/Default-Thumbnail.png" != oldThumbnail) {
@@ -155,7 +159,7 @@ export const updateVoucher = async (id, data) => {
           oldThumbnailPath,
           oldThumbnail
         );
-        UnlinkFile(oldThumbnailPath + oldThumbnail);
+        UnlinkFile(oldThumbnailPath + oldThumbnail, false);
       }
     }
 

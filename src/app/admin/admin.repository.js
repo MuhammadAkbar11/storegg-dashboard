@@ -92,7 +92,7 @@ export const updateAdmin = async payload => {
         .jpeg({ quality: 90 })
         .toFile(path.resolve(fileImgData.destination, playerImg));
 
-      UnlinkFile(fileImgData.path);
+      UnlinkFile(fileImgData.path, false);
       avatar = `/uploads/users/${playerImg}`;
 
       // delete previous avatar
