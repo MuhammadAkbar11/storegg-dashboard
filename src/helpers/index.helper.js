@@ -7,12 +7,18 @@ import { PREFIX_VERSION } from "./version.helper.js";
 import DayjsUTC from "./date.helper.js";
 import Logger from "./logger.helper.js";
 
+const bgWarn = chalk.bgHex("#EA7A20");
+
 export function GetRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function UnlinkFile(filePath) {
-  const file = path.join(ROOT_FOLDER, filePath);
+export function UnlinkFile(filePath, isRootPath = true) {
+  let file = path.join(filePath);
+
+  if (isRootPath) {
+    file = path.join(ROOT_FOLDER, filePath);
+  }
 
   if (fs.existsSync(file)) {
     return fs.unlink(file, err => {
@@ -20,7 +26,12 @@ export function UnlinkFile(filePath) {
         console.log(err);
         throw new BaseError(err);
       }
-      return file;
+      Logger.warn(
+        `${bgWarn(
+          chalk.black(`[HELPER]`)
+        )} Delete file in with the path is ${file}`
+      );
+      return true;
     });
   }
 
