@@ -49,16 +49,8 @@ const sequelizeConfig = {
     host: MYSQLHOST,
     port: MYSQLPORT,
     define,
-    // pool: {
-    //   max: 5,
-    //   min: 0,
-    //   idle: 10000,
-    //   acquire: 10000,
-    //   evict: 10000,
-    //   handleDisconnects: true,
-    // },
     logging: (query, timing) => {
-      Logger.info(`[SEQUELIZE TESTING] ${query} `);
+      // Logger.info(`[SEQUELIZE TESTING] ${query} `);
     },
   }),
 };
