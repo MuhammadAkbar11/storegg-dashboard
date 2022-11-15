@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node ./index.js --mode production",
     "dev": "nodemon ./index.js --mode development",
-    "test": "nodemon ./index.js --mode testing",
+    "prod": "nodemon ./index.js --mode testing",
     "db:import": "node ./src/database/seeders/index.seed.js --mode development --import",
     "dbprod:import": "node ./src/database/seeders/index.seed.js --mode production --import"
   },
