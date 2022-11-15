@@ -60,11 +60,6 @@ function createServer() {
       saveUninitialized: false,
       proxy: true,
       store: sessionStore,
-      cookie: {
-        secure: ENV.MODE === "production",
-        maxAge: 7 * 24 * 3600 * 1000,
-      },
-      rolling: true,
     })
   );
 

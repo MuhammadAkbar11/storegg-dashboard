@@ -45,7 +45,6 @@ export default function () {
 
       admin = ToPlainObject(admin);
       user = ToPlainObject(user);
-
       const reqUser = {
         ...admin,
         ...user,
