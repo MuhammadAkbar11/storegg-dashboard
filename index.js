@@ -6,6 +6,7 @@ import Logger from "./src/helpers/logger.helper.js";
 import MySQLConnection from "./src/config/db.config.js";
 import { createAutoNumberTable } from "./src/models/index.model.js";
 import createServer from "./src/server.js";
+import chalk from "chalk";
 
 const argv = yargs(hideBin(process.argv)).argv;
 envConfigs.dotenvConfig;
@@ -24,6 +25,11 @@ const app = createServer();
   if (force) createAutoNumberTable(tables);
   force && Logger.info("[SEQUELIZE] Sync sequelize done!");
 
+  Logger.info(
+    `[SEQUELIZE] Database connected on ${chalk.bold(
+      `${connect.config.host}:${connect.config.port}`
+    )} with the database name is ${chalk.bold(connect.config.database)}`
+  );
   app.listen(envConfigs.PORT, () =>
     Logger.info(`[SERVER] app running on port ${envConfigs.PORT}`)
   );
