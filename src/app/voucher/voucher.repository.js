@@ -133,10 +133,11 @@ export const updateVoucher = async (id, data) => {
     const oldThumbnail = voucher.thumbnail;
     const fileImgData = fileimg.data;
     // console.log(fileImgData);
-    Logger.info(
-      "[UPLOAD] Will Delete temp uploaded file = " + fileImgData.path
-    );
+
     if (fileImgData) {
+      Logger.info(
+        "[UPLOAD] Will Delete temp uploaded file = " + fileImgData.path
+      );
       const voucherImg = RenameFile(
         fileImgData.filename,
         "GG",
