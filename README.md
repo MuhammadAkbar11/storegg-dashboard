@@ -1,4 +1,4 @@
-# StoreGG - Game voucher top up website
+# StoreGG Dashboard - StoreGG Administrator Dashboard App
 
 ## Requirments
 
