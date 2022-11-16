@@ -35,7 +35,8 @@ const Op = Sequelize.Op;
 
 export const apiGetVouchers = async (req, res, next) => {
   const page = +req.query.page || 0;
-  const limit = +req.query.limit ?? 10;
+  const limit = +req.query.limit || 10;
+  const category = req.query.category || null;
   const search = req.query.search;
   const sortBy = req.query.sortBy || "game_name";
   const orderBy = req.query.orderBy || "ASC";
@@ -43,6 +44,17 @@ export const apiGetVouchers = async (req, res, next) => {
   let order = [[sortBy, orderBy]];
 
   let query = {};
+  let where = {
+    status: "Y",
+    name: search ? { [Op.like]: `%${search}%` } : { [Op.like]: `%%` },
+  };
+
+  if (category) {
+    where = {
+      ...where,
+      "$category.name$": { [Op.like]: `%${category}%` },
+    };
+  }
 
   if (limit) {
     query = {
@@ -65,9 +77,7 @@ export const apiGetVouchers = async (req, res, next) => {
   try {
     const voucher = await Voucher.findAndCountAll({
       ...query,
-      where: {
-        name: search ? { [Op.like]: `%${search}%` } : { [Op.like]: `%%` },
-      },
+      where: where,
       order: order,
       attributes: {
         exclude: ["updated_at", "admin_id"],
