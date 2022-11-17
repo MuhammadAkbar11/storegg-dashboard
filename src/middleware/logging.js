@@ -32,26 +32,28 @@ const log = pinoHtpp({
       httpMethodColors[req.method] || httpMethodColors["DEFAULT"]
     )(req.method);
 
-    const agent = `[${req.headers["user-agent"]}]`;
-    const url = textWhite(`- ${req.url} - `);
-
+    const url = textWhite(`- ${req.url} -`);
+    const apiBadge = url.includes("/api/")
+      ? (httpMethodColors[req.method] || httpMethodColors["DEFAULT"])("API") +
+        " "
+      : "";
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      return `${method} ${url} ${chalk.green(res.statusCode)} ${agent}`;
+      return `${apiBadge}${method} ${url} ${chalk.green(res.statusCode)}`;
     }
 
     if (res.statusCode === 404) {
-      return `${method} ${url} ${chalk.yellow(res.statusCode)} ${agent}`;
+      return `${apiBadge}${method} ${url} ${chalk.yellow(res.statusCode)}`;
     }
 
     if (res.statusCode >= 300 && res.statusCode < 400) {
-      return `${method} ${url} ${chalk.white(res.statusCode)} ${agent}`;
+      return `${apiBadge}${method} ${url} ${chalk.white(res.statusCode)}`;
     }
 
     if (res.statusCode === 500) {
-      return `${method} ${url} ${chalk.red(res.statusCode)} ${agent}`;
+      return `${apiBadge}${method} ${url} ${chalk.red(res.statusCode)}`;
     }
     // Logger.info();
-    return `${method} ${url} ${res.statusCode} ${agent}`;
+    return `${apiBadge}${method} ${url} ${res.statusCode}`;
   },
 
   customAttributeKeys: {
