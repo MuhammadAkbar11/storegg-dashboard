@@ -30,29 +30,40 @@ import {
 // import VoucherModel from "../voucher/voucher.model.js";
 import Logger from "../../helpers/logger.helper.js";
 import Transaction from "../../models/transaction.model.js";
+import Pagination from "../../helpers/pagination.helper.js";
 
 const Op = Sequelize.Op;
 
 export const apiGetVouchers = async (req, res, next) => {
-  const page = +req.query.page || 0;
-  const limit = +req.query.limit || 10;
-  const category = req.query.category || null;
-  const search = req.query.search;
-  const sortBy = req.query.sortBy || "game_name";
-  const orderBy = req.query.orderBy || "ASC";
-  const featuredVoucher = sortBy === "featured";
-  let order = [[sortBy, orderBy]];
+  const _limit = +req.query.limit || 20;
+  const _page = +req.query.page || 0;
+  const _category = req.query.category || null;
+  const _search = req.query.search;
+  const _sortBy = req.query.sortBy || "game_name";
+  const _orderBy = req.query.orderBy || "ASC";
+  const featuredVoucher = _sortBy === "featured";
+  let order = [[_sortBy, _orderBy]];
 
   let query = {};
   let where = {
     status: "Y",
-    name: search ? { [Op.like]: `%${search}%` } : { [Op.like]: `%%` },
+    name:
+      _search && _search.trim() !== ""
+        ? { [Op.like]: `%${_search}%` }
+        : { [Op.like]: `%%` },
   };
 
-  if (category) {
+  const paginated = new Pagination(_page, _limit, {
+    defaultLimit: 20,
+    itemKeyName: "vouchers",
+  });
+
+  const { limit, offset } = paginated.getPagination();
+
+  if (_category) {
     where = {
       ...where,
-      "$category.name$": { [Op.like]: `%${category}%` },
+      "$category.name$": { [Op.like]: `%${_category}%` },
     };
   }
 
@@ -63,9 +74,9 @@ export const apiGetVouchers = async (req, res, next) => {
     };
   }
 
-  if (page) {
+  if (offset) {
     query = {
-      offset: limit * (page - 1),
+      offset: offset,
       ...query,
     };
   }
@@ -93,23 +104,21 @@ export const apiGetVouchers = async (req, res, next) => {
       ],
     });
 
-    const pages = Math.ceil(voucher.count / +limit);
+    // const pages = Math.ceil(voucher.count / +limit);
     let listVouchers = voucher.rows;
     if (featuredVoucher) {
       for (const vcr of listVouchers) {
         vcr.dataValues.totalTransactions = await vcr.countTransactions();
       }
-
       listVouchers.sort((a, b) => a.totalTransactions - b.totalTransactions);
     }
 
+    const data = paginated.getPagingData(voucher.count, listVouchers);
     res.status(200).json({
       message: "Berhasil mengambil data voucher",
       data: {
-        pages,
-        page,
-        total: voucher.count,
-        rows: ToPlainObject(listVouchers),
+        search: _search,
+        ...data,
       },
     });
   } catch (err) {
