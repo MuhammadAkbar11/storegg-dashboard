@@ -209,6 +209,10 @@ export const getListUsers = async (req, res, next) => {
           attributes: ["admin_id"],
         },
       ],
+      order: [
+        ["role", "ASC"],
+        ["created_at", "ASC"],
+      ],
     });
     let countUsers = users.length;
     let countPending = await findCountUser({
