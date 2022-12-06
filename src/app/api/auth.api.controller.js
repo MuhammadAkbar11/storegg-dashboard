@@ -40,7 +40,7 @@ export const apiPlayerSignup = async (req, res, next) => {
 
     if (existPlayer) {
       throw new BaseError(
-        "BAD_REQUEST",
+        "EMAIL_ERROR",
         httpStatusCodes.BAD_REQUEST,
         `Email telah terdaftar silahkan masuk`,
         true
@@ -67,6 +67,7 @@ export const apiPlayerSignup = async (req, res, next) => {
       avatar: avatar,
       role: "PLAYER",
       favorite: category,
+      status: "Y",
     };
 
     const player = await createPlayer(newPlayer);
