@@ -12,6 +12,8 @@ export const findAllPayment = async filter => {
         {
           model: Bank,
           as: "banks",
+          attributes: ["bank_id", "account_name", "bank_name", "no_rekening"],
+          through: { attributes: [] },
         },
       ],
     });
