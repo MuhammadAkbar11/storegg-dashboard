@@ -12,7 +12,10 @@ import { findAllBank, findBankById } from "../bank/bank.repository.js";
 // import CategoryModel from "../category/category.model.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findNominalById } from "../nominal/nominal.repository.js";
-import { findPaymentById } from "../payment/payment.repository.js";
+import {
+  findAllPayment,
+  findPaymentById,
+} from "../payment/payment.repository.js";
 import {
   findOnePlayer,
   findPlayerById,
@@ -154,9 +157,15 @@ export const apiGetDetailVoucher = async (req, res, next) => {
       },
     });
 
+    const payments = await findAllPayment({
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+    });
+
     res.status(200).json({
       message: "Berhasil mengambil detail data voucher",
-      data: { voucher, banks },
+      data: { voucher, banks, payments },
     });
   } catch (err) {
     next(new TransfromError(err));
