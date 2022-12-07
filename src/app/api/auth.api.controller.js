@@ -39,12 +39,14 @@ export const apiPlayerSignup = async (req, res, next) => {
     });
 
     if (existPlayer) {
-      throw new BaseError(
-        "EMAIL_ERROR",
-        httpStatusCodes.BAD_REQUEST,
-        `Email telah terdaftar silahkan masuk`,
-        true
-      );
+      throw new ValidationError([
+        {
+          value: email,
+          msg: "Email telah terdaftar!, silahkan masuk atau gunakan email lain yang belum terdaftar",
+          param: "email",
+          location: "body",
+        },
+      ]);
     }
 
     let avatar = DEFAULT_USER_PP;
@@ -67,7 +69,7 @@ export const apiPlayerSignup = async (req, res, next) => {
       avatar: avatar,
       role: "PLAYER",
       favorite: category,
-      status: "Y",
+      status: "ACTIVE",
     };
 
     const player = await createPlayer(newPlayer);
