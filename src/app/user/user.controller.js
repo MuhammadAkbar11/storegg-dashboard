@@ -383,16 +383,10 @@ export const updateUserStatus = async (req, res) => {
     let message =
       status === USER_STATUS.SUSPENDED ? "meng-suspend" : "mengaktifkan";
 
-    await updateOneUser(
-      {
-        where: {
-          user_id: user.user_id,
-        },
-      },
-      {
-        status: status,
-      }
-    );
+    await updateOneUser({
+      user_id: user.user_id,
+      status: status,
+    });
 
     req.flash("flashdata", {
       type: "success",

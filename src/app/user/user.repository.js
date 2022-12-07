@@ -72,7 +72,7 @@ export const updateOneUser = async payload => {
       user_id,
     } = payload;
 
-    const fileImgData = fileimg.data;
+    const fileImgData = fileimg?.data || null;
     let avatar = oldAvatar;
     if (fileImgData) {
       const userImg = RenameFile(fileImgData.filename, "GGPlayer", username);
