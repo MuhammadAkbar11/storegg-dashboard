@@ -35,9 +35,9 @@ function returnError(err, req, res, next) {
   const message = err.message;
   const status = err.statusCode || httpStatusCodes.INTERNAL_SERVER;
   const type = req.responseType;
-  const stack = MODE != "production" ? err.stack : null;
+  const stack = MODE !== "production" ? err.stack : null;
 
-  if (type == "json") {
+  if (type === "json") {
     return res.status(status).json({
       name: err.name,
       message: err.message,
@@ -77,7 +77,7 @@ function returnError(err, req, res, next) {
   return res.status(status).render(view, {
     errors: errData,
     ...renderData,
-    stack: stack,
+    stack,
   });
 }
 
