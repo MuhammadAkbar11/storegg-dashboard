@@ -105,21 +105,25 @@ export const apiPlayerSignin = async (req, res, next) => {
     });
 
     if (!user) {
-      throw new BaseError(
-        "BAD_REQUEST",
-        httpStatusCodes.BAD_REQUEST,
-        `Email yang anda masukan belum terdaftar.`,
-        true
-      );
+      throw new ValidationError([
+        {
+          value: email,
+          msg: "Email yang anda masukan belum terdaftar.",
+          param: "email",
+          location: "body",
+        },
+      ]);
     }
 
     if (!user.role.includes("PLAYER")) {
-      throw new BaseError(
-        "BAD_REQUEST",
-        httpStatusCodes.BAD_REQUEST,
-        `Tidak dapat masuk menggunakan admin email`,
-        true
-      );
+      throw new ValidationError([
+        {
+          value: email,
+          msg: "Email yang anda masukan ditolak!",
+          param: "email",
+          location: "body",
+        },
+      ]);
     }
 
     const getPlayer = await findOnePlayer({
@@ -145,9 +149,6 @@ export const apiPlayerSignin = async (req, res, next) => {
         username: player.username,
         name: player.name,
         email: player.email,
-        phone_number: player?.phone_number,
-        avatar: player.avatar,
-        favorite: getPlayer.dataValues.category.name,
       };
 
       const token = SignJWT(payloadJWT, SESSION_SECRET, "7d");
@@ -158,12 +159,14 @@ export const apiPlayerSignin = async (req, res, next) => {
       });
       return;
     } else {
-      throw new BaseError(
-        "BAD_REQUEST",
-        httpStatusCodes.BAD_REQUEST,
-        `Password yang anda masukan salah.`,
-        true
-      );
+      throw new ValidationError([
+        {
+          value: email,
+          msg: "Password yang anda masukan salah!",
+          param: "password",
+          location: "body",
+        },
+      ]);
     }
   } catch (error) {
     next(new TransfromError(error));
