@@ -1,17 +1,12 @@
 import dayjs from "dayjs";
 import { faker } from "@faker-js/faker";
-import Sequelize from "sequelize";
-import { validationResult } from "express-validator";
 import {
   ROLES,
   SUPERADMIN_EMAIL,
   USER_STATUS,
 } from "../../constants/index.constants.js";
 // import { ComparePassword } from "../../helpers/authentication.helper.js";
-import BaseError, {
-  TransfromError,
-  ValidationError,
-} from "../../helpers/baseError.helper.js";
+import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
 import {
   HTMLScript,
   HTMLStylesheet,
@@ -32,8 +27,6 @@ import {
   findOneUser,
 } from "../user/user.repository.js";
 
-const Op = Sequelize.Op;
-
 export const getListAdmin = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
@@ -43,15 +36,18 @@ export const getListAdmin = async (req, res, next) => {
 
     listAdmin = ToPlainObject(listAdmin);
 
-    listAdmin.length !== 0 &&
-      listAdmin.map(u => {
-        u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
-        let is_locked = false;
-        if (u.user.email === SUPERADMIN_EMAIL) is_locked = true;
-        else if (u.user.email === req.user.email) is_locked = true;
-        u.is_locked = is_locked;
-        return { ...u };
-      });
+    if (listAdmin.length !== 0) {
+      listAdmin = listAdmin
+        .filter(
+          u =>
+            u.user.email !== SUPERADMIN_EMAIL && u.user.email !== req.user.email
+        )
+        .map(u => {
+          u.created_at = dayjs(u.created_at).format("DD MMM YYYY");
+          u.is_locked = false;
+          return { ...u };
+        });
+    }
 
     res.render("user/admin/v_list_admin", {
       title: "List Admin",
