@@ -16,7 +16,11 @@ import {
   apiPostCheckout,
   apiPutProfile,
 } from "./api.controller.js";
-import { apiPlayerSignin, apiPlayerSignup } from "./auth.api.controller.js";
+import {
+  apiPlayerSession,
+  apiPlayerSignin,
+  apiPlayerSignup,
+} from "./auth.api.controller.js";
 
 function APIsRoutes(app) {
   // app.route(ApiURL("/email")).get(async (req, res) => {
@@ -49,6 +53,7 @@ function APIsRoutes(app) {
   app.route(ApiURL("/checkout")).post(ensurePlayerAuth, apiPostCheckout);
   app.route(ApiURL("/dashboard")).get(ensurePlayerAuth, apiGetDashboard);
   app.route(ApiURL("/histories")).get(ensurePlayerAuth, apiGetListHistory);
+  app.route(ApiURL("/session")).get(ensurePlayerAuth, apiPlayerSession);
   app
     .route(ApiURL("/profile"))
     .get(ensurePlayerAuth, apiGetProfile)

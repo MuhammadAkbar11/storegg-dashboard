@@ -172,3 +172,14 @@ export const apiPlayerSignin = async (req, res, next) => {
     next(new TransfromError(error));
   }
 };
+
+export const apiPlayerSession = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      message: "Session Found!",
+      data: req.player,
+    });
+  } catch (error) {
+    next(new TransfromError(error));
+  }
+};
