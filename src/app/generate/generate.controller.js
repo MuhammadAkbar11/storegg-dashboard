@@ -1,24 +1,15 @@
 import { faker } from "@faker-js/faker";
 import bcryptjs from "bcryptjs";
-import dayjs from "dayjs";
-import { httpStatusCodes } from "../../constants/index.constants.js";
-import BaseError, { TransfromError } from "../../helpers/baseError.helper.js";
+import { TransfromError } from "../../helpers/baseError.helper.js";
 import DayjsUTC from "../../helpers/date.helper.js";
 import { GetRandom, ToPlainObject } from "../../helpers/index.helper.js";
 import Logger from "../../helpers/logger.helper.js";
 import { findAllCategories } from "../category/category.repository.js";
 import { findPaymentById } from "../payment/payment.repository.js";
-import {
-  createPlayer,
-  findAllPlayer,
-  findOnePlayer,
-} from "../player/player.repository.js";
+import { createPlayer, findAllPlayer } from "../player/player.repository.js";
 import { createTransaction } from "../transaction/transaction.repository.js";
 import { findOneUser } from "../user/user.repository.js";
-import {
-  findListVoucher,
-  findOneVoucher,
-} from "../voucher/voucher.repository.js";
+import { findListVoucher } from "../voucher/voucher.repository.js";
 
 const fakerGetRandom = faker.helpers.arrayElement;
 
@@ -155,16 +146,18 @@ export const generateChekcout = async (req, res, next) => {
       const resNominal = fakerGetRandom(resVoucher.nominals);
       const resBank = ToPlainObject(fakerGetRandom(resPayment.banks));
 
+      const year = DayjsUTC().year();
       const month = fakerGetRandom(getSelectedMonth());
 
-      const totalDay = getDaysInMonth(2022, month);
+      const totalDay = getDaysInMonth(year, month);
       const day = getDayFromDate(totalDay);
 
       const name = resPlayer.user.name;
       const accountGame = resPlayer.user.username;
       const status = fakerGetRandom(["pending", "success"]);
       const times = getTime();
-      const created_at = DayjsUTC(`2022-${month}-${day} ${times}`);
+
+      const created_at = DayjsUTC(`${year}-${month}-${day} ${times}`);
 
       let tax = (10 / 100) * resNominal.price;
       let value = resNominal.price + tax;
