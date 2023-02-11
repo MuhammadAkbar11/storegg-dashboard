@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  Checkout the main website repo here <a href="https://github.com/MuhammadAkbar11/storegg" target="_blank">StoreGG Web</a>.
+  The main website repo here <a href="https://github.com/MuhammadAkbar11/storegg" target="_blank">StoreGG Web</a>.
 </p>
 <br>
 <p align="center">
@@ -12,7 +12,6 @@
   </a>
 </p>
 <br>
-<hr >
 
 <br>
 
