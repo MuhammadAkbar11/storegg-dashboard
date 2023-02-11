@@ -1,7 +1,6 @@
 import passport from "passport";
 import BaseError from "../helpers/baseError.helper.js";
 import { findUserById } from "../app/user/user.repository.js";
-import GoogleStrategy from "./strategies/google.strategy.js";
 import LocalStrategy from "./strategies/local.strategy.js";
 import { findOneAdmin } from "../app/admin/admin.repository.js";
 import { httpStatusCodes } from "../constants/index.constants.js";
@@ -9,7 +8,6 @@ import { ToPlainObject } from "../helpers/index.helper.js";
 
 export default function () {
   passport.use(LocalStrategy);
-  passport.use(GoogleStrategy);
 
   passport.serializeUser((user, done) => {
     done(null, user.user_id);
