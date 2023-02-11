@@ -1,4 +1,21 @@
-# StoreGG Dashboard - StoreGG Administrator Dashboard App
+<h1 align="center">
+  StoreGG Dashboard - StoreGG Administrator Dashboard App + APIs
+</h1>
+
+<p align="center">
+  Checkout the main website repo here <a href="https://github.com/MuhammadAkbar11/storegg" target="_blank">StoreGG Web</a>.
+</p>
+<br>
+<p align="center">
+  <a href="https://muhammad-akbar.herokuapp.com/" target="_blank">
+    <img src="https://raw.githubusercontent.com/MuhammadAkbar11/storegg-dashboard/main/docs/demo.png" width="80%" />
+  </a>
+</p>
+<br>
+<hr >
+
+<br>
+
 
 ## Requirments
 
@@ -13,8 +30,9 @@
 3. **REST API**
 4. **MySQL** database
 5. **Seqeulize** ORM
-6. **PassportJs** Authentication
-7. **Ejs** Template Engine
+6. **PassportJs** for User Authentication
+7. **JWT** for API Service Authentication
+8. **Ejs** Template Engine
 
 ## Get Started
 
