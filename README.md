@@ -7,9 +7,7 @@
 </p>
 <br>
 <p align="center">
-  <a href="https://muhammad-akbar.herokuapp.com/" target="_blank">
-    <img src="https://raw.githubusercontent.com/MuhammadAkbar11/storegg-dashboard/main/docs/demo.png" width="80%" />
-  </a>
+  <img src="https://raw.githubusercontent.com/MuhammadAkbar11/storegg-dashboard/main/docs/demo.png" width="80%" />
 </p>
 <br>
 
