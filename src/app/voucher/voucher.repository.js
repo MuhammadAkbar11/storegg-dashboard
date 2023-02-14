@@ -90,6 +90,7 @@ export const findOneVoucher = async (filter = { attributes }) => {
           },
         },
       ],
+      order: [[{ model: Nominal, as: "nominals" }, "coin_quantity", "ASC"]],
     });
     return result;
   } catch (error) {

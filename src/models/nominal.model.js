@@ -18,7 +18,7 @@ Nominal.init(
       field: "coin_quantity",
     },
     coin_name: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(45),
       allowNull: false,
       field: "coin_name",
     },
