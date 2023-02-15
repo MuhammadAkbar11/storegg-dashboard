@@ -60,7 +60,14 @@ export const viewPutVoucher = async (req, res, next) => {
       });
     }
     // console.log(voucher.nominals[]);
-    const nominals = await findAllNominal({});
+    const nominals = await findAllNominal({
+      where: {
+        [Op.or]: {
+          coin_name: { [Op.like]: `%${voucher.game_coin_name}%` },
+          description: { [Op.like]: `%${voucher.name}%` },
+        },
+      },
+    });
     const categories = await findAllCategories({});
     const transformNominal = nominals.map(nominal => {
       const data = nominal.dataValues;
