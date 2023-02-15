@@ -20,7 +20,7 @@ HistoryVoucherTopup.init(
     },
     coin_name: {
       allowNull: false,
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(45),
       field: "coin_name",
     },
     category: {

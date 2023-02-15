@@ -19,7 +19,7 @@ HistoryPayment.init(
       field: "payer",
     },
     type: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(45),
       allowNull: false,
       field: "type",
     },

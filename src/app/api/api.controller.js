@@ -34,6 +34,7 @@ import {
 import Logger from "../../helpers/logger.helper.js";
 import Transaction from "../../models/transaction.model.js";
 import Pagination from "../../helpers/pagination.helper.js";
+import { SQL_COUNT_VOUCHER_TRANSACTIONS } from "../../utils/sqlQueries.js";
 
 const Op = Sequelize.Op;
 
@@ -46,8 +47,9 @@ export const apiGetVouchers = async (req, res, next) => {
   const _orderBy = req.query.orderBy || "ASC";
   const featuredVoucher = _sortBy === "featured";
   let order = [[_sortBy, _orderBy]];
-
+  let group = null;
   let query = {};
+
   let where = {
     status: "Y",
     name:
@@ -63,13 +65,6 @@ export const apiGetVouchers = async (req, res, next) => {
 
   const { limit, offset } = paginated.getPagination();
 
-  if (_category) {
-    where = {
-      ...where,
-      "$category.name$": { [Op.like]: `%${_category}%` },
-    };
-  }
-
   if (limit) {
     query = {
       limit,
@@ -83,40 +78,71 @@ export const apiGetVouchers = async (req, res, next) => {
       ...query,
     };
   }
-
+  let attributes = [
+    "voucher_id",
+    "game_name",
+    "game_name",
+    "game_coin_name",
+    "status",
+    "thumbnail",
+    "category_id",
+  ];
   if (featuredVoucher) {
-    order = null;
+    attributes.push([
+      Sequelize.literal(SQL_COUNT_VOUCHER_TRANSACTIONS),
+      "total_transactions",
+    ]);
+    order = [[Sequelize.literal("total_transactions"), "DESC"]];
+    group = ["Vouchers.voucher_id"];
   }
 
   try {
-    const voucher = await Voucher.findAndCountAll({
+    const voucher = await Voucher.findAll({
       ...query,
       where: where,
-      order: order,
-      attributes: {
-        exclude: ["updated_at", "admin_id"],
-      },
+      attributes: attributes,
       include: [
         {
           model: Category,
           as: "category",
+          where: {
+            name:
+              _category && _category.trim() !== ""
+                ? { [Op.like]: `%${_category}%` }
+                : { [Op.like]: `%%` },
+          },
           attributes: {
             exclude: ["created_at", "updated_at"],
+          },
+        },
+        {
+          model: Transaction,
+          as: "transactions",
+          attributes: [],
+        },
+      ],
+      group: group,
+      order: order,
+    });
+
+    const totalItems = await Voucher.count({
+      ...query,
+      where: where,
+      include: [
+        {
+          model: Category,
+          as: "category",
+          where: {
+            name:
+              _category && _category.trim() !== ""
+                ? { [Op.like]: `%${_category}%` }
+                : { [Op.like]: `%%` },
           },
         },
       ],
     });
 
-    // const pages = Math.ceil(voucher.count / +limit);
-    let listVouchers = voucher.rows;
-    if (featuredVoucher) {
-      for (const vcr of listVouchers) {
-        vcr.dataValues.totalTransactions = await vcr.countTransactions();
-      }
-      listVouchers.sort((a, b) => a.totalTransactions - b.totalTransactions);
-    }
-
-    const data = paginated.getPagingData(voucher.count, listVouchers);
+    const data = paginated.getPagingData(totalItems, voucher);
     res.status(200).json({
       message: "Berhasil mengambil data voucher",
       data: {
@@ -158,6 +184,9 @@ export const apiGetDetailVoucher = async (req, res, next) => {
     });
 
     const payments = await findAllPayment({
+      where: {
+        status: "Y",
+      },
       attributes: {
         exclude: ["created_at", "updated_at"],
       },
