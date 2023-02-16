@@ -20,18 +20,20 @@ export const index = async (req, res, next) => {
     let transactions = await findAllTransaction({
       where: {},
       order: [
-        ["transaction_id", "desc"],
-        ["is_paid", "desc"],
-        ["status", "desc"],
+        ["transaction_id", "ASC"],
+        // ["is_paid", "desc"],
+        // ["status", "desc"],
       ],
     });
 
     transactions = ToPlainObject(transactions);
-
+    console.log(transactions.slice(0, 5));
     transactions.map(tr => {
       tr.created_at = dayjs(tr.created_at).format("DD MMM YYYY");
       return { ...tr };
     });
+    console.log("=========");
+    console.log(transactions.slice(0, 5));
 
     res.render("transaction/v_transaction", {
       title: "Transaksi",
