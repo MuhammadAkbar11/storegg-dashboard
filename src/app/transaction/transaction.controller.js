@@ -12,6 +12,7 @@ import {
   // updateTransaction,
   updateTransactionStatusById,
 } from "./transaction.repository.js";
+import { findAllPayment } from "../payment/payment.repository.js";
 
 export const index = async (req, res, next) => {
   try {
@@ -19,21 +20,14 @@ export const index = async (req, res, next) => {
     const errors = req.flash("errors")[0];
     let transactions = await findAllTransaction({
       where: {},
-      order: [
-        ["transaction_id", "ASC"],
-        // ["is_paid", "desc"],
-        // ["status", "desc"],
-      ],
+      order: [["transaction_id", "ASC"]],
     });
 
     transactions = ToPlainObject(transactions);
-    console.log(transactions.slice(0, 5));
     transactions.map(tr => {
       tr.created_at = dayjs(tr.created_at).format("DD MMM YYYY");
       return { ...tr };
     });
-    console.log("=========");
-    console.log(transactions.slice(0, 5));
 
     res.render("transaction/v_transaction", {
       title: "Transaksi",
@@ -93,12 +87,15 @@ export const viewGetInvoice = async (req, res, next) => {
       ).format("DD/MM/YYYY");
     }
 
+    const payments = await findAllPayment();
+
     res.render("transaction/v_invoice", {
       title: "Invoice " + invoice.transaction_id,
       path: "/transaction",
       flashdata: flashdata,
       invoice: invoice,
       errors: errors,
+      payments,
       values: null,
     });
   } catch (error) {

@@ -364,47 +364,45 @@ export const apiGetDetailHistory = async (req, res, next) => {
 
 export const apiGetDashboard = async (req, res, next) => {
   try {
-    // const count = await TransactionModel.aggregate([
-    //   { $match: { player: req.player._id } },
-    //   {
-    //     $group: {
-    //       _id: "$category",
-    //       value: { $sum: "$value" },
-    //     },
-    //   },
-    // ]);
+    const count_categories = await Category.findAll({
+      where: {},
+      attributes: [
+        "category_id",
+        "name",
+        "description",
+        [
+          Sequelize.fn("sum", Sequelize.col("transactions.value")),
+          "total_value",
+        ],
+      ],
+      include: [
+        {
+          model: Transaction,
+          as: "transactions",
+          required: false,
+          where: {
+            player_id: req.player.player_id,
+          },
+          attributes: [],
+        },
+      ],
+      group: ["category_id"],
+    });
 
-    const count = await Transaction.findAll(
+    const history = await findAllTransaction(
       {
         where: { player_id: req.player.player_id },
-        attributes: [
-          "category_id",
-          [Sequelize.fn("sum", Sequelize.col("value")), "value"],
-        ],
-        group: ["category_id"],
-        raw: true,
+        limit: 5,
+        order: [["created_at", "DESC"]],
       },
-      false
+      true,
+      true
     );
-
-    const category = await findAllCategories({ where: {} });
-
-    category.forEach(element => {
-      count.forEach(data => {
-        if (data.category_id === element.category_id) {
-          data.name = element.name;
-        }
-      });
-    });
-
-    const history = await findAllTransaction({
-      where: { player_id: req.player.player_id },
-    });
 
     res.status(200).json({
       message: "Berhasil mendapat data Dashboard",
-      data: history,
-      count: count,
+      latest_transactions: history,
+      topup_categories: count_categories,
     });
   } catch (error) {
     next(new TransfromError(error));

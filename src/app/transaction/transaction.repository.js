@@ -14,7 +14,11 @@ import Voucher from "../../models/voucher.model.js";
 
 const Op = Sequelize.Op;
 
-export const findAllTransaction = async (filter = {}, associate = true) => {
+export const findAllTransaction = async (
+  filter = {},
+  associate = true,
+  isApi = false
+) => {
   if (associate) {
     filter = {
       ...filter,
@@ -23,7 +27,9 @@ export const findAllTransaction = async (filter = {}, associate = true) => {
           model: Voucher,
           as: "voucher",
           attributes: {
-            exclude: ["created_at", "updated_at"],
+            exclude: isApi
+              ? ["created_at", "updated_at", "admin_id"]
+              : ["created_at", "updated_at"],
           },
         },
         {
