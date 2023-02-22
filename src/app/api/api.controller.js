@@ -35,6 +35,7 @@ import Logger from "../../helpers/logger.helper.js";
 import Transaction from "../../models/transaction.model.js";
 import Pagination from "../../helpers/pagination.helper.js";
 import { SQL_COUNT_VOUCHER_TRANSACTIONS } from "../../utils/sqlQueries.js";
+import { APIFindTransactionHistory } from "./api.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -327,17 +328,23 @@ export const apiPostCheckout = async (req, res, next) => {
 };
 
 export const apiGetListHistory = async (req, res, next) => {
+  const _limit = +req.query.limit || 10;
+  const _page = +req.query.page || 0;
+  const _search = req.query.search;
+  const _status = req.query.status || "";
+
   try {
-    const { status = "" } = req.query;
-    const { history, total } = await findTransactionHistory({
-      status,
-      player: req.player,
+    const result = await APIFindTransactionHistory({
+      limit: _limit,
+      page: _page,
+      search: _search,
+      player: req.player.player_id,
+      status: _status,
     });
 
     res.status(200).json({
       message: "Daftar history berhasil didapatkan",
-      data: history,
-      total: total?.length ? total[0].value : 0,
+      ...result,
     });
   } catch (error) {
     next(new TransfromError(error));
