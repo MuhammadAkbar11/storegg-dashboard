@@ -256,27 +256,8 @@ export const updateTransactionStatusById = async (id, statusData) => {
   }
 };
 
-export const findTransactionHistory = async values => {
+export const findTransactionHistory = async where => {
   try {
-    const { status, player } = values;
-    let where = {};
-
-    if (status?.length) {
-      where = {
-        ...where,
-        status: {
-          [Op.like]: `%${status}%`,
-        },
-      };
-    }
-
-    if (player.player_id) {
-      where = {
-        ...where,
-        player_id: player.player_id,
-      };
-    }
-
     const history = await Transaction.findAll({
       where: where,
       attributes: {
