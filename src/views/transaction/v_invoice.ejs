@@ -194,7 +194,7 @@
 
                       </tbody>
                     </table>
-                    <%  if(invoice?.history?.history_payment?.type === "Transfer") { %>
+
                     <table class=" mt-1">
                       <tbody>
                         <tr>
@@ -208,9 +208,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <% } %>
-
-
                     <!-- <p class="card-text mb-0">
                       <span class="fw-bold">Salesperson:</span> <span class="ms-75">Alfie Solomons</span>
                     </p> -->
@@ -376,14 +373,19 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="payment-method">Payment Method</label>
-                  <select class="form-select" id="payment-method" name="payment_method">
+                  <!-- <select class="form-select" id="payment-method" name="payment_method">
                     <option value="" disabled>Select payment method</option>
-                    <!-- <option value="Cash">Cash</option> -->
-                    <option value="Bank Transfer" selected>Bank Transfer</option>
-                    <!-- <option value="Debit">Debit</option> -->
-                    <!-- <option value="Credit">Credit</option> -->
-                    <!-- <option value="Paypal">Paypal</option> -->
-                  </select>
+                    <option>-- Pilih Metode</option>
+                    <% for (let pay of payments) { %>
+                    <% if (pay.payment_method_id === invoice?.payment_method_id) { %>
+                    <option value="<%= pay.payment_method_id %>" selected><%= pay.type %></option>
+                    <% } else {  %>
+                    <option value="<%= pay.payment_method_id %>"><%= pay.type %></option>
+                    <% } %>
+                    <%  } %>
+                  </select> -->
+                  <input class="form-control " id="payment-method" name="payment_method" type="text"
+                    value="<%= invoice?.history?.history_payment?.type  %>" readonly />
                 </div>
                 <div class="mb-1">
                   <label class="form-label" for="bank_account_name">Pay By*</label>
