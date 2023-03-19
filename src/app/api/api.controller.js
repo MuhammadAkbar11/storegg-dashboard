@@ -343,8 +343,8 @@ export const apiGetListHistory = async (req, res, next) => {
     });
 
     res.status(200).json({
-      message: "Daftar history berhasil didapatkan",
       ...result,
+      message: "Daftar history berhasil didapatkan",
     });
   } catch (error) {
     next(new TransfromError(error));
@@ -362,7 +362,7 @@ export const apiGetDetailHistory = async (req, res, next) => {
 
     return res.status(200).json({
       message: "History berhasil didapatkan",
-      data: history,
+      history: history,
     });
   } catch (error) {
     next(new TransfromError(error));
