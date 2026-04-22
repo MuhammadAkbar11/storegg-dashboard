@@ -174,7 +174,7 @@ export const apiGetDetailVoucher = async (req, res, next) => {
         "NOT_FOUND",
         404,
         "Voucher game tidak ditemukan.!",
-        true
+        true,
       );
     }
 
@@ -232,7 +232,7 @@ export const apiPostCheckout = async (req, res, next) => {
         "NOT_FOUND",
         httpStatusCodes.NOT_FOUND,
         "Voucher game tidak ditemukan.",
-        true
+        true,
       );
     }
 
@@ -243,7 +243,7 @@ export const apiPostCheckout = async (req, res, next) => {
         "NOT_FOUND",
         httpStatusCodes.NOT_FOUND,
         "Nominal tidak ditemukan.",
-        true
+        true,
       );
     }
 
@@ -254,7 +254,7 @@ export const apiPostCheckout = async (req, res, next) => {
         "NOT_FOUND",
         httpStatusCodes.NOT_FOUND,
         "Metode pembayaran tidak ditemukan.",
-        true
+        true,
       );
     }
 
@@ -265,7 +265,7 @@ export const apiPostCheckout = async (req, res, next) => {
         "NOT_FOUND",
         httpStatusCodes.NOT_FOUND,
         "Bank tidak ditemukan.",
-        true
+        true,
       );
     }
 
@@ -403,7 +403,7 @@ export const apiGetDashboard = async (req, res, next) => {
         order: [["created_at", "DESC"]],
       },
       true,
-      true
+      true,
     );
 
     res.status(200).json({
@@ -452,7 +452,7 @@ export const apiPutProfile = async (req, res, next) => {
         "BAD_REQUEST",
         httpStatusCodes.BAD_REQUEST,
         `Player tidak ditemukan`,
-        true
+        true,
       );
     }
 
@@ -473,6 +473,7 @@ export const apiPutProfile = async (req, res, next) => {
     res.status(201).json({
       message: "Berhasil mengubah profile",
       data: {
+        player_id: updatedPlayer.player_id,
         user_id: updatedPlayer.user.user_id,
         username: updatedPlayer.user.username,
         name: updatedPlayer.user.name,
