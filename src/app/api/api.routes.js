@@ -15,6 +15,7 @@ import {
   apiGetVouchers,
   apiPostCheckout,
   apiPutProfile,
+  apiPutProfilePassword,
 } from "./api.controller.js";
 import {
   apiPlayerSession,
@@ -62,6 +63,13 @@ function APIsRoutes(app) {
       ensurePlayerAuth,
       playerValidation.update,
       apiPutProfile
+    );
+  app
+    .route(ApiURL("/profile/password"))
+    .put(
+      ensurePlayerAuth,
+      playerValidation.updatePassword,
+      apiPutProfilePassword
     );
   app.route(ApiURL("/categories")).get(apiGetCategories);
   app.route(ApiURL("/vouchers")).get(apiGetVouchers);

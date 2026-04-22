@@ -171,6 +171,26 @@ export const updatePlayer = async (id, payload) => {
   }
 };
 
+export const updatePlayerPassword = async (id, password) => {
+  try {
+    const result = await User.update(
+      {
+        password,
+      },
+      {
+        where: {
+          user_id: id,
+        },
+      }
+    );
+
+    return result;
+  } catch (error) {
+    console.error("[EXCEPTION] updatePlayerPassword", error);
+    throw new TransfromError(error);
+  }
+};
+
 export const deletePlayerById = async id => {
   try {
     const result = await Player.deleteOne({ _id: id });

@@ -20,6 +20,7 @@ import {
   findOnePlayer,
   findPlayerById,
   updatePlayer,
+  updatePlayerPassword,
 } from "../player/player.repository.js";
 import { httpStatusCodes } from "../../constants/index.constants.js";
 import { ToPlainObject, UnlinkFile } from "../../helpers/index.helper.js";
@@ -36,6 +37,11 @@ import Transaction from "../../models/transaction.model.js";
 import Pagination from "../../helpers/pagination.helper.js";
 import { SQL_COUNT_VOUCHER_TRANSACTIONS } from "../../utils/sqlQueries.js";
 import { APIFindTransactionHistory } from "./api.repository.js";
+import {
+  ComparePassword,
+  GeneratePassword,
+} from "../../helpers/authentication.helper.js";
+import { findOneUser } from "../user/user.repository.js";
 
 const Op = Sequelize.Op;
 
@@ -488,6 +494,73 @@ export const apiPutProfile = async (req, res, next) => {
     if (fileimg.data) {
       UnlinkFile(fileimg.data.path);
     }
+    next(new TransfromError(error));
+  }
+};
+
+export const apiPutProfilePassword = async (req, res, next) => {
+  const userId = req.player.user_id;
+  const currentPassword = req.body.currentPassword || req.body.oldPassword;
+  const newPassword = req.body.newPassword || req.body.password;
+
+  try {
+    const validate = validationResult(req);
+
+    if (!validate.isEmpty()) {
+      const errValidate = new ValidationError(validate.array());
+      throw errValidate;
+    }
+
+    const user = await findOneUser({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new BaseError(
+        "BAD_REQUEST",
+        httpStatusCodes.BAD_REQUEST,
+        `Player tidak ditemukan`,
+        true
+      );
+    }
+
+    const matchPassword = await ComparePassword(currentPassword, user.password);
+
+    if (!matchPassword) {
+      throw new ValidationError([
+        {
+          value: currentPassword,
+          msg: "Current password is invalid",
+          param: "currentPassword",
+          location: "body",
+        },
+      ]);
+    }
+
+    if (currentPassword === newPassword) {
+      throw new ValidationError([
+        {
+          value: newPassword,
+          msg: "New password must be different from current password",
+          param: "newPassword",
+          location: "body",
+        },
+      ]);
+    }
+
+    const newPasswordHash = await GeneratePassword(newPassword);
+    await updatePlayerPassword(userId, newPasswordHash);
+
+    res.status(200).json({
+      message: "Berhasil mengubah password",
+      data: {
+        user_id: userId,
+      },
+    });
+    return;
+  } catch (error) {
     next(new TransfromError(error));
   }
 };

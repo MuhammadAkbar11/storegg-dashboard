@@ -42,6 +42,51 @@ const playerValidation = {
       },
     },
   }),
+  updatePassword: checkSchema({
+    currentPassword: {
+      custom: {
+        options: (value, { req }) => {
+          const currentPassword =
+            value || req.body.currentPassword || req.body.oldPassword;
+          if (!currentPassword) {
+            throw new Error("Enter your current password");
+          }
+          return true;
+        },
+      },
+    },
+    newPassword: {
+      custom: {
+        options: (value, { req }) => {
+          const newPassword = value || req.body.newPassword || req.body.password;
+          if (!newPassword) {
+            throw new Error("Enter your new password");
+          }
+
+          if (newPassword.length < 5) {
+            throw new Error("Password should be at least 5 chars long");
+          }
+          return true;
+        },
+      },
+    },
+    confirmNewPassword: {
+      custom: {
+        options: (value, { req }) => {
+          const confirmPassword =
+            value || req.body.confirmNewPassword || req.body.password2;
+          const newPassword = req.body.newPassword || req.body.password;
+          if (!confirmPassword) {
+            throw new Error("Enter confirm password");
+          }
+          if (confirmPassword !== newPassword) {
+            throw new Error("Password have to match!");
+          }
+          return true;
+        },
+      },
+    },
+  }),
 };
 
 export default playerValidation;
