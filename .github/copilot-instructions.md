@@ -1,15 +1,85 @@
-When generating git commit messages, always follow the Conventional Commits specification:
+When generating git commit messages, ALWAYS follow the Conventional Commits specification.
 
-- Format: <type>(<scope>): <description>
-- Types: feat, fix, chore, docs, style, refactor, perf, test.
-- Description: lowercase, imperative mood, no period at the end.
-- Scope: optional, can be anything specifying the section of the codebase affected (e.g., "auth", "ui", "api").
+---
+
+## Format
+
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+
+---
+
+## Rules (STRICT)
+
+- ALWAYS use one of the allowed types
+- ALWAYS use lowercase for type and description
+- NEVER end description with a period
+- ALWAYS use imperative present tense (e.g., "add", "fix", "update")
+- KEEP description short (max ~72 chars)
+- DO NOT include unnecessary words like "this commit", "update code", etc.
+
+---
+
+## Types
+
+- feat: add a new feature
+- fix: fix a bug
+- refactor: restructure code without changing behavior
+- perf: improve performance
+- style: formatting only (no logic change)
+- test: add or update tests
+- docs: documentation only
+- build: build system / dependencies
+- ci: CI/CD changes
+- ops: infrastructure / deployment / scripts
+- chore: maintenance tasks
+
+> If multiple types apply, use the MOST IMPORTANT one (e.g., feat over fix).
+
+---
+
+## Scope
+
+- Optional but recommended
+- Use folder/module/component name
 - Examples:
-  - feat(auth): add JWT token support
-  - fix(ui): resolve button alignment issue
-  - chore: update dependencies
-  - docs: improve API documentation
-  - style: reformat code with Prettier
-  - refactor(api): simplify data fetching logic
-  - perf: optimize image loading
-  - test: add unit tests for user service
+  - auth
+  - api
+  - dashboard
+  - client
+
+---
+
+## Breaking Changes
+
+- Add `!` after type/scope:
+  - feat(api)!: remove v1 endpoints
+
+- MUST include footer:
+  BREAKING CHANGE: explanation of what changed and how to migrate
+
+---
+
+## Body Guidelines
+
+- Explain WHY, not WHAT
+- Compare before vs after behavior
+
+---
+
+## Footer
+
+- Reference issues:
+  - Closes #123
+  - Fixes #456
+
+---
+
+## Output Rules for AI
+
+- Output ONLY the commit message
+- DO NOT add explanation
+- DO NOT wrap in quotes or code block
