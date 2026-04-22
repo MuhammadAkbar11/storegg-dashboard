@@ -9,23 +9,31 @@ const playerValidation = {
         errorMessage: "name tidak boleh kosong",
       },
     },
-    username: {
-      trim: true,
+    email: {
       notEmpty: {
-        errorMessage: "username tidak boleh kosong",
+        errorMessage: "Enter your email address",
       },
-      custom: {
-        options: value => {
-          const ex = value.replace(/\s/, "");
-          if (/\s/.test(value)) {
-            throw new Error(
-              `username tidak mendukung karakter spasi, username yang dianjurkan seperti: ${ex}`
-            );
-          }
-          return true;
-        },
+      isEmail: {
+        errorMessage: "Invalid email",
       },
     },
+    // username: {
+    //   trim: true,
+    //   notEmpty: {
+    //     errorMessage: "username tidak boleh kosong",
+    //   },
+    //   custom: {
+    //     options: value => {
+    //       const ex = value.replace(/\s/, "");
+    //       if (/\s/.test(value)) {
+    //         throw new Error(
+    //           `username tidak mendukung karakter spasi, username yang dianjurkan seperti: ${ex}`
+    //         );
+    //       }
+    //       return true;
+    //     },
+    //   },
+    // },
     phoneNumber: {
       escape: true,
       trim: true,
