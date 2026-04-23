@@ -16,7 +16,7 @@ import User from "../../models/user.model.js";
 export const findAllPlayer = async (
   filter = {
     where: {},
-  }
+  },
 ) => {
   try {
     const result = await Player.findAll({
@@ -108,7 +108,7 @@ export const createPlayer = async data => {
 
     const result = await Player.create(
       { user_id: createdUser.user_id, favorite: data.favorite },
-      { transaction: t }
+      { transaction: t },
     );
 
     await t.commit();
@@ -161,7 +161,7 @@ export const updatePlayer = async (id, payload) => {
         where: {
           user_id: id,
         },
-      }
+      },
     );
 
     return result;
@@ -181,7 +181,7 @@ export const updatePlayerPassword = async (id, password) => {
         where: {
           user_id: id,
         },
-      }
+      },
     );
 
     return result;
